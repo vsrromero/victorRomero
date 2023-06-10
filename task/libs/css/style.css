@@ -1,0 +1,17 @@
+.table-container {
+    width: 75%;
+    margin: 15px auto;
+}
+
+tr .row-height {
+    min-height: 150px;
+}
+
+td {
+    vertical-align: middle !important;
+}
+
+a {
+    text-decoration: underline;
+    color: #007;
+}
