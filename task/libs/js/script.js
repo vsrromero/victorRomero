@@ -16,18 +16,57 @@ $(document).ready(function() {
                         var postalcode = result.data[i].postalcode;
                         var locality = result.data[i].locality;
     
-                        output += "Country: " + countryCode + "<br>" +
-                                  "Street: " + street + "<br>" +
-                                  "Postal code: " + postalcode + "<br>" +
-                                  "Locality: " + locality + "<br><br>";
+                        output +=   "Country: " + countryCode + "<br>" +
+                                    "Street: " + street + "<br>" +
+                                    "Postal code: " + postalcode + "<br>" +
+                                    "Locality: " + locality + "<br><br>";
                     }
     
-                    console.log(output);
                     $('#result').html(output);
                 })
                 .catch(function(error) {
                     console.error(error);
                 });
+
+            $('#user-input-streetName').val('');
+            $('#user-input-postalCode').val('');
+            event.preventDefault();
+
+        }
+    });
+
+    // Event listener postalCodeSearch button
+    $('#submit-btn-postalCode').click(function() {
+        var userInput = $('#user-input-postalCode').val();
+
+        if (userInput !== '') {
+            var url = 'libs/php/getPostalCode.php?placename=' + userInput;
+            var resultPromise = performAjaxRequest(url);
+            resultPromise
+                .then(function(result) {
+                    var output = '';
+                    for (var i = 0; i < result.data.length; i++) {
+                        var countryCode = result.data[i].countryCode;
+                        var placeName = result.data[i].placeName;
+                        var postalcode = result.data[i].postalcode;
+                        var lat = result.data[i].lat;
+                        var lng = result.data[i].lng;
+
+                        output +=   "Country: " + countryCode + "<br>" +
+                                    "Place Name: " + placeName + "<br>" +
+                                    "Postal code: " + postalcode + "<br>" +
+                                    "Latitude: " + lat + "<br>" +
+                                    "Longitude: " + lng + "<br><br>";
+                    }
+
+                    $('#result').html(output);
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+                
+            $('#user-input-streetName').val('');
+            $('#user-input-postalCode').val('');
             event.preventDefault();
 
         }
