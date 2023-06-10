@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoNames Task</title>
+    <!-- import bootsrap from node_modules -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!-- import custom css -->
+    <link rel="stylesheet" href="./libs/css/style.css">
+</head>
+<body>
+    <div class="container text-center">
+        <div class="table-container">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>API Name</th>
+                        <th>API Description</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="api-first-name" class="alert alert-success"><a href="https://www.geonames.org/maps/addresses.html#streetNameLookup" target="_blank">streetNameLookup</a></td>
+                        <td>
+                            <input type="text" class="form-control" id="user-input-streetName" placeholder="Type a Street Name to search">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="submit-btn-streetName">Submit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="api-second-name" class="alert alert-success"><a href="https://www.geonames.org/export/web-services.html#postalCodeSearch" target="_blank">postalCodeSearch</a></td>
+                        <td>
+                            <input type="text" class="form-control" id="user-input-postalCode" placeholder="Type a Postal Code, City or State to search">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="submit-btn-postalCode">Submit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="api-third-name" class="alert alert-success"><a href="https://www.geonames.org/export/web-services.html#findNearby" target="_blank">findNearby</a></td>
+                        <td>
+                            <input type="text" class="form-control" id="user-input-fNearby" placeholder="latitude, longitude (separated by comma)">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="submit-btn-fNearby">Submit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" id="result" class="row-height">
+                            
+                            json returned here
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- import jquery from node_modules -->
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- import bootstrap js from node_modules -->
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- import custom js -->
+    <script src="./libs/js/script.js"></script>
+</body>
+</html>
