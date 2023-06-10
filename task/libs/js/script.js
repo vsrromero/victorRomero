@@ -6,6 +6,10 @@ $(document).ready(function() {
         if (userInput !== '') {
             var url = 'libs/php/getStreetName.php?q=' + userInput;
             var resultPromise = performAjaxRequest(url);
+
+            console.log("url: " + url);
+
+                
             
             resultPromise
                 .then(function(result) {
@@ -28,8 +32,7 @@ $(document).ready(function() {
                     console.error(error);
                 });
 
-            $('#user-input-streetName').val('');
-            $('#user-input-postalCode').val('');
+            resetFields();
             event.preventDefault();
 
         }
@@ -65,10 +68,59 @@ $(document).ready(function() {
                     console.error(error);
                 });
                 
-            $('#user-input-streetName').val('');
-            $('#user-input-postalCode').val('');
+            resetFields();
             event.preventDefault();
 
+        }
+    });
+
+    // Event listener findNearby button
+    $('#submit-btn-findNearby').click(function() {
+        var userInput = $('#user-input-findNearby').val();
+        console.log("user input: " + userInput);
+
+        if (userInput !== '') {
+            var coords = userInput.split(',');
+            if (coords.length === 2) {
+                var lat = coords[0].trim();
+                var lng = coords[1].trim();
+
+                var url = 'libs/php/findNearby.php?lat=' + lat + '&lng=' + lng;
+                console.log("url: " + url);
+                var resultPromise = performAjaxRequest(url);
+
+                resultPromise.then(function(result) {
+                    console.log("result: " , result);
+                });
+
+                resultPromise
+                    .then(function(result) {
+                        console.log("result promise: check");
+                        var output = '';
+                        for (var i = 0; i < result.data.length; i++) {
+                            var countryCode = result.data[i].countryCode;
+                            var counryName = result.data[i].counryName;
+                            var name = result.data[i].name;
+                            var fclName = result.data[i].fclName;
+                            var fcodeName = result.data[i].fcodeName;
+
+                            output +=   "Country: " + countryCode + "<br>" +
+                                        "Country Name: " + counryName + "<br>" +
+                                        "Name: " + name + "<br>" +
+                                        "Fcl Name: " + fclName + "<br>" +
+                                        "Fcode Name: " + fcodeName + "<br><br>";
+                        }
+                        console.log(output);
+                        $('#result').html(output);
+                    })
+                    .catch(function(error) {
+                        console.log("deu ruim: " + error);
+                        console.error(error);
+                    });
+
+                resetFields();
+                event.preventDefault();
+            }
         }
     });
 
@@ -86,6 +138,12 @@ $(document).ready(function() {
                 }
             });
         });
+    }
+
+    function resetFields() {
+        $('#user-input-streetName').val('');
+        $('#user-input-postalCode').val('');
+        $('#user-input-findNearby').val('');
     }
     
 });
