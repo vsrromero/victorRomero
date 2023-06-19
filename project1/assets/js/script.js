@@ -167,10 +167,12 @@ function handleLocationCoordinates(lat, lng) {
                     var selectedCountry = $(this).val();
                     axios.get('../assets/php/getCountryByName.php?countryName=' + selectedCountry)
                         .then(function (response) {
+                            console.log(response.data.results[0]);
+                            console.log(response.data.message);
                             var country = response.data.results[0].geometry;
                             coordinatesToTravel = [country.lat, country.lng];
 
-                            console.log(coordinatesToTravel);
+                            console.log('Coordinates got from response: ', coordinatesToTravel);
 
                             // Set the map view to the selected country
                             map.setView(coordinatesToTravel, 5);
