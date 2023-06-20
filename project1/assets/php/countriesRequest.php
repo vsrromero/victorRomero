@@ -13,9 +13,9 @@ function getAllCountries($geonamesUser) {
     $executionStartTime = microtime(true);
 
     if(isset($_REQUEST['countryCode'])) {
-        $url = 'http://api.geonames.org/countryInfoJSON?username=' . $geonamesUser . '&country=' . $_REQUEST['countryCode'];
+        $url = 'http://api.geonames.org/countryInfoJSON?username=' . urlencode($geonamesUser) . '&country=' . urlencode($_REQUEST['countryCode']);
     } else {
-        $url='http://api.geonames.org/countryInfoJSON?username=' . $geonamesUser;
+        $url='http://api.geonames.org/countryInfoJSON?username=' . urlencode($geonamesUser);
     }
 
 

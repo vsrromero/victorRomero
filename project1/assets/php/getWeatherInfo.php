@@ -12,7 +12,7 @@ $weatherstack = $_ENV['WEATHERSTACK_API_KEY'];
 
     $executionStartTime = microtime(true);
 
-    $url='http://api.weatherstack.com/forecast?access_key=' . $weatherstack . '&query=' . $_REQUEST['adminName1'];
+    $url='http://api.weatherstack.com/forecast?access_key=' . $weatherstack . '&query=' . urlencode($_REQUEST['adminName1']);
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -30,6 +30,7 @@ $weatherstack = $_ENV['WEATHERSTACK_API_KEY'];
     $output['status']['name'] = "ok";
     $output['status']['description'] = "success";
     $output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
+    $output['message'] = 'Location for weather got from php side by urlencode($_REQUEST["adminName1"]' . urlencode($_REQUEST['adminName1']);
     
     header('Content-Type: application/json; charset=UTF-8');
 

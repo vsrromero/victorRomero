@@ -12,7 +12,7 @@ $opencage = $_ENV['OPENCAGE_API_KEY'];
 
     $executionStartTime = microtime(true);
 
-    $url='https://api.opencagedata.com/geocode/v1/json?q=' . $_REQUEST['countryName'] . '&key=' . $opencage;
+    $url='https://api.opencagedata.com/geocode/v1/json?q=' . urlencode($_REQUEST['countryName']) . '&key=' . urlencode($opencage);
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

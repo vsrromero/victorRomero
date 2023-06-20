@@ -127,8 +127,9 @@ function handleLocationCoordinates(lat, lng) {
         var modal = $(this);
         modal.find('.modal-title').text(countryName);
         modal.find('.modal-body').html('<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>');
-        axios.get('../assets/php/getWeatherInfo.php?adminName1=' + adminName1)
+        axios.get('../assets/php/getWeatherInfo.php?adminName1=' + encodeURIComponent(adminName1))
             .then(function (response) {
+                console.log(response.data.message);
                 var weatherInfo = response.data.current;
                 var modalBody = modal.find('.modal-body');
                 modalBody.html('');
@@ -165,7 +166,7 @@ function handleLocationCoordinates(lat, lng) {
                 // Get the country coordinates and set map view when the user selects a country
                 selectElement.change(function () {
                     var selectedCountry = $(this).val();
-                    axios.get('../assets/php/getCountryByName.php?countryName=' + selectedCountry)
+                    axios.get('../assets/php/getCountryByName.php?countryName=' + encodeURIComponent(selectedCountry))
                         .then(function (response) {
                             console.log(response.data.results[0]);
                             console.log(response.data.message);
