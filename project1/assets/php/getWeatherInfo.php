@@ -1,6 +1,6 @@
 <?php
 
-$weatherstack = '415f51eb6e8613d2309a674a1beadfce';
+$openweather = '45af79699ebb6caec94837a11803f2f9';
 
 
     ini_set('display_errors', 'On');
@@ -8,7 +8,7 @@ $weatherstack = '415f51eb6e8613d2309a674a1beadfce';
 
     $executionStartTime = microtime(true);
 
-    $url='http://api.weatherstack.com/forecast?access_key=' . $weatherstack . '&query=' . $_REQUEST['adminName1'];
+    $url= 'https://api.openweathermap.org/data/2.5/weather?lat=' . $_REQUEST['lat'] . '&lon=' . $_REQUEST['lng'] . '&appid=' . $openweather;
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

@@ -1,6 +1,6 @@
 <?php
 
-$opencage = 'dc3d07f991d94a1891284a688071be34';
+$app_id = '5ec73c6c4b9d4591ba4560b972a15fcc';
 
 
 ini_set('display_errors', 'On');
@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 $executionStartTime = microtime(true);
 
-$url = 'https://api.opencagedata.com/geocode/v1/json?q=' . urlencode($_REQUEST['countryName']) . '&key=' . $opencage;
+$url = "https://openexchangerates.org/api/latest.json?app_id=" . $app_id;
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -30,3 +30,4 @@ $output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime)
 header('Content-Type: application/json; charset=UTF-8');
 
 echo json_encode($output);
+
