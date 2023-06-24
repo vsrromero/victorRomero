@@ -1,108 +1,112 @@
 /* CSS Variables */
 
 :root {
-    --airplane-icon-color: #cc1e1e;  
-    --nav-text-color: #ff0;
-    --nav-background-color: #000;
-    --button-background-color: rgba(221, 221, 221, 0.596);
-    --button-text-color: rgb(21, 86, 105);
+  --airplane-icon-color: #cc1e1e;
+  --nav-text-color: #ff0;
+  --nav-background-color: #000;
+  --button-background-color: rgba(221, 221, 221, 0.596);
+  --button-text-color: rgb(9, 58, 73);
 
 }
 
 /* CSS */
 
 nav {
-    display: flex;
-    width: 100%;
-    height: 5vh;
-    background-color: var(--nav-background-color);
-    color: var(--nav-text-color);
-    align-items: center;
-    padding: 5px;
+  display: flex;
+  width: 100%;
+  height: 5vh;
+  background-color: var(--nav-background-color);
+  color: var(--nav-text-color);
+  align-items: center;
+  padding: 5px;
 }
 
 select {
-width: 150px;
-margin: 0 10px;
+  width: 150px;
+  margin: 0 10px;
 }
 
 
 #map {
-    width: 100%;
-    height: 95vh;
+  width: 100%;
+  height: 95vh;
 }
 
 #loading-overlay {
-    position: fixed;
-    flex-direction: column;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  position: fixed;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .loading-text {
-    color: #070b31;
-    font-weight: bolder;
-    padding: 5px 0;
+  color: #070b31;
+  font-weight: bolder;
+  padding: 5px 0;
 }
 
 .custom-marker-icon {
-    color: var(--airplane-icon-color); 
-    font-size: 24px; /*icon size*/ 
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 166, 0, 0.8) 50%, rgba(255, 140, 0, 0.8) 100%);
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  color: #fff;
 }
 
 /* * Control Buttons * */
 
 .control-button {
-    background-color: var(--button-background-color);
-    color: var(--button-text-color);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.5rem;
-    top: 300px;
-    margin: 10px;
+  background-color: var(--button-background-color);
+  color: var(--button-text-color);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.0rem;
+  padding: 0;
 }
 
 /* * Modal * */
 #infoModal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: 300px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  }
-  
-  .modal-hidden {
-    display: none;
-  }
-  
-  .modal-visible {
-    display: block;
-  }
-
-  /* * Media Queries * */
-
-@media screen and (min-width: 768px) {
-    select {
-        width: 300px;
-        margin: 0 10px;
-        }
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 300px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
+.modal-hidden {
+  display: none;
+}
+
+.modal-visible {
+  display: block;
+}
+
+.title-info {
+  font-weight: bold;
+}
+
+/* * Media Queries * */
+
+@media screen and (min-width: 768px) {
+  select {
+    width: 300px;
+    margin: 0 10px;
+  }
 
 
-  
-  
+}
+
