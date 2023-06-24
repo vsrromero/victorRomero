@@ -12,14 +12,12 @@ var countryCode = '';
 
 //* general functions 
 
-// Exibe o loading circle
 function showLoadingCircle() {
     $('#loading-circle').css('display', 'block');
 }
 
 showLoadingCircle();
 
-// Oculta o loading circle
 function hideLoadingCircle() {
     $('#loading-circle').css('display', 'none');
 }
@@ -28,7 +26,12 @@ function hideCoverLayer() {
     $('#cover-layer').css('display', 'none');
 }
 
-//! Get the coordinates from a country name
+/**
+ * Retrieves the coordinates (latitude and longitude) of a given country using the OpenCage Geocoding API.
+ * 
+ * @param {string} countryName - The name of the country for which to fetch the coordinates.
+ * @returns {Promise<Array<number>>} A promise that resolves to an array containing the latitude and longitude of the country. If an error occurs, it returns null.
+ */
 async function getCoordinatesFromCountry(countryName) {
     try {
         const response = await fetch('assets/php/openCage.php?countryName=' + encodeURIComponent(countryName));
@@ -41,12 +44,16 @@ async function getCoordinatesFromCountry(countryName) {
     }
 }
 
-//! Get the exchange rate from USD
+/**
+ * Retrieves the exchange rate for a given currency code using the Open Exchange API.
+ * 
+ * @param {string} currencyCode - The currency code for which to fetch the exchange rate.
+ * @returns {Promise<number>} A promise that resolves to the exchange rate of the specified currency. If an error occurs, it returns null.
+ */
 async function getExchangeRate(currencyCode) {
     try {
         const response = await fetch('assets/php/openExchange.php');
         const data = await response.json();
-        console.log(data.rates[currencyCode]);
         return data.rates[currencyCode];
     } catch (error) {
         console.log(error);
@@ -54,7 +61,12 @@ async function getExchangeRate(currencyCode) {
     }
 }
 
-//! Get the country info from a country code on countryInfo.php
+/**
+ * Retrieves country information for a given country code using the countryInfo.php API.
+ * 
+ * @param {string} countryCode - The country code for which to fetch the information.
+ * @returns {Promise<object|null>} A promise that resolves to an object containing country information. If an error occurs, it returns null.
+ */
 async function getCountryInfoByCode(countryCode) {
     try {
         const response = await fetch('assets/php/countryInfo.php?countryCode=' + countryCode);
@@ -67,7 +79,14 @@ async function getCountryInfoByCode(countryCode) {
     }
 }
 
-//! Check if a point is inside a polygon
+/**
+ * Checks if a given point is inside a polygon defined by its coordinates.
+ * 
+ * @param {number} latitude - The latitude of the point to check.
+ * @param {number} longitude - The longitude of the point to check.
+ * @param {Array<Array<Array<number>>>} coordinates - The coordinates defining the polygon.
+ * @returns {boolean} A boolean indicating whether the point is inside the polygon.
+ */
 function pointInPolygon(latitude, longitude, coordinates) {
     var isInPolygon = false;
 
@@ -98,7 +117,14 @@ function pointInPolygon(latitude, longitude, coordinates) {
     return isInPolygon;
 }
 
-//! Get the country name by latitude and longitude
+/**
+ * Retrieves the country name based on given coordinates using a GeoJSON object.
+ * 
+ * @param {number} latitude - The latitude of the coordinates.
+ * @param {number} longitude - The longitude of the coordinates.
+ * @param {Object} geoJSON - The GeoJSON object containing country features.
+ * @returns {string} The name of the country corresponding to the coordinates.
+ */
 function getCountryFromCoordinates(latitude, longitude, geoJSON) {
     for (var i = 0; i < geoJSON.features.length; i++) {
         var feature = geoJSON.features[i];
@@ -108,10 +134,17 @@ function getCountryFromCoordinates(latitude, longitude, geoJSON) {
         }
     }
     console.log('No country found');
-    return ""; // Retorna uma string vazia se nenhum país for encontrado
+    return "";
 }
 
-//! Get the country code by latitude and longitude
+/**
+ * Retrieves the country code based on given coordinates using a GeoJSON object.
+ * 
+ * @param {number} latitude - The latitude of the coordinates.
+ * @param {number} longitude - The longitude of the coordinates.
+ * @param {Object} geoJSON - The GeoJSON object containing country features.
+ * @returns {string} The ISO country code corresponding to the coordinates.
+ */
 function getCountryCodeFromCoordinates(latitude, longitude, geoJSON) {
     for (var i = 0; i < geoJSON.features.length; i++) {
         var feature = geoJSON.features[i];
@@ -120,15 +153,17 @@ function getCountryCodeFromCoordinates(latitude, longitude, geoJSON) {
         }
     }
     console.log('No country found');
-    return ""; // Retorna uma string vazia se nenhum país for encontrado
+    return "";
 }
 
-//! update the country list on the select element
+/**
+ * Updates the country list in the HTML select element with data retrieved from the server.
+ */
 function updateCountryList() {
     var selectElement = $('#countriesList select');
 
     $.getJSON('assets/php/getCountryList.php', function (data) {
-        selectElement.empty(); // Limpa a lista antes de atualizá-la
+        selectElement.empty();
 
         $.each(data, function (index, country) {
             var option = $('<option>').val(country.iso_a2).text(country.name);
@@ -142,7 +177,11 @@ function updateCountryList() {
     });
 }
 
-//! Get the country code from the selected country and render the info modal
+/**
+ * Handles the click event of the info button for a selected country.
+ *
+ * @param {string} selectedCountryName - The name of the selected country.
+ */
 function handleInfoButtonClick(selectedCountryName) {
     $.getJSON('assets/php/getCountryList.php', function (data) {
         var selectedCountryCode = '';
@@ -158,14 +197,12 @@ function handleInfoButtonClick(selectedCountryName) {
     });
 }
 
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(map);
-}
-
-//! classify the magnitude of an earthquake
+/**
+ * Determines the classification of an earthquake based on its magnitude using the Richter scale.
+ *
+ * @param {number} magnitude - The magnitude of the earthquake.
+ * @returns {string} The classification of the earthquake.
+ */
 function richterScale(magnitude) {
     if (magnitude < 3.0) {
         return 'Microtremor';
@@ -182,13 +219,19 @@ function richterScale(magnitude) {
     }
 }
 
-//! Get wikipedia article about a country from wikipediaSearch.php
+/**
+ * Retrieves Wikipedia article data within the specified geographical boundaries.
+ *
+ * @param {number} north - The northern boundary latitude.
+ * @param {number} south - The southern boundary latitude.
+ * @param {number} east - The eastern boundary longitude.
+ * @param {number} west - The western boundary longitude.
+ * @returns {Object|null} The retrieved Wikipedia article data, or null if an error occurs.
+ */
 async function getWikipediaArticle(north, south, east, west) {
     try {
-        console.log('north=' + north + '\n&south=' + south + '\n&east=' + east + '\n&west=' + west);
         const response = await fetch('assets/php/wikipediaSearch.php?north=' + north + '&south=' + south + '&east=' + east + '&west=' + west);
         const data = await response.json();
-        console.log(data.data[0]);
         return data;
     } catch (error) {
         console.log(error);
@@ -196,7 +239,13 @@ async function getWikipediaArticle(north, south, east, west) {
     }
 }
 
-//! Get weather info from getWeatherInfo.php by latitude and longitude
+/**
+ * Retrieves weather information for the specified latitude and longitude.
+ *
+ * @param {number} latitude - The latitude coordinate.
+ * @param {number} longitude - The longitude coordinate.
+ * @returns {Object|null} The retrieved weather information, or null if an error occurs.
+ */
 async function getWeatherInfo(latitude, longitude) {
     try {
         const response = await fetch('assets/php/getWeatherInfo.php?lat=' + latitude + '&lng=' + longitude);
@@ -213,6 +262,11 @@ async function getWeatherInfo(latitude, longitude) {
 
 //* Leaflet helper functions
 
+/**
+ * Toggles the visibility of markers on the map.
+ * If markers are currently visible, they will be removed.
+ * If markers are not currently visible, earthquake markers will be added based on the country's cardinal coordinates.
+ */
 async function toggleMarkers() {
     if (markersVisible) {
         removeMarkers();
@@ -232,9 +286,15 @@ async function toggleMarkers() {
     }
 }
 
+/**
+ * Handles the click event on an earthquake marker.
+ * Displays a popup with information about the earthquake.
+ *
+ * @param {Object} earthquake - The earthquake object containing information about the earthquake.
+ */
 function onMarkerClick(earthquake) {
 
-    const datetime = new Date(earthquake.datetime); // Convert datetime string to a Date object
+    const datetime = new Date(earthquake.datetime);
 
     const formattedDate = datetime.toLocaleString('en-GB', {
         day: '2-digit',
@@ -257,9 +317,15 @@ function onMarkerClick(earthquake) {
         .openOn(map);
 }
 
-//! Add earthquake markers to the map
+/**
+ * Fetches earthquake data from the server and adds markers for each earthquake within the specified bounding box.
+ *
+ * @param {number} north - The northern latitude of the bounding box.
+ * @param {number} south - The southern latitude of the bounding box.
+ * @param {number} east - The eastern longitude of the bounding box.
+ * @param {number} west - The western longitude of the bounding box.
+ */
 async function addEarthquakes(north, south, east, west) {
-    console.log('north: ' + north + ', south: ' + south + ', east: ' + east + ', west: ' + west);
     const response = await fetch('assets/php/earthquakes.php?north=' + north + '&south=' + south + '&east=' + east + '&west=' + west);
     const data = await response.json();
     data.data.forEach(function (earthquake) {
@@ -274,22 +340,21 @@ async function addEarthquakes(north, south, east, west) {
             iconAnchor: [20, 40]
         });
 
-        // Crie um marcador usando as coordenadas lat e lng
         var marker = L.marker([lat, lng], { icon: earthquakeIcon });
 
-        // Adiciona um evento de clique ao marcador para exibir as informações
         marker.on('click', function () {
             onMarkerClick(earthquake);
         });
 
-        // Adicione o marcador à matriz earthquakeMarkers
         earthquakeMarkers.push(marker);
 
-        // Adicione o marcador ao mapa
         marker.addTo(map);
     });
 }
 
+/**
+ * Removes all earthquake markers from the map.
+ */
 function removeMarkers() {
     if (earthquakeMarkers.length > 0) {
         earthquakeMarkers.forEach(function (marker) {
@@ -300,33 +365,39 @@ function removeMarkers() {
 }
 
 function hideLoadingModal() {
-    $('#modal .loading-text').remove(); // Remove the loading dots text
+    $('#modal .loading-text').remove();
 }
 
+/**
+ * Renders the information modal for a given country.
+ * 
+ * @param {string} countryCode - The country code of the country.
+ */
 async function renderInfoModal(countryCode) {
     showLoadingModal();
 
     var countryInfo = await getCountryInfoByCode(countryCode);
 
-    // Atualize o título do modal
     $('#modalLabel').text(countryInfo.countryName + ' Information');
 
-    // Limpe o conteúdo atual do modal
     $('#modal .modal-body').empty();
 
-    // Crie elementos HTML para as informações do país
     var capitalElement = $('<p>').append($('<span class="title-info">').text('Capital: '), countryInfo.capital);
     var populationElement = $('<p>').append($('<span class="title-info">').text('Population: '), countryInfo.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     var areaElement = $('<p>').append($('<span class="title-info">').text('Area: '), countryInfo.areaInSqKm.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' km²');
     var continentElement = $('<p>').append($('<span class="title-info">').text('Continent: '), countryInfo.continentName);
 
-    // Adicione os elementos criados ao modal
     $('#modal .modal-body').append(capitalElement, populationElement, areaElement, continentElement);
 
-    hideLoadingModal(); // Hide the loading modal after the information is rendered
+    hideLoadingModal();
 }
 
-//! Convert timestamp to hh:mm format
+/**
+ * Converts a timestamp to the hh:mm format.
+ * 
+ * @param {number} timestamp - The timestamp to convert.
+ * @returns {string} The time in the hh:mm format.
+ */
 function timestampToTime(timestamp) {
     var date = new Date(timestamp * 1000);
     var hours = date.getHours();
@@ -336,13 +407,16 @@ function timestampToTime(timestamp) {
 }
 
 
-//! Render weather modal
+/**
+ * Renders the weather modal with weather information for a specific country.
+ * 
+ * @param {string} countryName - The name of the country.
+ */
 async function renderWeatherModal(countryName) {
     showLoadingModal();
     var coordinates = await getCoordinatesFromCountry(countryName);
     var weatherInfo = await getWeatherInfo(coordinates[0], coordinates[1]);
 
-    // date dd/mm/yyyy
     var date = new Date();
     var weatherDescription = (weatherInfo.weather[0].description);
     var temperature = ((weatherInfo.main.temp - 273.15).toFixed(1) + '°C');
@@ -354,13 +428,10 @@ async function renderWeatherModal(countryName) {
     var sunrise = (timestampToTime(weatherInfo.sys.sunrise) + 'h');
     var sunset = (timestampToTime(weatherInfo.sys.sunset) + 'h');
 
-    // Atualize o título do modal
     $('#modalLabel').text('General weather to ' + countryName);
 
-    // Limpe o conteúdo atual do modal
     $('#modal .modal-body').empty();
 
-    // Crie elementos HTML para as informações do tempo
     var weatherElement = $('<p>').append($('<span class="title-info">').text('Weather for today: '), date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
     var weatherDescriptionElement = $('<p>').append($('<span class="title-info">').text('Weather description: '), weatherDescription);
     var temperatureElement = $('<p>').append($('<span class="title-info">').text('Temperature: '), temperature);
@@ -372,13 +443,16 @@ async function renderWeatherModal(countryName) {
     var sunriseElement = $('<p>').append($('<span class="title-info">').text('Sunrise: '), sunrise);
     var sunsetElement = $('<p>').append($('<span class="title-info">').text('Sunset: '), sunset);
 
-    // Adicione os elementos criados ao modal
     $('#modal .modal-body').append(weatherElement, weatherDescriptionElement, temperatureElement, feelsLikeElement, minTemperatureElement, maxTemperatureElement, humidityElement, windSpeedElement, sunriseElement, sunsetElement);
 
-    hideLoadingModal(); // Hide the loading modal after the information is rendered
+    hideLoadingModal();
 }
 
-//! Render wikipedia modal
+/**
+ * Renders the Wikipedia modal with insights for a specific country and neighbourhood.
+ * 
+ * @param {string} countryCode - The country code.
+ */
 async function renderWikipediaModal(countryCode) {
     showLoadingModal();
 
@@ -386,46 +460,41 @@ async function renderWikipediaModal(countryCode) {
     var cardinalCoordinates = await getCountryInfoByCode(countryInfo.countryCode);
     var wikiInfo = await getWikipediaArticle(cardinalCoordinates.north, cardinalCoordinates.south, cardinalCoordinates.east, cardinalCoordinates.west);
 
-    // Atualize o título do modal
     $('#modalLabel').text('Wikipedia insights to ' + countryInfo.countryName);
 
-    // Limpe o conteúdo atual do modal
     $('#modal .modal-body').empty();
 
-    // Crie elementos HTML para as informações da wikipedia
     var wikiSummaryElement = $('<p>').append($('<span class="title-info">').text('Wikipedia Insights: '), wikiInfo.data[0].summary);
     var wikiLinkElement = $('<p>').append(
         $('<span class="title-info">').text('Keep reading at Wikipedia: '),
         $('<a target="blank">').attr('href', 'https://' + wikiInfo.data[0].wikipediaUrl).text(countryInfo.countryName + ' insights at Wikipedia'),
     );
 
-    // Adicione os elementos criados ao modal
     $('#modal .modal-body').append(wikiSummaryElement, wikiLinkElement);
 
-    hideLoadingModal(); // Hide the loading modal after the information is rendered
-
+    hideLoadingModal();
 }
 
-//! Render Currency modal
+/**
+ * Renders the Currency modal with the exchange rate for a specific country's currency.
+ * 
+ * @param {string} countryCode - The country code.
+ */
 async function renderCurrencyModal(countryCode) {
     showLoadingModal();
 
     var countryInfo = await getCountryInfoByCode(countryCode);
     var exchangeRate = await getExchangeRate(countryInfo.currencyCode);
 
-    // Atualize o título do modal
     $('#modalLabel').text('Currency exchange rate to ' + countryInfo.currencyName);
 
-    // Limpe o conteúdo atual do modal
     $('#modal .modal-body').empty();
 
-    // Crie elementos HTML para as informações da conversão de moeda
     var currencyElement = $('<p>').append($('<span class="title-info">').text('Currency: '), countryInfo.currencyCode + ' 1 = ' + exchangeRate + ' USD');
 
-    // Adicione os elementos criados ao modal
     $('#modal .modal-body').append(currencyElement);
 
-    hideLoadingModal(); // Hide the loading modal after the information is rendered
+    hideLoadingModal();
 }
 
 
@@ -445,7 +514,6 @@ function showLoadingModal() {
         loadingText.text(loadingDots[dotIndex]);
     }, 500);
 
-    // Store the interval ID so it can be cleared later
     $('#modal').data('intervalId', intervalId);
 }
 
@@ -454,14 +522,12 @@ function showLoadingModal() {
 
 //* End of Leaflet helper functions
 
-//! Loading overlay
 $(window).on('load', function () {
     $('#loading-overlay').fadeOut('slow');
 });
 
 // * Leaflet codes
 
-//! Map instance and rendering
 // map initialization
 var map = L.map('map').setView([51.505, -0.09], 15);
 
@@ -488,9 +554,6 @@ var OpenRailwayMap = L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/
 
 mapLayer.addTo(map);
 
-//! End of map instance and rendering
-
-//! Map groups
 
 var mapViews = {
     'street': mapLayer,
@@ -504,12 +567,8 @@ var overlays = {
 
 L.control.layers(mapViews, overlays).addTo(map);
 
-//! End of map groups
-
-//! featureGroup object to store the GeoJSON layers
 var featureGroup = L.featureGroup().addTo(map);
 
-//! add layers from GeoJSON data to the featureGroup object
 $.getJSON('assets/php/geoJSON.php', function (data) {
 
     L.geoJSON(data, {
@@ -601,29 +660,21 @@ function handleGeolocation(position) {
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
 
-    // Set map view to current location
     map.setView([latitude, longitude], 12);
 
-
-
-
-    //Retrieve country information based on the current location
     $.getJSON('assets/php/geoJSON.php', function (geoJSONdata) {
         var selectedCountry = getCountryFromCoordinates(latitude, longitude, geoJSONdata);
         var selectedCountryCode = getCountryCodeFromCoordinates(latitude, longitude, geoJSONdata);
         countryCode = selectedCountryCode;
 
-        // Get the country name by the current location
         selectedCountryName = getCountryFromCoordinates(latitude, longitude, geoJSONdata);
 
-        // Remove existing layers from the map
         map.eachLayer(function (layer) {
             if (layer !== featureGroup && layer !== mapLayer) {
                 map.removeLayer(layer);
             }
         });
 
-        // Highlight the selected country
         featureGroup.eachLayer(function (layer) {
             if (layer.feature.properties.name === selectedCountry) {
                 layer.setStyle({ className: 'selected' });
@@ -633,7 +684,6 @@ function handleGeolocation(position) {
             }
         });
 
-        // Fit the map to the bounds of the selected country
         var selectedLayer = featureGroup.getLayers().find(function (layer) {
             return layer.feature.properties.name === selectedCountry;
         });
@@ -666,15 +716,12 @@ function handleCountryListChange() {
     selectedCountryName = selectedCountryList;
     markersVisible = false;
 
-
-    // Remove existing layers from the map
     map.eachLayer(function (layer) {
         if (layer !== featureGroup && layer !== mapLayer) {
             map.removeLayer(layer);
         }
     });
 
-    // Highlight the selected country
     featureGroup.eachLayer(function (layer) {
         if (layer.feature.properties.name === selectedCountryList) {
             layer.setStyle({ className: 'selected' });
@@ -684,7 +731,6 @@ function handleCountryListChange() {
         }
     });
 
-    // Fit the map to the bounds of the selected country
     var selectedLayer = featureGroup.getLayers().find(function (layer) {
         return layer.feature.properties.name === selectedCountryList;
     });
