@@ -32,45 +32,45 @@
     <body>
         <div id="cover-layer"></div>
         <div id="loading-circle"></div>
-            <!-- Modal -->
-            <div
-                class="modal fade"
-                id="modal"
-                tabindex="-1"
-                aria-labelledby="modalLabel"
-                aria-hidden="true"
-            >
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="modalLabel"></h1>
-                            <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            ></button>
-                        </div>
-                        <div class="modal-body"></div>
-                        <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-secondary"
-                                data-bs-dismiss="modal"
-                            >
-                                Close
-                            </button>
-                        </div>
+        <!-- Modal -->
+        <div
+            class="modal fade"
+            id="modal"
+            tabindex="-1"
+            aria-labelledby="modalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalLabel">Title</h1>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
                     </div>
                 </div>
             </div>
-
-            <nav id="countriesList">
-                <label for="countrieList">Select a Country: </label>
-                <select name="countrieList" id="countrieList"></select>
-            </nav>
-            <div id="map"></div>
         </div>
+
+        <nav id="countriesList">
+            <label for="countrieList">Select a Country: </label>
+            <select name="countrieList" id="countrieList"></select>
+        </nav>
+        <div id="map"></div>
+
         <!-- Leaflet JS -->
         <script
             src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"

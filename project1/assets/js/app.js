@@ -532,17 +532,12 @@ $(window).on('load', function () {
 var map = L.map('map').setView([51.505, -0.09], 15);
 
 // map layer
-var mapLayer = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-    maxZoom: 20,
-    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+var mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	maxZoom: 19,
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
 var mapSatellite = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-    maxZoom: 20,
-    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-});
-
-var mapHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
     maxZoom: 20,
     subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
 });
@@ -558,7 +553,6 @@ mapLayer.addTo(map);
 var mapViews = {
     'street': mapLayer,
     'satellite': mapSatellite,
-    'hybrid': mapHybrid,
 };
 
 var overlays = {
