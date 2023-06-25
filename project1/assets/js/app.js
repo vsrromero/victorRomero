@@ -1,10 +1,8 @@
 //* global variables
 
-var homePosition = [];
 var selectedCountryName = '';
 var popup = L.popup();
 var earthquakeMarkers = [];
-var marker = null;
 var markersVisible = false;
 var countryCode = '';
 
@@ -174,26 +172,6 @@ function updateCountryList() {
 
             selectElement.append(option);
         });
-    });
-}
-
-/**
- * Handles the click event of the info button for a selected country.
- *
- * @param {string} selectedCountryName - The name of the selected country.
- */
-function handleInfoButtonClick(selectedCountryName) {
-    $.getJSON('assets/php/getCountryList.php', function (data) {
-        var selectedCountryCode = '';
-        $.each(data, function (index, country) {
-            if (country.name === selectedCountryName) {
-                selectedCountryCode = country.iso_a2;
-            }
-        });
-
-        if (selectedCountryCode !== '') {
-            renderInfoModal(selectedCountryName, selectedCountryCode);
-        }
     });
 }
 
