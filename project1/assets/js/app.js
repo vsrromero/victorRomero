@@ -5,6 +5,8 @@ var popup = L.popup();
 var earthquakeMarkers = [];
 var markersVisible = false;
 var countryCode = '';
+var markerCluster;
+
 
 //* End of global variables
 
@@ -306,16 +308,22 @@ function onMarkerClick(earthquake) {
 async function addEarthquakes(north, south, east, west) {
     const response = await fetch('assets/php/earthquakes.php?north=' + north + '&south=' + south + '&east=' + east + '&west=' + west);
     const data = await response.json();
+
+    // Create a marker cluster group
+    markerCluster = L.markerClusterGroup({
+        showCoverageOnHover: false,
+    });
+
     data.data.forEach(function (earthquake) {
         var lat = earthquake.lat;
         var lng = earthquake.lng;
 
-        // customize the marker
-        var earthquakeIcon = L.divIcon({
-            className: 'custom-marker-icon',
-            html: '<i class="fa-solid fa-house-chimney-crack"></i>',
-            iconSize: [20, 20],
-            iconAnchor: [20, 40]
+        // Customize the marker with the ExtraMarkers plugin
+        var earthquakeIcon = L.ExtraMarkers.icon({
+            icon: 'fa-house-chimney-crack',
+            markerColor: 'red',
+            shape: 'circle',
+            prefix: 'fa'
         });
 
         var marker = L.marker([lat, lng], { icon: earthquakeIcon });
@@ -324,10 +332,12 @@ async function addEarthquakes(north, south, east, west) {
             onMarkerClick(earthquake);
         });
 
-        earthquakeMarkers.push(marker);
+        markerCluster.addLayer(marker); // Add the marker to the marker cluster group
 
-        marker.addTo(map);
+        earthquakeMarkers.push(marker);
     });
+
+    map.addLayer(markerCluster); // Add the marker cluster group to the map
 }
 
 /**
@@ -336,9 +346,14 @@ async function addEarthquakes(north, south, east, west) {
 function removeMarkers() {
     if (earthquakeMarkers.length > 0) {
         earthquakeMarkers.forEach(function (marker) {
-            marker.remove();
+            marker.removeFrom(map); // Remove the marker from the map
         });
         earthquakeMarkers = [];
+    }
+
+    if (markerCluster) {
+        map.removeLayer(markerCluster); // Remove the marker cluster group from the map
+        markerCluster.clearLayers(); // Clear all markers inside the marker cluster group
     }
 }
 
@@ -511,8 +526,8 @@ var map = L.map('map').setView([51.505, -0.09], 15);
 
 // map layer
 var mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	maxZoom: 19,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
 var mapSatellite = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
@@ -563,7 +578,7 @@ var currencyControl = L.control({ position: 'topleft' });
 earthquakeMarkersControl.onAdd = function (map) {
     var button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
     button.innerHTML = '<i class="fa-solid fa-house-chimney-crack"></i>';
-    button.title = 'Last 20 Earthquake Locations';
+    button.title = 'Last 20 Nearby Earthquake Locations';
     button.classList.add('control-button');
     L.DomEvent.on(button, 'click', function () {
         toggleMarkers();
