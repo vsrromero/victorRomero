@@ -469,7 +469,7 @@ async function renderWikipediaModal(countryCode) {
 }
 
 /**
- * Renders the Currency modal with the exchange rate for a specific country's currency.
+ * Renders the Currency modal with the exchange rate for a specific country's currency and allows user to input a value to convert.
  * 
  * @param {string} countryCode - The country code.
  */
@@ -485,7 +485,19 @@ async function renderCurrencyModal(countryCode) {
 
     var currencyElement = $('<p>').append($('<span class="title-info">').text('Currency: '), countryInfo.currencyCode + ' 1 = ' + exchangeRate + ' USD');
 
-    $('#modal .modal-body').append(currencyElement);
+    // Input field for user to enter the value
+    var inputElement = $('<input type="text" id="currencyInput" placeholder="Enter amount">');
+    inputElement.on('input', function() {
+        var amount = parseFloat($(this).val());
+        if (!isNaN(amount)) {
+            var conversion = amount * exchangeRate;
+            $('#conversionResult').text('Conversion: ' + conversion.toFixed(2) + ' USD');
+        }
+    });
+
+    var conversionResult = $('<p id="conversionResult">');
+
+    $('#modal .modal-body').append(currencyElement, inputElement, conversionResult);
 
     hideLoadingModal();
 }
