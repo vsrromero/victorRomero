@@ -479,7 +479,7 @@ async function renderCurrencyModal(countryCode) {
     var countryInfo = await getCountryInfoByCode(countryCode);
     var exchangeRate = await getExchangeRate(countryInfo.currencyCode);
 
-    $('#modalLabel').text('Currency exchange rate to ' + countryInfo.currencyName);
+    $('#modalLabel').text(`Currency exchange rate ${countryInfo.currencyCode} to USD`);
 
     $('#modal .modal-body').empty();
 
