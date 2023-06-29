@@ -1,11 +1,11 @@
 //* global variables
 
-var selectedCountryName = '';
-var popup = L.popup();
-var earthquakeMarkers = [];
-var markersVisible = false;
-var countryCode = '';
-var markerCluster;
+let selectedCountryName = '';
+const popup = L.popup();
+let earthquakeMarkers = [];
+let markersVisible = false;
+let countryCode = '';
+let markerCluster;
 
 
 //* End of global variables
@@ -87,21 +87,21 @@ async function getCountryInfoByCode(countryCode) {
  * @param {Array<Array<Array<number>>>} coordinates - The coordinates defining the polygon.
  * @returns {boolean} A boolean indicating whether the point is inside the polygon.
  */
-function pointInPolygon(latitude, longitude, coordinates) {
-    var isInPolygon = false;
+function isInPolygon(latitude, longitude, coordinates) {
+    let isInPolygon = false;
 
-    for (var i = 0; i < coordinates.length; i++) {
-        var polygon = coordinates[i];
+    for (let i = 0; i < coordinates.length; i++) {
+        let polygon = coordinates[i];
 
-        for (var j = 0; j < polygon.length; j++) {
-            var ring = polygon[j];
+        for (let j = 0; j < polygon.length; j++) {
+            let ring = polygon[j];
 
-            var intersect = false;
-            for (var k = 0, l = ring.length - 1; k < ring.length; l = k++) {
-                var xi = ring[k][0];
-                var yi = ring[k][1];
-                var xj = ring[l][0];
-                var yj = ring[l][1];
+            let intersect = false;
+            for (let k = 0, l = ring.length - 1; k < ring.length; l = k++) {
+                let xi = ring[k][0];
+                let yi = ring[k][1];
+                let xj = ring[l][0];
+                let yj = ring[l][1];
 
                 if (((yi > latitude) !== (yj > latitude)) && (longitude < (xj - xi) * (latitude - yi) / (yj - yi) + xi)) {
                     intersect = !intersect;
@@ -126,9 +126,9 @@ function pointInPolygon(latitude, longitude, coordinates) {
  * @returns {string} The name of the country corresponding to the coordinates.
  */
 function getCountryFromCoordinates(latitude, longitude, geoJSON) {
-    for (var i = 0; i < geoJSON.features.length; i++) {
-        var feature = geoJSON.features[i];
-        if (pointInPolygon(latitude, longitude, feature.geometry.coordinates)) {
+    for (let i = 0; i < geoJSON.features.length; i++) {
+        let feature = geoJSON.features[i];
+        if (isInPolygon(latitude, longitude, feature.geometry.coordinates)) {
             updateCountryList();
             return feature.properties.name;
         }
@@ -146,9 +146,9 @@ function getCountryFromCoordinates(latitude, longitude, geoJSON) {
  * @returns {string} The ISO country code corresponding to the coordinates.
  */
 function getCountryCodeFromCoordinates(latitude, longitude, geoJSON) {
-    for (var i = 0; i < geoJSON.features.length; i++) {
-        var feature = geoJSON.features[i];
-        if (pointInPolygon(latitude, longitude, feature.geometry.coordinates)) {
+    for (let i = 0; i < geoJSON.features.length; i++) {
+        let feature = geoJSON.features[i];
+        if (isInPolygon(latitude, longitude, feature.geometry.coordinates)) {
             return feature.properties.iso_a2;
         }
     }
@@ -160,13 +160,13 @@ function getCountryCodeFromCoordinates(latitude, longitude, geoJSON) {
  * Updates the country list in the HTML select element with data retrieved from the server.
  */
 function updateCountryList() {
-    var selectElement = $('#countriesList select');
+    let selectElement = $('#countriesList select');
 
     $.getJSON('assets/php/getCountryList.php', function (data) {
         selectElement.empty();
 
         $.each(data, function (index, country) {
-            var option = $('<option>').val(country.iso_a2).text(country.name);
+            let option = $('<option>').val(country.iso_a2).text(country.name);
 
             if (country.name === selectedCountryName) {
                 option.attr('selected', 'selected');
@@ -253,11 +253,11 @@ async function toggleMarkers() {
         markersVisible = false;
 
     } else {
-        var cardinalCoordinates = await getCountryInfoByCode(countryCode);
-        var north = cardinalCoordinates.north;
-        var south = cardinalCoordinates.south;
-        var east = cardinalCoordinates.east;
-        var west = cardinalCoordinates.west;
+        let cardinalCoordinates = await getCountryInfoByCode(countryCode);
+        let north = cardinalCoordinates.north;
+        let south = cardinalCoordinates.south;
+        let east = cardinalCoordinates.east;
+        let west = cardinalCoordinates.west;
 
         addEarthquakes(north, south, east, west);
 
@@ -315,18 +315,18 @@ async function addEarthquakes(north, south, east, west) {
     });
 
     data.data.forEach(function (earthquake) {
-        var lat = earthquake.lat;
-        var lng = earthquake.lng;
+        let lat = earthquake.lat;
+        let lng = earthquake.lng;
 
         // Customize the marker with the ExtraMarkers plugin
-        var earthquakeIcon = L.ExtraMarkers.icon({
+        const earthquakeIcon = L.ExtraMarkers.icon({
             icon: 'fa-house-chimney-crack',
             markerColor: 'red',
             shape: 'circle',
             prefix: 'fa'
         });
 
-        var marker = L.marker([lat, lng], { icon: earthquakeIcon });
+        const marker = L.marker([lat, lng], { icon: earthquakeIcon });
 
         marker.on('click', function () {
             onMarkerClick(earthquake);
@@ -369,16 +369,16 @@ function hideLoadingModal() {
 async function renderInfoModal(countryCode) {
     showLoadingModal();
 
-    var countryInfo = await getCountryInfoByCode(countryCode);
+    let countryInfo = await getCountryInfoByCode(countryCode);
 
     $('#modalLabel').text(countryInfo.countryName + ' Information');
 
     $('#modal .modal-body').empty();
 
-    var capitalElement = $('<p>').append($('<span class="title-info">').text('Capital: '), countryInfo.capital);
-    var populationElement = $('<p>').append($('<span class="title-info">').text('Population: '), countryInfo.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-    var areaElement = $('<p>').append($('<span class="title-info">').text('Area: '), countryInfo.areaInSqKm.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' km²');
-    var continentElement = $('<p>').append($('<span class="title-info">').text('Continent: '), countryInfo.continentName);
+    const capitalElement = $('<p>').append($('<span class="title-info">').text('Capital: '), countryInfo.capital);
+    const populationElement = $('<p>').append($('<span class="title-info">').text('Population: '), countryInfo.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    const areaElement = $('<p>').append($('<span class="title-info">').text('Area: '), countryInfo.areaInSqKm.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' km²');
+    const continentElement = $('<p>').append($('<span class="title-info">').text('Continent: '), countryInfo.continentName);
 
     $('#modal .modal-body').append(capitalElement, populationElement, areaElement, continentElement);
 
@@ -392,10 +392,10 @@ async function renderInfoModal(countryCode) {
  * @returns {string} The time in the hh:mm format.
  */
 function timestampToTime(timestamp) {
-    var date = new Date(timestamp * 1000);
-    var hours = date.getHours();
-    var minutes = "0" + date.getMinutes();
-    var formattedTime = hours + ':' + minutes.substr(-2);
+    let date = new Date(timestamp * 1000);
+    let hours = date.getHours();
+    let minutes = "0" + date.getMinutes();
+    let formattedTime = hours + ':' + minutes.substr(-2);
     return formattedTime;
 }
 
@@ -407,34 +407,34 @@ function timestampToTime(timestamp) {
  */
 async function renderWeatherModal(countryName) {
     showLoadingModal();
-    var coordinates = await getCoordinatesFromCountry(countryName);
-    var weatherInfo = await getWeatherInfo(coordinates[0], coordinates[1]);
+    let coordinates = await getCoordinatesFromCountry(countryName);
+    let weatherInfo = await getWeatherInfo(coordinates[0], coordinates[1]);
 
-    var date = new Date();
-    var weatherDescription = (weatherInfo.weather[0].description);
-    var temperature = ((weatherInfo.main.temp - 273.15).toFixed(1) + '°C');
-    var feelsLike = ((weatherInfo.main.feels_like - 273.15).toFixed(1) + '°C');
-    var minTemperature = ((weatherInfo.main.temp_min - 273.15).toFixed(1) + '°C');
-    var maxTemperature = ((weatherInfo.main.temp_max - 273.15).toFixed(1) + '°C');
-    var humidity = (weatherInfo.main.humidity + '%');
-    var windSpeed = (weatherInfo.wind.speed + ' m/s');
-    var sunrise = (timestampToTime(weatherInfo.sys.sunrise) + 'h');
-    var sunset = (timestampToTime(weatherInfo.sys.sunset) + 'h');
+    const date = new Date();
+    const weatherDescription = (weatherInfo.weather[0].description);
+    const temperature = ((weatherInfo.main.temp - 273.15).toFixed(1) + '°C');
+    const feelsLike = ((weatherInfo.main.feels_like - 273.15).toFixed(1) + '°C');
+    const minTemperature = ((weatherInfo.main.temp_min - 273.15).toFixed(1) + '°C');
+    const maxTemperature = ((weatherInfo.main.temp_max - 273.15).toFixed(1) + '°C');
+    const humidity = (weatherInfo.main.humidity + '%');
+    const windSpeed = (weatherInfo.wind.speed + ' m/s');
+    const sunrise = (timestampToTime(weatherInfo.sys.sunrise) + 'h');
+    const sunset = (timestampToTime(weatherInfo.sys.sunset) + 'h');
 
     $('#modalLabel').text('General weather to ' + countryName);
 
     $('#modal .modal-body').empty();
 
-    var weatherElement = $('<p>').append($('<span class="title-info">').text('Weather for today: '), date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
-    var weatherDescriptionElement = $('<p>').append($('<span class="title-info">').text('Weather description: '), weatherDescription);
-    var temperatureElement = $('<p>').append($('<span class="title-info">').text('Temperature: '), temperature);
-    var feelsLikeElement = $('<p>').append($('<span class="title-info">').text('Feels like: '), feelsLike);
-    var minTemperatureElement = $('<p>').append($('<span class="title-info">').text('Min temperature: '), minTemperature);
-    var maxTemperatureElement = $('<p>').append($('<span class="title-info">').text('Max temperature: '), maxTemperature);
-    var humidityElement = $('<p>').append($('<span class="title-info">').text('Humidity: '), humidity);
-    var windSpeedElement = $('<p>').append($('<span class="title-info">').text('Wind speed: '), windSpeed);
-    var sunriseElement = $('<p>').append($('<span class="title-info">').text('Sunrise: '), sunrise);
-    var sunsetElement = $('<p>').append($('<span class="title-info">').text('Sunset: '), sunset);
+    const weatherElement = $('<p>').append($('<span class="title-info">').text('Weather for today: '), date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+    const weatherDescriptionElement = $('<p>').append($('<span class="title-info">').text('Weather description: '), weatherDescription);
+    const temperatureElement = $('<p>').append($('<span class="title-info">').text('Temperature: '), temperature);
+    const feelsLikeElement = $('<p>').append($('<span class="title-info">').text('Feels like: '), feelsLike);
+    const minTemperatureElement = $('<p>').append($('<span class="title-info">').text('Min temperature: '), minTemperature);
+    const maxTemperatureElement = $('<p>').append($('<span class="title-info">').text('Max temperature: '), maxTemperature);
+    const humidityElement = $('<p>').append($('<span class="title-info">').text('Humidity: '), humidity);
+    const windSpeedElement = $('<p>').append($('<span class="title-info">').text('Wind speed: '), windSpeed);
+    const sunriseElement = $('<p>').append($('<span class="title-info">').text('Sunrise: '), sunrise);
+    const sunsetElement = $('<p>').append($('<span class="title-info">').text('Sunset: '), sunset);
 
     $('#modal .modal-body').append(weatherElement, weatherDescriptionElement, temperatureElement, feelsLikeElement, minTemperatureElement, maxTemperatureElement, humidityElement, windSpeedElement, sunriseElement, sunsetElement);
 
@@ -449,16 +449,16 @@ async function renderWeatherModal(countryName) {
 async function renderWikipediaModal(countryCode) {
     showLoadingModal();
 
-    var countryInfo = await getCountryInfoByCode(countryCode);
-    var cardinalCoordinates = await getCountryInfoByCode(countryInfo.countryCode);
-    var wikiInfo = await getWikipediaArticle(cardinalCoordinates.north, cardinalCoordinates.south, cardinalCoordinates.east, cardinalCoordinates.west);
+    let countryInfo = await getCountryInfoByCode(countryCode);
+    let cardinalCoordinates = await getCountryInfoByCode(countryInfo.countryCode);
+    let wikiInfo = await getWikipediaArticle(cardinalCoordinates.north, cardinalCoordinates.south, cardinalCoordinates.east, cardinalCoordinates.west);
 
     $('#modalLabel').text('Wikipedia insights to ' + countryInfo.countryName);
 
     $('#modal .modal-body').empty();
 
-    var wikiSummaryElement = $('<p>').append($('<span class="title-info">').text('Wikipedia Insights: '), wikiInfo.data[0].summary);
-    var wikiLinkElement = $('<p>').append(
+    const wikiSummaryElement = $('<p>').append($('<span class="title-info">').text('Wikipedia Insights: '), wikiInfo.data[0].summary);
+    const wikiLinkElement = $('<p>').append(
         $('<span class="title-info">').text('Keep reading at Wikipedia: '),
         $('<a target="blank">').attr('href', 'https://' + wikiInfo.data[0].wikipediaUrl).text(countryInfo.countryName + ' insights at Wikipedia'),
     );
@@ -476,26 +476,26 @@ async function renderWikipediaModal(countryCode) {
 async function renderCurrencyModal(countryCode) {
     showLoadingModal();
 
-    var countryInfo = await getCountryInfoByCode(countryCode);
-    var exchangeRate = await getExchangeRate(countryInfo.currencyCode);
+    let countryInfo = await getCountryInfoByCode(countryCode);
+    let exchangeRate = await getExchangeRate(countryInfo.currencyCode);
 
     $('#modalLabel').text(`Currency exchange rate ${countryInfo.currencyCode} to USD`);
 
     $('#modal .modal-body').empty();
 
-    var currencyElement = $('<p>').append($('<span class="title-info">').text('Currency: '), countryInfo.currencyCode + ' 1 = ' + exchangeRate + ' USD');
+    const currencyElement = $('<p>').append($('<span class="title-info">').text('Currency: '), countryInfo.currencyCode + ' 1 = ' + exchangeRate + ' USD');
 
     // Input field for user to enter the value
-    var inputElement = $('<input type="text" id="currencyInput" placeholder="Enter amount">');
+    let inputElement = $('<input type="text" id="currencyInput" placeholder="Enter amount">');
     inputElement.on('input', function() {
-        var amount = parseFloat($(this).val());
+        let amount = parseFloat($(this).val());
         if (!isNaN(amount)) {
             var conversion = amount * exchangeRate;
             $('#conversionResult').text('Conversion: ' + conversion.toFixed(2) + ' USD');
         }
     });
 
-    var conversionResult = $('<p id="conversionResult">');
+    const conversionResult = $('<p id="conversionResult">');
 
     $('#modal .modal-body').append(currencyElement, inputElement, conversionResult);
 
@@ -508,13 +508,13 @@ function showLoadingModal() {
     $('#modal .modal-body').empty();
     $('#modal').modal('show');
 
-    var loadingDots = ['. ', '.. ', '... '];
-    var dotIndex = 0;
+    const loadingDots = ['. ', '.. ', '... '];
+    const dotIndex = 0;
 
-    var loadingText = $('<p class="loading-text">').text(loadingDots[dotIndex]);
+    const loadingText = $('<p class="loading-text">').text(loadingDots[dotIndex]);
     $('#modal .modal-body').append(loadingText);
 
-    var intervalId = setInterval(function () {
+    const intervalId = setInterval(function () {
         dotIndex = (dotIndex + 1) % loadingDots.length;
         loadingText.text(loadingDots[dotIndex]);
     }, 500);
@@ -534,20 +534,20 @@ $(window).on('load', function () {
 // * Leaflet codes
 
 // map initialization
-var map = L.map('map').setView([51.505, -0.09], 15);
+const map = L.map('map').setView([51.505, -0.09], 15);
 
 // map layer
-var mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+const mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
-var mapSatellite = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+const mapSatellite = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
     maxZoom: 20,
     subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
 });
 
-var OpenRailwayMap = L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
+const OpenRailwayMap = L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Map style: &copy; <a href="https://www.OpenRailwayMap.org">OpenRailwayMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 });
@@ -555,18 +555,18 @@ var OpenRailwayMap = L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/
 mapLayer.addTo(map);
 
 
-var mapViews = {
+const mapViews = {
     'street': mapLayer,
     'satellite': mapSatellite,
 };
 
-var overlays = {
+const overlays = {
     'world railway': OpenRailwayMap
 };
 
 L.control.layers(mapViews, overlays).addTo(map);
 
-var featureGroup = L.featureGroup().addTo(map);
+const featureGroup = L.featureGroup().addTo(map);
 
 $.getJSON('assets/php/geoJSON.php', function (data) {
 
@@ -579,16 +579,16 @@ $.getJSON('assets/php/geoJSON.php', function (data) {
 });
 
 // control buttons
-var earthquakeMarkersControl = L.control({ position: 'topleft' });
-var infoControl = L.control({ position: 'topleft' });
-var weatherControl = L.control({ position: 'topleft' });
-var wikipediaControl = L.control({ position: 'topleft' });
-var currencyControl = L.control({ position: 'topleft' });
+const earthquakeMarkersControl = L.control({ position: 'topleft' });
+const infoControl = L.control({ position: 'topleft' });
+const weatherControl = L.control({ position: 'topleft' });
+const wikipediaControl = L.control({ position: 'topleft' });
+const currencyControl = L.control({ position: 'topleft' });
 
 
 // button html
 earthquakeMarkersControl.onAdd = function (map) {
-    var button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
+    const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
     button.innerHTML = '<i class="fa-solid fa-house-chimney-crack"></i>';
     button.title = 'Last 20 Nearby Earthquake Locations';
     button.classList.add('control-button');
@@ -599,7 +599,7 @@ earthquakeMarkersControl.onAdd = function (map) {
 };
 
 infoControl.onAdd = function (map) {
-    var button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
+    const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
     button.innerHTML = '<i class="fas fa-info"></i>';
     button.title = 'Show Country Info';
     button.classList.add('control-button');
@@ -610,7 +610,7 @@ infoControl.onAdd = function (map) {
 };
 
 weatherControl.onAdd = function (map) {
-    var button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
+    const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
     button.innerHTML = '<i class="fas fa-cloud-sun"></i>';
     button.title = 'Current Weather';
     button.classList.add('control-button');
@@ -621,7 +621,7 @@ weatherControl.onAdd = function (map) {
 };
 
 wikipediaControl.onAdd = function (map) {
-    var button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
+    const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
     button.innerHTML = '<i class="fas fa-wikipedia-w"></i>';
     button.title = 'Wikipedia';
     button.classList.add('control-button');
@@ -632,7 +632,7 @@ wikipediaControl.onAdd = function (map) {
 };
 
 currencyControl.onAdd = function (map) {
-    var button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
+    const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
     button.innerHTML = '<i class="fas fa-money-bill-wave"></i>';
     button.title = 'Currency';
     button.classList.add('control-button');
@@ -656,14 +656,14 @@ currencyControl.addTo(map);
  * @param {Object} position - The geolocation position object containing latitude and longitude coordinates.
  */
 function handleGeolocation(position) {
-    var latitude = position.coords.latitude;
-    var longitude = position.coords.longitude;
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
 
     map.setView([latitude, longitude], 12);
 
     $.getJSON('assets/php/geoJSON.php', function (geoJSONdata) {
-        var selectedCountry = getCountryFromCoordinates(latitude, longitude, geoJSONdata);
-        var selectedCountryCode = getCountryCodeFromCoordinates(latitude, longitude, geoJSONdata);
+        const selectedCountry = getCountryFromCoordinates(latitude, longitude, geoJSONdata);
+        const selectedCountryCode = getCountryCodeFromCoordinates(latitude, longitude, geoJSONdata);
         countryCode = selectedCountryCode;
 
         selectedCountryName = getCountryFromCoordinates(latitude, longitude, geoJSONdata);
@@ -683,7 +683,7 @@ function handleGeolocation(position) {
             }
         });
 
-        var selectedLayer = featureGroup.getLayers().find(function (layer) {
+        const selectedLayer = featureGroup.getLayers().find(function (layer) {
             return layer.feature.properties.name === selectedCountry;
         });
         if (selectedLayer) {
@@ -693,7 +693,7 @@ function handleGeolocation(position) {
         map.addLayer(mapLayer);
 
         if (selectedCountryName !== '') {
-            var selectedLayer = featureGroup.getLayers().find(function (layer) {
+            const selectedLayer = featureGroup.getLayers().find(function (layer) {
                 return layer.feature.properties.name === selectedCountryName;
             });
 
@@ -709,8 +709,8 @@ function handleGeolocation(position) {
  * It updates the map and selected country based on the selected option.
  */
 function handleCountryListChange() {
-    var selectedCountryCodeList = $(this).find('option:selected').val();
-    var selectedCountryList = $(this).find('option:selected').text();
+    const selectedCountryCodeList = $(this).find('option:selected').val();
+    const selectedCountryList = $(this).find('option:selected').text();
     countryCode = selectedCountryCodeList;
     selectedCountryName = selectedCountryList;
     markersVisible = false;
@@ -730,7 +730,7 @@ function handleCountryListChange() {
         }
     });
 
-    var selectedLayer = featureGroup.getLayers().find(function (layer) {
+    const selectedLayer = featureGroup.getLayers().find(function (layer) {
         return layer.feature.properties.name === selectedCountryList;
     });
     if (selectedLayer) {
