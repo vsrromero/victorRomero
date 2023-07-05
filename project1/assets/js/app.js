@@ -160,7 +160,7 @@ function getCountryCodeFromCoordinates(latitude, longitude, geoJSON) {
  * Updates the country list in the HTML select element with data retrieved from the server.
  */
 function updateCountryList() {
-    let selectElement = $('#countriesList select');
+    let selectElement = $('#selectContainer select');
 
     $.getJSON('assets/php/getCountryList.php', function (data) {
         selectElement.empty();
@@ -542,9 +542,8 @@ const mapLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 });
 
-const mapSatellite = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-    maxZoom: 20,
-    subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+const mapSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 });
 
 const OpenRailwayMap = L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
@@ -757,8 +756,8 @@ $(document).ready(function () {
     updateCountryList();
 });
 
-//! Runs when the element with id="countriesList" is changed
-$('#countriesList select').change(handleCountryListChange);
+//! Runs when the element with id="selectContainer" is changed
+$('#selectContainer select').change(handleCountryListChange);
 
 //* End of JQuery codes
 
