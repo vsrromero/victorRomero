@@ -1,11 +1,12 @@
 //* global variables
 
 let selectedCountryName = '';
-const popup = L.popup();
 let earthquakeMarkers = [];
 let markersVisible = false;
 let countryCode = '';
 let markerCluster;
+const popup = L.popup();
+
 
 
 //* End of global variables
@@ -311,7 +312,14 @@ async function addEarthquakes(north, south, east, west) {
 
     // Create a marker cluster group
     markerCluster = L.markerClusterGroup({
-        showCoverageOnHover: false,
+        showCoverageOnHover: true,
+        polygonOptions: {
+            fillColor: '#fff',
+            color: '#050',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5
+        }
     });
 
     data.data.forEach(function (earthquake) {
@@ -572,10 +580,20 @@ $.getJSON('assets/php/geoJSON.php', function (data) {
     L.geoJSON(data, {
         onEachFeature: function (feature, layer) {
             featureGroup.addLayer(layer);
+        },
+        style: function (feature) {
+            return {
+                color: '#585',
+                fillColor: '#585',
+                fillOpacity: 0.1,
+                weight: 2
+            }
         }
     }).addTo(map);
 
 });
+
+
 
 // control buttons
 const earthquakeMarkersControl = L.control({ position: 'topleft' });
