@@ -7,30 +7,28 @@
         <link rel="icon" href="./assets/img/favicon.ico" />
         <link
             rel="stylesheet"
-            href="./node_modules/normalize.css/normalize.css"
+            href="node_modules/normalize.css/normalize.css"
+        />
+        <!-- fontawesome CSS -->
+        <link
+
+            href="node_modules/@fortawesome/fontawesome-free/css/all.css"
+
         />
         <link
             rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-            integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
+            href="node_modules/bootstrap/dist/css/bootstrap.css"
         />
-        <link
-            rel="stylesheet"
-            href="./node_modules/bootstrap/dist/css/bootstrap.css"
-        />
-        <link rel="stylesheet" href="./assets/css/style.css" />
         <!-- Leaflet CSS -->
         <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-            crossorigin=""
+        rel="stylesheet"
+        href="node_modules/leaflet/dist/leaflet.css"
         />
         <link rel="stylesheet" href="dist/css/leaflet.extra-markers.min.css">
         <link rel="stylesheet" href="dist/css/MarkerCluster.css">
         <link rel="stylesheet" href="dist/css/MarkerCluster.Default.css">
+        <!-- Custom style -->
+        <link rel="stylesheet" href="assets/css/style.css" />
     </head>
     <body>
         <div id="cover-layer"></div>
@@ -73,27 +71,20 @@
             <select name="countrieList" id="countrieList"></select>
         </nav>
         <div id="map"></div>
-
+        
+        <!-- jQuery JS -->
+        <script src="node_modules/jquery/dist/jquery.js"></script>
+        <!-- Bootstrap JS -->
+        <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
         <!-- Leaflet JS -->
-        <script
-            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""
-        ></script>
-        <script src="./dist/js/leaflet.extra-markers.min.js"></script>
-        <script src="./dist/js/leaflet.markercluster-src.js"></script>
+        <script src="node_modules/leaflet/dist/leaflet.js"></script>
+        <script src="dist/js/leaflet.extra-markers.min.js"></script>
+        <script src="dist/js/leaflet.markercluster-src.js"></script>
         <!-- fontawesome JS -->
         <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
-            integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
+            src="node_modules/@fortawesome/fontawesome-free/js/all.js"
         ></script>
-        <!-- jQuery JS -->
-        <script src="./node_modules/jquery/dist/jquery.js"></script>
         <!-- app JS -->
-        <script src="./assets/js/app.js"></script>
-        <!-- Bootstrap JS -->
-        <script src="./node_modules/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="assets/js/app.js"></script>
     </body>
 </html>
