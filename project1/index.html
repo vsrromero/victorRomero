@@ -10,23 +10,16 @@
             href="node_modules/normalize.css/normalize.css"
         />
         <!-- fontawesome CSS -->
-        <link
-
-            href="node_modules/@fortawesome/fontawesome-free/css/all.css"
-
-        />
+        <link href="node_modules/@fortawesome/fontawesome-free/css/all.css" />
         <link
             rel="stylesheet"
             href="node_modules/bootstrap/dist/css/bootstrap.css"
         />
         <!-- Leaflet CSS -->
-        <link
-        rel="stylesheet"
-        href="node_modules/leaflet/dist/leaflet.css"
-        />
-        <link rel="stylesheet" href="dist/css/leaflet.extra-markers.min.css">
-        <link rel="stylesheet" href="dist/css/MarkerCluster.css">
-        <link rel="stylesheet" href="dist/css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+        <link rel="stylesheet" href="dist/css/leaflet.extra-markers.min.css" />
+        <link rel="stylesheet" href="dist/css/MarkerCluster.css" />
+        <link rel="stylesheet" href="dist/css/MarkerCluster.Default.css" />
         <!-- Custom style -->
         <link rel="stylesheet" href="assets/css/style.css" />
     </head>
@@ -45,14 +38,60 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="modalLabel">Title</h1>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
                     </div>
-                    <div class="modal-body"></div>
+                    <div class="modal-body" id="modal-body">
+                        Loading
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Modal -->
+
+        <div
+            class="modal fade"
+            id="infoModal"
+            tabindex="-1"
+            aria-labelledby="infoModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog custom-modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content shadow">
+                    <div class="modal-header bg-success bg-gradient text-white">
+                        <h5 class="modal-title fs-5" id="infoModalLabel">
+                            Title
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="infoModalBody">
+                        <table class="table table-striped" id="countryInfo">
+                            <tr>
+                                <td class="text-center"><i class="fa-solid fa-landmark fa-xl text-success"></i></td>
+                                <td class="title-info">Capital:</td>
+                                <td class="text-end" id="countryCapital"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-center"><i class="fa-solid fa-people-group fa-xl text-success"></i></td>
+                                <td class="title-info">Population:</td>
+                                <td class="text-end" id="countryPopulation"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-center"><i class="fa-solid fa-chart-area fa-xl text-success"></i></td>
+                                <td class="title-info">Area:</td>
+                                <td class="text-end" id="countryArea"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-center"><i class="fa-solid fa-globe fa-xl text-success"></i></td>
+                                <td class="title-info">Region:</td>
+                                <td class="text-end" id="countryRegion"></td>
+                            </tr>
+                        </table>
+                    </div>
                     <div class="modal-footer">
                         <button
                             type="button"
@@ -66,11 +105,17 @@
             </div>
         </div>
 
+        <!-- End Info Modal -->
+
         <nav id="selectContainer">
-            <select name="countrySelect" id="countrySelect" class="form-select shadow-sm"></select>
+            <select
+                name="countrySelect"
+                id="countrySelect"
+                class="form-select shadow-sm"
+            ></select>
         </nav>
         <div id="map"></div>
-        
+
         <!-- jQuery JS -->
         <script src="node_modules/jquery/dist/jquery.js"></script>
         <!-- Bootstrap JS -->
@@ -80,9 +125,7 @@
         <script src="dist/js/leaflet.extra-markers.min.js"></script>
         <script src="dist/js/leaflet.markercluster-src.js"></script>
         <!-- fontawesome JS -->
-        <script
-            src="node_modules/@fortawesome/fontawesome-free/js/all.js"
-        ></script>
+        <script src="node_modules/@fortawesome/fontawesome-free/js/all.js"></script>
         <!-- app JS -->
         <script src="assets/js/app.js"></script>
     </body>

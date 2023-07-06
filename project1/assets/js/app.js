@@ -375,20 +375,24 @@ function hideLoadingModal() {
  * @param {string} countryCode - The country code of the country.
  */
 async function renderInfoModal(countryCode) {
-    showLoadingModal();
+
+    const modalId = 'infoModal';
+    const modalLabelId = 'infoModalLabel';
+    const modalBodyId = 'infoModalBody';
+
+    showLoadingModal(modalId, modalLabelId, modalBodyId);
 
     let countryInfo = await getCountryInfoByCode(countryCode);
 
-    $('#modalLabel').text(countryInfo.countryName + ' Information');
+    $('#' + modalId +' .' + modalBodyId).empty();
+    
+    $('#' + modalLabelId).text(countryInfo.countryName + ' Information');
 
-    $('#modal .modal-body').empty();
-
-    const capitalElement = $('<p>').append($('<span class="title-info">').text('Capital: '), countryInfo.capital);
-    const populationElement = $('<p>').append($('<span class="title-info">').text('Population: '), countryInfo.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-    const areaElement = $('<p>').append($('<span class="title-info">').text('Area: '), countryInfo.areaInSqKm.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' km²');
-    const continentElement = $('<p>').append($('<span class="title-info">').text('Continent: '), countryInfo.continentName);
-
-    $('#modal .modal-body').append(capitalElement, populationElement, areaElement, continentElement);
+    $('#' + modalLabelId).text(countryInfo.countryName + ' Information');
+    $('#countryCapital').text(countryInfo.capital);
+    $('#countryPopulation').text(countryInfo.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    $('#countryArea').html(countryInfo.areaInSqKm.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' km<sup>2');
+    $('#countryRegion').text(countryInfo.continentName);
 
     hideLoadingModal();
 }
@@ -511,23 +515,23 @@ async function renderCurrencyModal(countryCode) {
 }
 
 
-function showLoadingModal() {
-    $('#modalLabel').text('Loading...');
-    $('#modal .modal-body').empty();
-    $('#modal').modal('show');
+function showLoadingModal(modalId, modalLabelId, modalBodyId) {
+    $('#' + modalLabelId).text('Loading...');
+    $('#' + modalId + ' .' + modalBodyId).empty();
+    $('#' + modalId).modal('show');
 
     const loadingDots = ['. ', '.. ', '... '];
-    const dotIndex = 0;
+    let dotIndex = 0;
 
     const loadingText = $('<p class="loading-text">').text(loadingDots[dotIndex]);
-    $('#modal .modal-body').append(loadingText);
+    $('#' + modalId + ' .' + modalBodyId).append(loadingText);
 
     const intervalId = setInterval(function () {
         dotIndex = (dotIndex + 1) % loadingDots.length;
         loadingText.text(loadingDots[dotIndex]);
     }, 500);
 
-    $('#modal').data('intervalId', intervalId);
+    $('#' + modalId).data('intervalId', intervalId);
 }
 
 
