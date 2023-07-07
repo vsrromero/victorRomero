@@ -134,8 +134,15 @@ select {
   padding: 11px 0;
 }
 
-.modal {
-  height: 450px !important;
-  overflow: auto;
+.fadeOut {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 1s, opacity 1s linear;
+}
+
+
+.footer {
+  position: fixed;
+  bottom: 0;
 }
 
