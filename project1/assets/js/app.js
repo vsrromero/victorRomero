@@ -385,8 +385,6 @@ async function renderInfoModal(countryCode) {
     let countryInfo = await getCountryInfoByCode(countryCode);
 
     $('#' + modalId +' .' + modalBodyId).empty();
-    
-    $('#' + modalLabelId).text(countryInfo.countryName + ' Information');
 
     $('#' + modalLabelId).text(countryInfo.countryName + ' Information');
     $('#countryCapital').text(countryInfo.capital);
@@ -418,7 +416,12 @@ function timestampToTime(timestamp) {
  * @param {string} countryName - The name of the country.
  */
 async function renderWeatherModal(countryName) {
-    showLoadingModal();
+    
+    const modalId = 'weatherModal';
+    const modalLabelId = 'weatherModalLabel';
+    const modalBodyId = 'weatherModalBody';
+    showLoadingModal(modalId, modalLabelId, modalBodyId);
+
     let coordinates = await getCoordinatesFromCountry(countryName);
     let weatherInfo = await getWeatherInfo(coordinates[0], coordinates[1]);
 
@@ -433,9 +436,9 @@ async function renderWeatherModal(countryName) {
     const sunrise = (timestampToTime(weatherInfo.sys.sunrise) + 'h');
     const sunset = (timestampToTime(weatherInfo.sys.sunset) + 'h');
 
-    $('#modalLabel').text('General weather to ' + countryName);
+    $('#' + modalLabelId).text('General weather to ' + countryName);
 
-    $('#modal .modal-body').empty();
+    $('#' + modalId +' .' + modalBodyId).empty();
 
     const weatherElement = $('<p>').append($('<span class="title-info">').text('Weather for today: '), date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
     const weatherDescriptionElement = $('<p>').append($('<span class="title-info">').text('Weather description: '), weatherDescription);
@@ -459,23 +462,23 @@ async function renderWeatherModal(countryName) {
  * @param {string} countryCode - The country code.
  */
 async function renderWikipediaModal(countryCode) {
-    showLoadingModal();
+
+    const modalId = 'wikiModal';
+    const modalLabelId = 'wikiModalLabel';
+    const modalBodyId = 'wikiModalBody';
+    const modalLinkId = 'wikiModalLink';
+
+    showLoadingModal(modalId, modalLabelId, modalBodyId);
 
     let countryInfo = await getCountryInfoByCode(countryCode);
     let cardinalCoordinates = await getCountryInfoByCode(countryInfo.countryCode);
     let wikiInfo = await getWikipediaArticle(cardinalCoordinates.north, cardinalCoordinates.south, cardinalCoordinates.east, cardinalCoordinates.west);
 
-    $('#modalLabel').text('Wikipedia insights to ' + countryInfo.countryName);
+    $('#' + modalLabelId).text('Wikipedia insights to ' + countryInfo.countryName);
 
-    $('#modal .modal-body').empty();
-
-    const wikiSummaryElement = $('<p>').append($('<span class="title-info">').text('Wikipedia Insights: '), wikiInfo.data[0].summary);
-    const wikiLinkElement = $('<p>').append(
-        $('<span class="title-info">').text('Keep reading at Wikipedia: '),
-        $('<a target="blank">').attr('href', 'https://' + wikiInfo.data[0].wikipediaUrl).text(countryInfo.countryName + ' insights at Wikipedia'),
-    );
-
-    $('#modal .modal-body').append(wikiSummaryElement, wikiLinkElement);
+    $('#' + modalId +' .' + modalBodyId).empty();
+    $('#' + modalBodyId).text(wikiInfo.data[0].summary);
+    $('#' + modalLinkId).attr('href', 'https://' + wikiInfo.data[0].wikipediaUrl).text(countryInfo.countryName + ' insights at Wikipedia');
 
     hideLoadingModal();
 }

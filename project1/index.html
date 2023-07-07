@@ -39,11 +39,13 @@
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="modalLabel">Title</h1>
                     </div>
-                    <div class="modal-body" id="modal-body">
-                        Loading
-                    </div>
+                    <div class="modal-body" id="modal-body">Loading</div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
                             Close
                         </button>
                     </div>
@@ -60,33 +62,59 @@
             aria-labelledby="infoModalLabel"
             aria-hidden="true"
         >
-            <div class="modal-dialog custom-modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div
+                class="modal-dialog custom-modal-dialog modal-dialog-centered modal-dialog-scrollable"
+            >
                 <div class="modal-content shadow">
                     <div class="modal-header bg-success bg-gradient text-white">
                         <h5 class="modal-title fs-5" id="infoModalLabel">
                             Title
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
                     </div>
                     <div class="modal-body" id="infoModalBody">
                         <table class="table table-striped" id="countryInfo">
                             <tr>
-                                <td class="text-center"><i class="fa-solid fa-landmark fa-xl text-success"></i></td>
+                                <td class="text-center">
+                                    <i
+                                        class="fa-solid fa-landmark fa-xl text-success"
+                                    ></i>
+                                </td>
                                 <td class="title-info">Capital:</td>
                                 <td class="text-end" id="countryCapital"></td>
                             </tr>
                             <tr>
-                                <td class="text-center"><i class="fa-solid fa-people-group fa-xl text-success"></i></td>
+                                <td class="text-center">
+                                    <i
+                                        class="fa-solid fa-people-group fa-xl text-success"
+                                    ></i>
+                                </td>
                                 <td class="title-info">Population:</td>
-                                <td class="text-end" id="countryPopulation"></td>
+                                <td
+                                    class="text-end"
+                                    id="countryPopulation"
+                                ></td>
                             </tr>
                             <tr>
-                                <td class="text-center"><i class="fa-solid fa-chart-area fa-xl text-success"></i></td>
+                                <td class="text-center">
+                                    <i
+                                        class="fa-solid fa-chart-area fa-xl text-success"
+                                    ></i>
+                                </td>
                                 <td class="title-info">Area:</td>
                                 <td class="text-end" id="countryArea"></td>
                             </tr>
                             <tr>
-                                <td class="text-center"><i class="fa-solid fa-globe fa-xl text-success"></i></td>
+                                <td class="text-center">
+                                    <i
+                                        class="fa-solid fa-globe fa-xl text-success"
+                                    ></i>
+                                </td>
                                 <td class="title-info">Region:</td>
                                 <td class="text-end" id="countryRegion"></td>
                             </tr>
@@ -106,6 +134,207 @@
         </div>
 
         <!-- End Info Modal -->
+
+        <!-- Wiki Modal -->
+
+        <div
+            class="modal fade"
+            id="wikiModal"
+            tabindex="-1"
+            aria-labelledby="wikiModalLabel"
+            aria-hidden="true"
+        >
+            <div
+                class="modal-dialog custom-modal-dialog modal-dialog-centered modal-dialog-scrollable"
+            >
+                <div class="modal-content shadow">
+                    <div
+                        class="modal-header bg-secondary bg-gradient text-white"
+                    >
+                        <h5 class="modal-title fs-5" id="wikiModalLabel">
+                            Wikipedia Insights to
+                            <span id="wikiModalTitle"></span>
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="title-info">Wiki insights: </span
+                        ><span id="wikiModalBody"></span>
+                        <span class="title-info">Keep reading at: </span
+                        ><a id="wikiModalLink" href="" target="_blank"></a>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Wiki Modal -->
+
+        <!-- Weather Modal -->
+
+        <div
+            id="weatherModal"
+            class="modal fade"
+            tabindex="-1"
+            aria-labelledby="weatherModalLabel"
+            aria-hidden="true"
+        >
+            <div
+                class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+            >
+                <div class="modal-content shadow">
+                    <div class="modal-header bg-primary bg-gradient text-white">
+                        <h5 class="modal-title" id="weatherModalLabel"></h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+
+                    <div class="modal-body" id="weatherModalBody">
+                        <div id="pre-load"></div>
+
+                        <div class="row">
+                            <div class="col border m-2">
+                                <p class="fw-bold fs-5 mt-3">TODAY</p>
+
+                                <div class="row">
+                                    <div class="col text-center m-2">
+                                        <p
+                                            id="todayConditions"
+                                            class="fw-bold fs-6"
+                                        ></p>
+                                    </div>
+
+                                    <div class="col text-center">
+                                        <img
+                                            id="todayIcon"
+                                            class="img-fluid mt-0"
+                                            src=""
+                                            alt=""
+                                            title=""
+                                        />
+                                    </div>
+
+                                    <div class="col text-center">
+                                        <p class="fw-bold fs-4 mb-0">
+                                            <span id="todayMaxTemp">3</span
+                                            ><sup>o</sup
+                                            ><span class="tempMetric">c</span>
+                                        </p>
+                                        <p class="fs-5 mt-0 text-secondary">
+                                            <span id="todayMinTemp">-2</span
+                                            ><sup>o</sup
+                                            ><span class="tempMetric">c</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col border m-2">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <p
+                                            id="day1Date"
+                                            class="fw-bold fs-6 mt-3"
+                                        ></p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <p class="fw-bold fs-4 mb-0">
+                                            <span id="day1MaxTemp"></span
+                                            ><sup>o</sup>c
+                                        </p>
+                                        <p class="fs-5 mt-0 text-secondary">
+                                            <span id="day1MinTemp"></span
+                                            ><sup>o</sup>c
+                                        </p>
+                                    </div>
+
+                                    <div class="col text-center">
+                                        <img
+                                            id="day1Icon"
+                                            src=""
+                                            alt=""
+                                            title=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col border m-2">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <p
+                                            id="day2Date"
+                                            class="fw-bold fs-6 mt-3"
+                                        >
+                                            Fri 16th
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <p class="fw-bold fs-4 mb-0">
+                                            <span id="day2MaxTemp"></span
+                                            ><sup>o</sup>c
+                                        </p>
+                                        <p class="fs-5 mt-0 text-secondary">
+                                            <span id="day2MinTemp"></span
+                                            ><sup>o</sup>c
+                                        </p>
+                                    </div>
+
+                                    <div class="col text-center">
+                                        <img
+                                            id="day2Icon"
+                                            src=""
+                                            alt=""
+                                            title=""
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <p class="fs-6 fw-light">
+                            Last updated <span id="lastUpdated"></span>. Powered
+                            by
+                            <a
+                                href="https://www.weatherapi.com/"
+                                target="_blank"
+                                title="Free Weather API"
+                                >WeatherAPI.com</a
+                            >
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Weather Modal -->
 
         <nav id="selectContainer">
             <select
