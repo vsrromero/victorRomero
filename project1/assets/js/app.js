@@ -27,6 +27,26 @@ function hideCoverLayer() {
     $('#cover-layer').css('display', 'none');
 }
 
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { weekday: 'short', day: 'numeric' };
+    const formattedDate = date.toLocaleDateString('en-GB', options);
+    
+    const day = date.getDate();
+    let daySuffix;
+    if (day === 1 || day === 21 || day === 31) {
+      daySuffix = 'st';
+    } else if (day === 2 || day === 22) {
+      daySuffix = 'nd';
+    } else if (day === 3 || day === 23) {
+      daySuffix = 'rd';
+    } else {
+      daySuffix = 'th';
+    }
+    
+    return formattedDate + daySuffix;
+  }
+
 /**
  * Retrieves the coordinates (latitude and longitude) of a given country using the OpenCage Geocoding API.
  * 
@@ -229,7 +249,7 @@ async function getWikipediaArticle(north, south, east, west) {
  */
 async function getWeatherInfo(latitude, longitude) {
     try {
-        const response = await fetch('assets/php/getWeatherInfo.php?lat=' + latitude + '&lng=' + longitude);
+        const response = await fetch('assets/php/getWeather.php?lat=' + latitude + '&lng=' + longitude);
         const data = await response.json();
         return data;
     } catch (error) {
@@ -237,7 +257,6 @@ async function getWeatherInfo(latitude, longitude) {
         return null;
     }
 }
-
 
 //* End of general functions
 
@@ -417,41 +436,37 @@ function timestampToTime(timestamp) {
  */
 async function renderWeatherModal(countryName) {
     
+    
     const modalId = 'weatherModal';
     const modalLabelId = 'weatherModalLabel';
     const modalBodyId = 'weatherModalBody';
+    
     showLoadingModal(modalId, modalLabelId, modalBodyId);
-
+    
+    
     let coordinates = await getCoordinatesFromCountry(countryName);
     let weatherInfo = await getWeatherInfo(coordinates[0], coordinates[1]);
 
-    const date = new Date();
-    const weatherDescription = (weatherInfo.weather[0].description);
-    const temperature = ((weatherInfo.main.temp - 273.15).toFixed(1) + '°C');
-    const feelsLike = ((weatherInfo.main.feels_like - 273.15).toFixed(1) + '°C');
-    const minTemperature = ((weatherInfo.main.temp_min - 273.15).toFixed(1) + '°C');
-    const maxTemperature = ((weatherInfo.main.temp_max - 273.15).toFixed(1) + '°C');
-    const humidity = (weatherInfo.main.humidity + '%');
-    const windSpeed = (weatherInfo.wind.speed + ' m/s');
-    const sunrise = (timestampToTime(weatherInfo.sys.sunrise) + 'h');
-    const sunset = (timestampToTime(weatherInfo.sys.sunset) + 'h');
+    const lastUpdated = new Date(weatherInfo.current.last_updated_epoch);
+    let formattedDate = ('0' + lastUpdated.getDate()).slice(-2) + '/' + ('0' + (lastUpdated.getMonth() + 1)).slice(-2) + '/' + lastUpdated.getFullYear();
+    let formattedTime = ('0' + lastUpdated.getHours()).slice(-2) + ':' + ('0' + lastUpdated.getMinutes()).slice(-2);
+    let formattedDateTime = formattedDate + ' ' + formattedTime;
 
     $('#' + modalLabelId).text('General weather to ' + countryName);
 
     $('#' + modalId +' .' + modalBodyId).empty();
-
-    const weatherElement = $('<p>').append($('<span class="title-info">').text('Weather for today: '), date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
-    const weatherDescriptionElement = $('<p>').append($('<span class="title-info">').text('Weather description: '), weatherDescription);
-    const temperatureElement = $('<p>').append($('<span class="title-info">').text('Temperature: '), temperature);
-    const feelsLikeElement = $('<p>').append($('<span class="title-info">').text('Feels like: '), feelsLike);
-    const minTemperatureElement = $('<p>').append($('<span class="title-info">').text('Min temperature: '), minTemperature);
-    const maxTemperatureElement = $('<p>').append($('<span class="title-info">').text('Max temperature: '), maxTemperature);
-    const humidityElement = $('<p>').append($('<span class="title-info">').text('Humidity: '), humidity);
-    const windSpeedElement = $('<p>').append($('<span class="title-info">').text('Wind speed: '), windSpeed);
-    const sunriseElement = $('<p>').append($('<span class="title-info">').text('Sunrise: '), sunrise);
-    const sunsetElement = $('<p>').append($('<span class="title-info">').text('Sunset: '), sunset);
-
-    $('#modal .modal-body').append(weatherElement, weatherDescriptionElement, temperatureElement, feelsLikeElement, minTemperatureElement, maxTemperatureElement, humidityElement, windSpeedElement, sunriseElement, sunsetElement);
+    console.log(weatherInfo);
+    $('#todayConditions').text(weatherInfo.current.condition.text);
+    $('#todayIcon').attr('src', 'https:' + weatherInfo.current.condition.icon);
+    $('#todayMaxTemp').text(weatherInfo.forecast.forecastday[0].day.maxtemp_c);
+    $('#todayMinTemp').text(weatherInfo.forecast.forecastday[0].day.mintemp_c);
+    $('#day1Date').text(formatDate(weatherInfo.forecast.forecastday[0].date));
+    $('#day1MaxTemp').text(weatherInfo.forecast.forecastday[1].day.maxtemp_c);
+    $('#day1MinTemp').text(weatherInfo.forecast.forecastday[1].day.mintemp_c);
+    $('#day2Date').text(formatDate(weatherInfo.forecast.forecastday[1].date));
+    $('#day2MaxTemp').text(weatherInfo.forecast.forecastday[2].day.maxtemp_c);
+    $('#day2MinTemp').text(weatherInfo.forecast.forecastday[2].day.mintemp_c);
+    $('#lastUpdated').text(formattedDateTime);
 
     hideLoadingModal();
 }
@@ -505,7 +520,7 @@ async function renderCurrencyModal(countryCode) {
     inputElement.on('input', function() {
         let amount = parseFloat($(this).val());
         if (!isNaN(amount)) {
-            var conversion = amount * exchangeRate;
+            let conversion = amount * exchangeRate;
             $('#conversionResult').text('Conversion: ' + conversion.toFixed(2) + ' USD');
         }
     });
@@ -646,7 +661,7 @@ weatherControl.onAdd = function (map) {
 
 wikipediaControl.onAdd = function (map) {
     const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
-    button.innerHTML = '<i class="fas fa-wikipedia-w"></i>';
+    button.innerHTML = '<i class="fa-brands fa-wikipedia-w"></i>';
     button.title = 'Wikipedia';
     button.classList.add('control-button');
     L.DomEvent.on(button, 'click', function () {
