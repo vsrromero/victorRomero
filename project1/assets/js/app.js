@@ -565,13 +565,13 @@ async function renderNewsModal(countryCode) {
             $('<p class="text-center">').text('No news found for this country.')
         );
     } else {
-    articles.news.forEach(article => {
+        articles.news.forEach(article => {
             $('#' + modalBodyId).append(
                 $('<table class="table table-borderless">').append(
                     $('<tbody>').append(
                         $('<tr>').append(
                             $('<td rowspan="2" width="50%">').append(
-                                $('<img  class="img-fluid rounded">').attr('src', article.image)
+                                article.image ? $('<img class="img-fluid rounded">').attr('src', article.image) : $('<img class="img-fluid rounded">').attr('src', 'assets/img/Image_not_available.png')
                             )
                         ).append(
                             $('<td>').append(
