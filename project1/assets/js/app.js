@@ -71,11 +71,11 @@ async function getCoordinatesFromCountry(countryName) {
  * @param {string} currencyCode - The currency code for which to fetch the exchange rate.
  * @returns {Promise<number>} A promise that resolves to the exchange rate of the specified currency. If an error occurs, it returns null.
  */
-async function getExchangeRate(currencyCode) {
+async function getExchangeRate() {
     try {
-        const response = await fetch('assets/php/openExchange.php');
+        const response = await fetch('assets/php/getExchangeRates.php');
         const data = await response.json();
-        return data.rates[currencyCode];
+        return data.rates;
     } catch (error) {
         console.log(error);
         return null;
@@ -489,11 +489,11 @@ async function renderWikipediaModal(countryCode) {
     let cardinalCoordinates = await getCountryInfoByCode(countryInfo.countryCode);
     let wikiInfo = await getWikipediaArticle(cardinalCoordinates.north, cardinalCoordinates.south, cardinalCoordinates.east, cardinalCoordinates.west);
 
-    $('#' + modalLabelId).text('Wikipedia insights to ' + countryInfo.countryName);
+    $('#' + modalLabelId).text(countryInfo.countryName);
 
     $('#' + modalId +' .' + modalBodyId).empty();
     $('#' + modalBodyId).text(wikiInfo.data[0].summary);
-    $('#' + modalLinkId).attr('href', 'https://' + wikiInfo.data[0].wikipediaUrl).text(countryInfo.countryName + ' insights at Wikipedia');
+    $('#' + modalLinkId).attr('href', 'https://' + wikiInfo.data[0].wikipediaUrl).text(countryInfo.countryName );
 
     hideLoadingModal();
 }
@@ -503,33 +503,44 @@ async function renderWikipediaModal(countryCode) {
  * 
  * @param {string} countryCode - The country code.
  */
-async function renderCurrencyModal(countryCode) {
-    showLoadingModal();
+async function renderCurrencyModal() {
+    const modalId = 'currencyModal';
+    const fromAmountInput = $('#fromAmount');
+    const toAmountInput = $('#toAmount');
+    const exchangeRateSelect = $('#exchangeRate');
 
-    let countryInfo = await getCountryInfoByCode(countryCode);
-    let exchangeRate = await getExchangeRate(countryInfo.currencyCode);
+    showLoadingModal(modalId);
 
-    $('#modalLabel').text(`Currency exchange rate ${countryInfo.currencyCode} to USD`);
+    const exchangeRate = await getExchangeRate();
 
-    $('#modal .modal-body').empty();
+    exchangeRateSelect.empty();
 
-    const currencyElement = $('<p>').append($('<span class="title-info">').text('Currency: '), countryInfo.currencyCode + ' 1 = ' + exchangeRate + ' USD');
+    for (const currency in exchangeRate) {
+        const option = $('<option></option>');
+        option.val(exchangeRate[currency]);
+        option.text(currency);
+        exchangeRateSelect.append(option);
+    }
 
-    // Input field for user to enter the value
-    let inputElement = $('<input type="text" id="currencyInput" placeholder="Enter amount">');
-    inputElement.on('input', function() {
-        let amount = parseFloat($(this).val());
-        if (!isNaN(amount)) {
-            let conversion = amount * exchangeRate;
-            $('#conversionResult').text('Conversion: ' + conversion.toFixed(2) + ' USD');
-        }
-    });
+    fromAmountInput.on('input', updateToAmount);
+    exchangeRateSelect.on('change', updateToAmount);
 
-    const conversionResult = $('<p id="conversionResult">');
+    updateToAmount();
 
-    $('#modal .modal-body').append(currencyElement, inputElement, conversionResult);
+    hideLoadingModal(modalId);
+}
 
-    hideLoadingModal();
+
+function updateToAmount() {
+    const fromAmountInput = $('#fromAmount');
+    const toAmountInput = $('#toAmount');
+    const exchangeRateSelect = $('#exchangeRate');
+
+    const fromAmount = parseFloat(fromAmountInput.val());
+    const exchangeRate = parseFloat(exchangeRateSelect.val());
+
+    const toAmount = fromAmount * exchangeRate;
+    toAmountInput.val(toAmount.toFixed(2));
 }
 
 
@@ -676,7 +687,7 @@ currencyControl.onAdd = function (map) {
     button.title = 'Currency';
     button.classList.add('control-button');
     L.DomEvent.on(button, 'click', function () {
-        renderCurrencyModal(countryCode);
+        renderCurrencyModal();
     });
     return button;
 };

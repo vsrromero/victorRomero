@@ -7,21 +7,24 @@
         <link rel="icon" href="./assets/img/favicon.ico" />
         <link
             rel="stylesheet"
-            href="node_modules/normalize.css/normalize.css"
+            href="./node_modules/normalize.css/normalize.css"
         />
         <!-- fontawesome CSS -->
-        <link href="node_modules/@fortawesome/fontawesome-free/css/all.css" />
+        <link href="./node_modules/@fortawesome/fontawesome-free/css/all.css" />
         <link
             rel="stylesheet"
-            href="node_modules/bootstrap/dist/css/bootstrap.css"
+            href="./node_modules/bootstrap/dist/css/bootstrap.css"
         />
         <!-- Leaflet CSS -->
-        <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
-        <link rel="stylesheet" href="dist/css/leaflet.extra-markers.min.css" />
-        <link rel="stylesheet" href="dist/css/MarkerCluster.css" />
-        <link rel="stylesheet" href="dist/css/MarkerCluster.Default.css" />
+        <link rel="stylesheet" href="./node_modules/leaflet/dist/leaflet.css" />
+        <link
+            rel="stylesheet"
+            href="./dist/css/leaflet.extra-markers.min.css"
+        />
+        <link rel="stylesheet" href="./dist/css/MarkerCluster.css" />
+        <link rel="stylesheet" href="./dist/css/MarkerCluster.Default.css" />
         <!-- Custom style -->
-        <link rel="stylesheet" href="assets/css/style.css" />
+        <link rel="stylesheet" href="./assets/css/style.css" />
     </head>
     <body>
         <div id="cover-layer"></div>
@@ -148,9 +151,7 @@
                 class="modal-dialog custom-modal-dialog modal-dialog-centered modal-dialog-scrollable"
             >
                 <div class="modal-content shadow">
-                    <div
-                        class="modal-header bg-success bg-gradient text-white"
-                    >
+                    <div class="modal-header bg-success bg-gradient text-white">
                         <h5 class="modal-title fs-5" id="wikiModalLabel">
                             Wikipedia Insights to
                             <span id="wikiModalTitle"></span>
@@ -163,10 +164,15 @@
                         ></button>
                     </div>
                     <div class="modal-body">
-                        <p><span class="title-info">Wiki insights: </span
-                        ><span id="wikiModalBody"></span></p>
-                        <p><span class="title-info">Keep reading at: </span
-                        ><a id="wikiModalLink" href="" target="_blank"></a></p>
+                        <p>
+                            <span class="title-info">Wiki insights: </span
+                            ><span id="wikiModalBody"></span>
+                        </p>
+                        <p>
+                            <span class="title-info">Keep reading at: </span
+                            ><a id="wikiModalLink" href="" target="_blank"></a>
+                            insights at Wikipedia
+                        </p>
                     </div>
                     <div class="modal-footer">
                         <button
@@ -336,6 +342,66 @@
 
         <!-- End Weather Modal -->
 
+        <!-- Currency Modal -->
+
+        <div id="currencyModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+            <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
+            <!--   that the header and footer are always on display by making the body scroll -->
+          
+            <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+          
+              <div class="modal-content shadow">
+          
+                <div class="modal-header bg-secondary bg-gradient text-white">
+                  <h5 class="modal-title">Currency calculator</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+          
+                <div class="modal-body">
+          
+                  <form>
+          
+                    <div class="form-floating mb-3">
+          
+                      <input id="fromAmount" type="number" class="form-control" value="1" min="1" step="1">
+                      <label id="fromAmountLabel" for="fromAmount">From USD</label>
+          
+                    </div>
+          
+                    <div class="form-floating mb-3">
+          
+                      <select id="exchangeRate" class="form-select">
+
+                      </select>
+                      
+                      <label for="exchangeRate">Convert to</label>
+          
+                    </div>
+          
+                    <div class="form-floating">
+          
+                      <input id="toAmount" type="text" class="form-control" disabled>
+                      <label for="toAmount">Result</label>
+          
+                    </div>
+          
+                  </form>
+          
+                </div>
+          
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CLOSE</button>
+                </div>
+          
+              </div>
+          
+            </div>
+          
+        </div>
+
+        <!-- End Currency Modal -->
+
         <nav id="selectContainer">
             <select
                 name="countrySelect"
@@ -346,16 +412,16 @@
         <div id="map"></div>
 
         <!-- jQuery JS -->
-        <script src="node_modules/jquery/dist/jquery.js"></script>
+        <script src="./node_modules/jquery/dist/jquery.js"></script>
         <!-- Bootstrap JS -->
-        <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="./node_modules/bootstrap/dist/js/bootstrap.js"></script>
         <!-- Leaflet JS -->
-        <script src="node_modules/leaflet/dist/leaflet.js"></script>
-        <script src="dist/js/leaflet.extra-markers.min.js"></script>
-        <script src="dist/js/leaflet.markercluster-src.js"></script>
+        <script src="./node_modules/leaflet/dist/leaflet.js"></script>
+        <script src="./dist/js/leaflet.extra-markers.min.js"></script>
+        <script src="./dist/js/leaflet.markercluster-src.js"></script>
         <!-- fontawesome JS -->
-        <script src="node_modules/@fortawesome/fontawesome-free/js/all.js"></script>
+        <script src="./node_modules/@fortawesome/fontawesome-free/js/all.js"></script>
         <!-- app JS -->
-        <script src="assets/js/app.js"></script>
+        <script src="./assets/js/app.js"></script>
     </body>
 </html>
