@@ -27,6 +27,8 @@ function hideCoverLayer() {
     $('#cover-layer').css('display', 'none');
 }
 
+
+
 function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { weekday: 'short', day: 'numeric' };
@@ -250,6 +252,17 @@ async function getWikipediaArticle(north, south, east, west) {
 async function getWeatherInfo(latitude, longitude) {
     try {
         const response = await fetch('assets/php/getWeather.php?lat=' + latitude + '&lng=' + longitude);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+async function getNews(countryCode) {
+    try {
+        const response = await fetch('assets/php/getNews.php?countryCode=' + countryCode);
         const data = await response.json();
         return data;
     } catch (error) {
@@ -530,6 +543,54 @@ async function renderCurrencyModal() {
     hideLoadingModal(modalId);
 }
 
+async function renderNewsModal(countryCode) {
+    const modalId = 'newsModal';
+    const modalLabelId = 'newsModalLabel';
+    const modalBodyId = 'newsModalBody';
+
+    showLoadingModal(modalId, modalLabelId, modalBodyId);
+
+    $('#' + modalBodyId).empty();
+
+    // update country name in modal
+    let countryInfo = await getCountryInfoByCode(countryCode);
+    $('#' + modalLabelId).text(countryInfo.countryName);
+
+    let articles = await getNews(countryCode);
+
+    console.log(articles);
+
+    if (articles.news.length === 0) {
+        $('#' + modalBodyId).append(
+            $('<p class="text-center">').text('No news found for this country.')
+        );
+    } else {
+    articles.news.forEach(article => {
+            $('#' + modalBodyId).append(
+                $('<table class="table table-borderless">').append(
+                    $('<tbody>').append(
+                        $('<tr>').append(
+                            $('<td rowspan="2" width="50%">').append(
+                                $('<img  class="img-fluid rounded">').attr('src', article.image)
+                            )
+                        ).append(
+                            $('<td>').append(
+                                $('<a class="fw-bold fs-6 text-black">').attr('href', article.url).text(article.title).attr('target', '_blank')
+                            )
+                        )
+                    ).append(
+                        $('<tr>').append(
+                            $('<td>').text('Author: ' + article.author)
+                        )
+                    )
+                )
+            );
+        });
+    }
+
+    hideLoadingModal();
+}
+
 
 function updateToAmount() {
     const fromAmountInput = $('#fromAmount');
@@ -634,6 +695,7 @@ const infoControl = L.control({ position: 'topleft' });
 const weatherControl = L.control({ position: 'topleft' });
 const wikipediaControl = L.control({ position: 'topleft' });
 const currencyControl = L.control({ position: 'topleft' });
+const newsControl = L.control({ position: 'topleft' });
 
 
 // button html
@@ -692,12 +754,24 @@ currencyControl.onAdd = function (map) {
     return button;
 };
 
+newsControl.onAdd = function (map) {
+    const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
+    button.innerHTML = '<i class="fas fa-newspaper"></i>';
+    button.title = 'News';
+    button.classList.add('control-button');
+    L.DomEvent.on(button, 'click', function () {
+        renderNewsModal(countryCode);
+    });
+    return button;
+};
+
 // add controls to map
 earthquakeMarkersControl.addTo(map);
 infoControl.addTo(map);
 weatherControl.addTo(map);
 wikipediaControl.addTo(map);
 currencyControl.addTo(map);
+newsControl.addTo(map);
 
 //* End of Leaflet codes
 
