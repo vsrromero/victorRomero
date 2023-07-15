@@ -24,8 +24,11 @@ function hideCoverLayer() {
     $('#cover-layer').css('display', 'none');
 }
 
-
-
+/**
+ * Formats a date string to a more readable format.
+ * @param {string} dateString - The date string to format.
+ * @returns {string} The formatted date string including the day suffix.
+ */
 function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { weekday: 'short', day: 'numeric' };
@@ -44,7 +47,7 @@ function formatDate(dateString) {
     }
     
     return formattedDate + daySuffix;
-  }
+}
 
 /**
  * Retrieves the coordinates (latitude and longitude) of a given country using the OpenCage Geocoding API.
@@ -67,7 +70,6 @@ async function getCoordinatesFromCountry(countryName) {
 /**
  * Retrieves the exchange rate for a given currency code using the Open Exchange API.
  * 
- * @param {string} currencyCode - The currency code for which to fetch the exchange rate.
  * @returns {Promise<number>} A promise that resolves to the exchange rate of the specified currency. If an error occurs, it returns null.
  */
 async function getExchangeRate() {
@@ -99,8 +101,13 @@ async function getCountryInfoByCode(countryCode) {
     }
 }
 
-  // end of paddy code
-  async function getAirports(countryCode) {
+/**
+ * Retrieves airport information for a given country code using the GeoNames API.
+ * 
+ * @param {string} countryCode - The country code for which to fetch the airports.
+ * @returns {Promise<object|null>} A promise that resolves to an object containing airport information. If an error occurs, it returns null.
+ */
+async function getAirports(countryCode) {
     try {
         const response = await fetch('assets/php/getAirports.php?countryCode=' + countryCode);
         const data = await response.json();
@@ -119,8 +126,6 @@ async function getCountryInfoByCode(countryCode) {
         return null;
     }
 }
-
-
 
 /**
  * Checks if a given point is inside a polygon defined by its coordinates.
@@ -258,6 +263,12 @@ async function getWeatherInfo(latitude, longitude) {
     }
 }
 
+/**
+ * Retrieves news information for a given country code using the News API.
+ * 
+ * @param {string} countryCode - The country code for which to fetch the news.
+ * @returns {Promise<Object|null>} The retrieved news information, or null if an error occurs.
+ * */
 async function getNews(countryCode) {
     try {
         const response = await fetch('assets/php/getNews.php?countryCode=' + countryCode);
@@ -280,7 +291,7 @@ function hideLoadingModal() {
 /**
  * Renders the information modal for a given country.
  * 
- * @param {string} countryCode - The country code of the country.
+ * @param {string} countryCode - The country code for which to fetch the information.
  */
 async function renderInfoModal(countryCode) {
 
@@ -316,7 +327,6 @@ function timestampToTime(timestamp) {
     let formattedTime = hours + ':' + minutes.substr(-2);
     return formattedTime;
 }
-
 
 /**
  * Renders the weather modal with weather information for a specific country.
@@ -363,7 +373,7 @@ async function renderWeatherModal(countryName) {
 /**
  * Renders the Wikipedia modal with insights for a specific country and neighbourhood.
  * 
- * @param {string} countryCode - The country code.
+ * @param {string} countryCode - The country code for which to fetch the wikipedia article.
  */
 async function renderWikipediaModal(countryCode) {
 
@@ -390,7 +400,6 @@ async function renderWikipediaModal(countryCode) {
 /**
  * Renders the Currency modal with the exchange rate for a specific country's currency and allows user to input a value to convert.
  * 
- * @param {string} countryCode - The country code.
  */
 async function renderCurrencyModal() {
     const modalId = 'currencyModal';
@@ -419,6 +428,13 @@ async function renderCurrencyModal() {
     hideLoadingModal(modalId);
 }
 
+/**
+ * Renders the News modal with news articles for a specific country.
+ * 
+ * @param {string} countryCode -  * @param {string} countryCode - The country code for which to fetch the news articles.
+ * @returns {Promise<void>} A promise that resolves when the modal is rendered.
+ * 
+ */
 async function renderNewsModal(countryCode) {
     const modalId = 'newsModal';
     const modalLabelId = 'newsModalLabel';
@@ -467,7 +483,9 @@ async function renderNewsModal(countryCode) {
     hideLoadingModal();
 }
 
-
+/**
+ * Updates the toAmount input field with the converted value.
+ */
 function updateToAmount() {
     const fromAmountInput = $('#fromAmount');
     const toAmountInput = $('#toAmount');
@@ -480,7 +498,12 @@ function updateToAmount() {
     toAmountInput.val(toAmount.toFixed(2));
 }
 
-
+/**
+* Displays a loading modal with a loading animation and text.
+*@param {string} modalId - The ID of the loading modal.
+*@param {string} modalLabelId - The ID of the element containing the modal label.
+*@param {string} modalBodyId - The ID of the element containing the modal body.
+*/
 function showLoadingModal(modalId, modalLabelId, modalBodyId) {
     $('#' + modalLabelId).text('Loading...');
     $('#' + modalId + ' .' + modalBodyId).empty();
@@ -537,7 +560,6 @@ const mapViews = {
     'satellite': mapSatellite,
 };
 
-// paddy code
 
 var airports = L.markerClusterGroup({
     polygonOptions: {
@@ -548,20 +570,12 @@ var airports = L.markerClusterGroup({
       fillOpacity: 0.5
     }}).addTo(map);
 
-
-
-// end of paddy code
-
 const overlays = {
-    'world railway': OpenRailwayMap,
-    // paddy code
+    "world railway": OpenRailwayMap,
     "Airports": airports
-    // end of paddy code
 };
 
 L.control.layers(mapViews, overlays).addTo(map);
-
-// paddy code
 
 var airportIcon = L.ExtraMarkers.icon({
     prefix: 'fa',
@@ -591,8 +605,6 @@ $.getJSON('assets/php/geoJSON.php', function (data) {
     }).addTo(map);
 
 });
-
-
 
 // control buttons
 const infoControl = L.control({ position: 'topleft' });
@@ -781,9 +793,7 @@ $('#selectContainer select').change(handleCountryListChange);
 window.addEventListener('load', function () {
     hideLoadingCircle();
     hideCoverLayer();
-    //update countryCode with the current country from option list
     countryCode = $('#selectContainer select').find('option:selected').val();
     getAirports(countryCode);
-    
 });
 
