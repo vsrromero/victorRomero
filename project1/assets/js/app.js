@@ -106,6 +106,9 @@ async function getCountryInfoByCode(countryCode) {
         const data = await response.json();
         console.log(data.geonames);
 
+        // Limpa os marcadores existentes
+        airports.clearLayers();
+
         data.geonames.forEach(airport => {
             L.marker([airport.lat, airport.lng], {icon: airportIcon})
             .bindTooltip(airport.name, {direction: 'top', sticky: true})
@@ -117,9 +120,7 @@ async function getCountryInfoByCode(countryCode) {
     }
 }
 
-function removeClusterMarkers() {
-    markerCluster.clearLayers();
-}
+
 
 /**
  * Checks if a given point is inside a polygon defined by its coordinates.
@@ -564,14 +565,11 @@ L.control.layers(mapViews, overlays).addTo(map);
 
 var airportIcon = L.ExtraMarkers.icon({
     prefix: 'fa',
-    icon: 'fa-plane',
-    iconColor: 'black',
+    icon: 'fa-plane-departure',
+    iconColor: '#050',
     markerColor: 'white',
     shape: 'square'
-  });
-
-
-
+});
 
 
 const featureGroup = L.featureGroup().addTo(map);
