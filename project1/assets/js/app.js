@@ -1,13 +1,10 @@
 //* global variables
 
 let selectedCountryName = '';
-let earthquakeMarkers = [];
 let markersVisible = false;
 let countryCode = '';
 let markerCluster;
 const popup = L.popup();
-
-
 
 //* End of global variables
 
@@ -100,6 +97,28 @@ async function getCountryInfoByCode(countryCode) {
         console.log(error);
         return null;
     }
+}
+
+  // end of paddy code
+  async function getAirports(countryCode) {
+    try {
+        const response = await fetch('assets/php/getAirports.php?countryCode=' + countryCode);
+        const data = await response.json();
+        console.log(data.geonames);
+
+        data.geonames.forEach(airport => {
+            L.marker([airport.lat, airport.lng], {icon: airportIcon})
+            .bindTooltip(airport.name, {direction: 'top', sticky: true})
+            .addTo(airports);
+        });
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+function removeClusterMarkers() {
+    markerCluster.clearLayers();
 }
 
 /**
@@ -201,28 +220,6 @@ function updateCountryList() {
 }
 
 /**
- * Determines the classification of an earthquake based on its magnitude using the Richter scale.
- *
- * @param {number} magnitude - The magnitude of the earthquake.
- * @returns {string} The classification of the earthquake.
- */
-function richterScale(magnitude) {
-    if (magnitude < 3.0) {
-        return 'Microtremor';
-    } else if (magnitude < 4.0) {
-        return 'Minor earthquake';
-    } else if (magnitude < 5.0) {
-        return 'Moderate earthquake';
-    } else if (magnitude < 6.0) {
-        return 'Strong earthquake';
-    } else if (magnitude >= 6.0) {
-        return 'Major earthquake';
-    } else {
-        return 'Unknown';
-    }
-}
-
-/**
  * Retrieves Wikipedia article data within the specified geographical boundaries.
  *
  * @param {number} north - The northern boundary latitude.
@@ -274,128 +271,6 @@ async function getNews(countryCode) {
 //* End of general functions
 
 //* Leaflet helper functions
-
-/**
- * Toggles the visibility of markers on the map.
- * If markers are currently visible, they will be removed.
- * If markers are not currently visible, earthquake markers will be added based on the country's cardinal coordinates.
- */
-async function toggleMarkers() {
-    if (markersVisible) {
-        removeMarkers();
-        markersVisible = false;
-
-    } else {
-        let cardinalCoordinates = await getCountryInfoByCode(countryCode);
-        let north = cardinalCoordinates.north;
-        let south = cardinalCoordinates.south;
-        let east = cardinalCoordinates.east;
-        let west = cardinalCoordinates.west;
-
-        addEarthquakes(north, south, east, west);
-
-        markersVisible = true;
-
-    }
-}
-
-/**
- * Handles the click event on an earthquake marker.
- * Displays a popup with information about the earthquake.
- *
- * @param {Object} earthquake - The earthquake object containing information about the earthquake.
- */
-function onMarkerClick(earthquake) {
-
-    const datetime = new Date(earthquake.datetime);
-
-    const formattedDate = datetime.toLocaleString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    });
-
-    popup
-        .setLatLng([earthquake.lat, earthquake.lng])
-        .setContent(
-            "Richter Scale: " + earthquake.magnitude + "<br>" +
-            "Magnitude: " + richterScale(Number(earthquake.magnitude)) + "<br>" +
-            "Depth: " + earthquake.depth + "km<br />" +
-            "Date: " + formattedDate + "<br />" +
-            "Coordinates: " + earthquake.lat + ", " + earthquake.lng + "<br />"
-        )
-        .openOn(map);
-}
-
-/**
- * Fetches earthquake data from the server and adds markers for each earthquake within the specified bounding box.
- *
- * @param {number} north - The northern latitude of the bounding box.
- * @param {number} south - The southern latitude of the bounding box.
- * @param {number} east - The eastern longitude of the bounding box.
- * @param {number} west - The western longitude of the bounding box.
- */
-async function addEarthquakes(north, south, east, west) {
-    const response = await fetch('assets/php/earthquakes.php?north=' + north + '&south=' + south + '&east=' + east + '&west=' + west);
-    const data = await response.json();
-
-    // Create a marker cluster group
-    markerCluster = L.markerClusterGroup({
-        showCoverageOnHover: true,
-        polygonOptions: {
-            fillColor: '#fff',
-            color: '#050',
-            weight: 2,
-            opacity: 1,
-            fillOpacity: 0.5
-        }
-    });
-
-    data.data.forEach(function (earthquake) {
-        let lat = earthquake.lat;
-        let lng = earthquake.lng;
-
-        // Customize the marker with the ExtraMarkers plugin
-        const earthquakeIcon = L.ExtraMarkers.icon({
-            icon: 'fa-house-chimney-crack',
-            markerColor: 'red',
-            shape: 'circle',
-            prefix: 'fa'
-        });
-
-        const marker = L.marker([lat, lng], { icon: earthquakeIcon });
-
-        marker.on('click', function () {
-            onMarkerClick(earthquake);
-        });
-
-        markerCluster.addLayer(marker); // Add the marker to the marker cluster group
-
-        earthquakeMarkers.push(marker);
-    });
-
-    map.addLayer(markerCluster); // Add the marker cluster group to the map
-}
-
-/**
- * Removes all earthquake markers from the map.
- */
-function removeMarkers() {
-    if (earthquakeMarkers.length > 0) {
-        earthquakeMarkers.forEach(function (marker) {
-            marker.removeFrom(map); // Remove the marker from the map
-        });
-        earthquakeMarkers = [];
-    }
-
-    if (markerCluster) {
-        map.removeLayer(markerCluster); // Remove the marker cluster group from the map
-        markerCluster.clearLayers(); // Clear all markers inside the marker cluster group
-    }
-}
 
 function hideLoadingModal() {
     $('#modal .loading-text').remove();
@@ -661,11 +536,43 @@ const mapViews = {
     'satellite': mapSatellite,
 };
 
+// paddy code
+
+var airports = L.markerClusterGroup({
+    polygonOptions: {
+      fillColor: '#fff',
+      color: '#000',
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.5
+    }}).addTo(map);
+
+
+
+// end of paddy code
+
 const overlays = {
-    'world railway': OpenRailwayMap
+    'world railway': OpenRailwayMap,
+    // paddy code
+    "Airports": airports
+    // end of paddy code
 };
 
 L.control.layers(mapViews, overlays).addTo(map);
+
+// paddy code
+
+var airportIcon = L.ExtraMarkers.icon({
+    prefix: 'fa',
+    icon: 'fa-plane',
+    iconColor: 'black',
+    markerColor: 'white',
+    shape: 'square'
+  });
+
+
+
+
 
 const featureGroup = L.featureGroup().addTo(map);
 
@@ -690,25 +597,11 @@ $.getJSON('assets/php/geoJSON.php', function (data) {
 
 
 // control buttons
-const earthquakeMarkersControl = L.control({ position: 'topleft' });
 const infoControl = L.control({ position: 'topleft' });
 const weatherControl = L.control({ position: 'topleft' });
 const wikipediaControl = L.control({ position: 'topleft' });
 const currencyControl = L.control({ position: 'topleft' });
 const newsControl = L.control({ position: 'topleft' });
-
-
-// button html
-earthquakeMarkersControl.onAdd = function (map) {
-    const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
-    button.innerHTML = '<i class="fa-solid fa-house-chimney-crack"></i>';
-    button.title = 'Last 20 Nearby Earthquake Locations';
-    button.classList.add('control-button');
-    L.DomEvent.on(button, 'click', function () {
-        toggleMarkers();
-    });
-    return button;
-};
 
 infoControl.onAdd = function (map) {
     const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
@@ -766,7 +659,6 @@ newsControl.onAdd = function (map) {
 };
 
 // add controls to map
-earthquakeMarkersControl.addTo(map);
 infoControl.addTo(map);
 weatherControl.addTo(map);
 wikipediaControl.addTo(map);
@@ -862,6 +754,8 @@ function handleCountryListChange() {
     }
 
     map.addLayer(mapLayer);
+
+    getAirports(countryCode);
 }
 
 //! Loading overlay
@@ -889,4 +783,9 @@ $('#selectContainer select').change(handleCountryListChange);
 window.addEventListener('load', function () {
     hideLoadingCircle();
     hideCoverLayer();
+    //update countryCode with the current country from option list
+    countryCode = $('#selectContainer select').find('option:selected').val();
+    getAirports(countryCode);
+    
 });
+
