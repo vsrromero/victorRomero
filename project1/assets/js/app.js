@@ -111,11 +111,9 @@ async function getAirports(countryCode) {
     try {
         const response = await fetch('assets/php/getAirports.php?countryCode=' + countryCode);
         const data = await response.json();
-        console.log(data.geonames);
 
         // Limpa os marcadores existentes
         airports.clearLayers();
-
         data.geonames.forEach(airport => {
             L.marker([airport.lat, airport.lng], {icon: airportIcon})
             .bindTooltip(airport.name, {direction: 'top', sticky: true})
@@ -211,13 +209,15 @@ function updateCountryList() {
     let selectElement = $('#selectContainer select');
 
     $.getJSON('assets/php/getCountryList.php', function (data) {
-        selectElement.empty();
-
+        
+        
         $.each(data, function (index, country) {
             let option = $('<option>').val(country.iso_a2).text(country.name);
 
             if (country.name === selectedCountryName) {
                 option.attr('selected', 'selected');
+                const selectedValue = option.val();
+                getAirports(selectedValue);
             }
 
             selectElement.append(option);
@@ -354,7 +354,6 @@ async function renderWeatherModal(countryName) {
     $('#' + modalLabelId).text('General weather to ' + countryName);
 
     $('#' + modalId +' .' + modalBodyId).empty();
-    console.log(weatherInfo);
     $('#todayConditions').text(weatherInfo.current.condition.text);
     $('#todayIcon').attr('src', 'https:' + weatherInfo.current.condition.icon);
     $('#todayMaxTemp').text(weatherInfo.forecast.forecastday[0].day.maxtemp_c);
@@ -449,8 +448,6 @@ async function renderNewsModal(countryCode) {
     $('#' + modalLabelId).text(countryInfo.countryName);
 
     let articles = await getNews(countryCode);
-
-    console.log(articles);
 
     if (articles.news.length === 0) {
         $('#' + modalBodyId).append(
@@ -764,7 +761,6 @@ function handleCountryListChange() {
     }
 
     map.addLayer(mapLayer);
-
     getAirports(countryCode);
 }
 
@@ -793,7 +789,5 @@ $('#selectContainer select').change(handleCountryListChange);
 window.addEventListener('load', function () {
     hideLoadingCircle();
     hideCoverLayer();
-    countryCode = $('#selectContainer select').find('option:selected').val();
-    getAirports(countryCode);
 });
 
