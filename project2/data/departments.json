@@ -1,0 +1,30 @@
+{
+    "data": {
+        "0": [
+            {
+                "id": "1",
+                "name": "Accountancy"
+            },
+            {
+                "id": "2",
+                "name": "Technology"
+            },
+            {
+                "id": "3",
+                "name": "Sales"
+            },
+            {
+                "id": "4",
+                "name": "Marketing"
+            },
+            {
+                "id": "5",
+                "name": "Human Resources"
+            },
+            {
+                "id": "6",
+                "name": "Customer Service"
+            }
+        ]
+    }
+}
