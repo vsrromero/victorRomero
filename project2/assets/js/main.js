@@ -7,7 +7,7 @@ async function getPersonnel() {
     return data;
 }
 
-// Event listener para o botão de pesquisa
+// Event listener to search input
 $("#searchInput").on("keyup", function () {
     var value = $(this).val().toLowerCase();
     $("table tbody tr").filter(function () {
@@ -16,7 +16,7 @@ $("#searchInput").on("keyup", function () {
     });
 });
 
-// Event listener para o dropdown de departamento
+// Event listener do dropdown de department
 $("#personnelDepartment").on("change", function () {
     var selectedDepartment = $(this).val();
     if (selectedDepartment === "") {
