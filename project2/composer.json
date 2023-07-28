@@ -1,0 +1,18 @@
+{
+    "name": "victo/company-directory",
+    "description": "Final project IT Carreer Switch",
+    "autoload": {
+        "psr-4": {
+            "src\\": "src/"
+        },
+        "files": [
+            "src/config.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Victor Romero"
+        }
+    ],
+    "require": {}
+}

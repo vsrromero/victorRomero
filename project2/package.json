@@ -1,0 +1,22 @@
+{
+  "name": "companydirectory",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vsrromero/companyDirectory.git"
+  },
+  "author": "Victor Romero",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vsrromero/companyDirectory/issues"
+  },
+  "homepage": "https://github.com/vsrromero/companyDirectory#readme",
+  "description": "",
+  "dependencies": {
+    "bootstrap": "^5.2.3"
+  }
+}
