@@ -1,143 +1,138 @@
-async function getPersonnel() {
-    console.log('getPersonnel() called');
-    const response = await fetch('src/personnel.php');
-    const data = await response.json();
-    console.log(data)
+$("#searchInp").on("keyup", function () {
 
-    return data;
-}
+    // your code
 
-// Event listener to search input
-$("#searchInput").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
-    $("table tbody tr").filter(function () {
-        var rowText = $(this).text().toLowerCase();
-        $(this).toggle(matches);
-    });
 });
 
-// Event listener do dropdown de department
-$("#personnelDepartment").on("change", function () {
-    var selectedDepartment = $(this).val();
-    if (selectedDepartment === "") {
-        // If no department is selected, show all table rows
-        $("table tbody tr").show();
+$("#refreshBtn").click(function () {
+
+    if ($("#personnelBtn").hasClass("active")) {
+
+        alert("refresh personnel table");
+
     } else {
-        // Otherwise, filter the rows based on the selected department
-        $("table tbody tr").each(function () {
-            var department = $(this).find("td:nth-child(4)").text();
-            $(this).toggle(department === selectedDepartment);
-        });
+
+        if ($("#departmentsBtn").hasClass("active")) {
+
+            alert("refresh department table");
+
+        } else {
+
+            alert("refresh location table");
+
+        }
+
+    }
+
+});
+
+$("#addBtn").click(function () {
+    console.log("Add button clicked"); // Add this line to check if the event is triggered
+
+    if ($("#personnelBtn").hasClass("active")) {
+        $("#addPersonnelModal").modal("show");
+    } else if ($("#departmentsBtn").hasClass("active")) {
+        $("#addDepartmentModal").modal("show");
+    } else if ($("#locationsBtn").hasClass("active")) {
+        $("#addLocationModal").modal("show");
     }
 });
 
-// Event listener para o dropdown de location
-$("#personnelLocation").on("change", function () {
-    var selectedDepartment = $(this).val();
-    if (selectedDepartment === "") {
-        // If no location is selected, show all table rows
-        $("table tbody tr").show();
-    } else {
-        // Otherwise, filter the rows based on the selected location
-        $("table tbody tr").each(function () {
-            var department = $(this).find("td:nth-child(5)").text();
-            $(this).toggle(department === selectedDepartment);
+// Assuming you want to make the API request to the same domain.
+const baseUrl = ''; // Change this to the base URL of your API if needed
+
+document.addEventListener("DOMContentLoaded", function () {
+    const personnelTable = document.getElementById("personnelTable");
+
+    // Function to populate the personnel table with data
+    function populatePersonnelTable(data) {
+        personnelTable.innerHTML = ""; // Clear the existing content
+
+        // Loop through the data and create rows for the table
+        data.forEach(person => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${person.lastName}</td>
+                <td>${person.firstName}</td>
+                <td>${person.jobTitle}</td>
+                <td>${person.email}</td>
+                <td>${person.department}</td>
+                <td>${person.location}</td>
+            `;
+            personnelTable.appendChild(row);
         });
     }
-});
 
-$("#personnel-tab").on("click", async function () {
-    const response = await getPersonnel();
-    const data = response.data;
-    console.log('data from personnel: ', data);
-    renderPersonnelTable(data);
-});
-
-//! End Event listener to nav tables
-
-
-//! Event listener to dropdowns
-$("#department").on("change", function () {
-    var selectedDepartment = $(this).val();
-    if (selectedDepartment === "") {
-        // If no department is selected, show all table rows
-        $("table tbody tr").show();
-    } else {
-        // Otherwise, filter the rows based on the selected department
-        $("table tbody tr").each(function () {
-            var department = $(this).find("td:nth-child(1)").text();
-            $(this).toggle(department === selectedDepartment);
+    // Fetch data from the API and populate the table
+    fetch(`${baseUrl}/backend/app/controllers/PersonnelController.php`)
+        .then(response => response.json())
+        .then(data => {
+            populatePersonnelTable(data);
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
         });
-    }
 });
 
-//! End Event listener to dropdowns
-
-
-$(document).ready(function () {
-    // Add event listener to the button with the class 'btn-primary'
-    $(".btn-primary").click(function () {
-        // Retrieve the modal ID from the data-target attribute
-        var modalId = $(this).data("target");
-        // Show the modal using the modal ID
-        $(modalId).modal("show");
-    });
-});
-
-//! Tables
-function renderPersonnelTable(data) {
-    console.log('renderPersonnelTable() called');
-    console.log('data from renderPersonnelTable: ', data[0]);
-    var tbody = $('#personnelTable');
-
-    tbody.empty();
-
-    data[0].forEach(function (item) {
-        var row = $('<tr>');
-        console.log('item: ', item.firstName);
-        row.append($('<td>').text(item.firstName));
-        row.append($('<td>').text(item.lastName));
-        row.append($('<td>').text(item.jobTitle));
-        row.append($('<td>').text(item.department));
-        row.append($('<td>').text(item.location));
-        row.append($('<td>').text(item.email));
-        row.append($('<td class="text-center">').append($('<a href="#" id="' + item.id + '">').html('<i class="icon fa-solid fa-trash"></i>')));
-        row.append($('<td class="text-center">').append($('<a href="#">').html('<i class="icon fa-solid fa-pen"></i>')));
-
-        tbody.append(row);
-    });
-}
-
-function renderDepartmentTable(data) {
-    console.log('renderDepartmentTable() called');
-    console.log('data from renderDepartmentTable: ', data[0]);
-    var tbody = $('#departmentTable');
-
-    tbody.empty();
-
-    data[0].forEach(function (item) {
-        var row = $('<tr>');
-        console.log('item: ', item.firstName);
-        row.append($('<td>').text(item.firstName));
-        row.append($('<td>').text(item.lastName));
-
-        tbody.append(row);
-    });
-}
-
-//! End Tables
-
-// on window load
-window.addEventListener('load', async () => {
-    console.log('window loaded');
-    const response = await getPersonnel();
-    const data = response.data;
-    console.log('data from load: ', data);
-    renderPersonnelTable(data);
-});
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
-    
-    let id = $(e.relatedTarget).attr("data-id");
-    console.log('id: ', id);
+
+    $.ajax({
+        url:
+            "https://coding.itcareerswitch.co.uk/companydirectory/libs/php/getPersonnelByID.php",
+        type: "POST",
+        dataType: "json",
+        data: {
+            id: $(e.relatedTarget).attr("data-id") // Retrieves the data-id attribute from the calling button
+        },
+        success: function (result) {
+            var resultCode = result.status.code;
+
+            if (resultCode == 200) {
+                // Update the hidden input with the employee id so that
+                // it can be referenced when the form is submitted
+
+                $("#editPersonnelEmployeeID").val(result.data.personnel[0].id);
+
+                $("#editPersonnelFirstName").val(result.data.personnel[0].firstName);
+                $("#editPersonnelLastName").val(result.data.personnel[0].lastName);
+                $("#editPersonnelJobTitle").val(result.data.personnel[0].jobTitle);
+                $("#editPersonnelEmailAddress").val(result.data.personnel[0].email);
+
+                $("#editPersonnelDepartment").html("");
+
+                $.each(result.data.department, function () {
+                    $("#editPersonnelDepartment").append(
+                        $("<option>", {
+                            value: this.id,
+                            text: this.name
+                        })
+                    );
+                });
+
+                $("#editPersonnelDepartment").val(result.data.personnel[0].departmentID);
+
+            } else {
+                $("#editPersonnelModal .modal-title").replaceWith(
+                    "Error retrieving data"
+                );
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            $("#editPersonnelModal .modal-title").replaceWith(
+                "Error retrieving data"
+            );
+        }
+    });
+});
+
+// Executes when the form button with type="submit" is clicked
+
+$("#editPersonnelForm").on("submit", function (e) {
+    // stop the default browser behviour
+
+    e.preventDefault();
+
+    // AJAX call to save form data
+
 });

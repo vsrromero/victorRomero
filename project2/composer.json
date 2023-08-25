@@ -1,18 +1,19 @@
 {
-    "name": "victo/company-directory",
-    "description": "Final project IT Carreer Switch",
+    "name": "victo/company-directory-api",
     "autoload": {
         "psr-4": {
-            "src\\": "src/"
-        },
-        "files": [
-            "src/config.php"
-        ]
+            "Victo\\CompanyDirectoryApi\\": "api/"
+        }
     },
     "authors": [
         {
             "name": "Victor Romero"
         }
     ],
-    "require": {}
+    "require": {
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.3"
+    }
 }

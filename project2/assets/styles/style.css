@@ -1,0 +1,27 @@
+html,
+body {
+  background-color: #f9f6ee;
+  margin: 10px 0px 5px 2px;
+  padding: 0px 0px 5px 2px;
+  overflow: hidden;
+}
+
+section {
+  display: flex;
+  flex-flow: column;
+  height: calc(100vh - 20px);
+  background-color: #f9f6ee;
+}
+
+.tab-content {
+  flex: 1;
+  overflow-y: scroll;
+}
+
+tr {
+  cursor: default;
+}
+
+.myBtn {
+  width: 70px;
+}
