@@ -2,7 +2,7 @@
     "name": "victo/company-directory-api",
     "autoload": {
         "psr-4": {
-            "Victo\\CompanyDirectoryApi\\": "api/"
+            "api\\": "api/"
         }
     },
     "authors": [

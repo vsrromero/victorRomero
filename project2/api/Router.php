@@ -18,9 +18,7 @@ class Router
         }
         return null; // Return null if no ID is found
     }
-    
-    
-
+        
     public function addRoute($method, $path, $callback)
     {
         $this->routes[] = [
@@ -30,11 +28,18 @@ class Router
         ];
     }
 
-
     public function route($httpMethod, $uri)
     {
         $jsonData = file_get_contents('php://input');
         $dataArray = json_decode($jsonData, true);
+        
+        // Parse the query string parameters from the URI
+        $parsedUri = parse_url($uri);
+        $queryParams = [];
+        if (isset($parsedUri['query'])) {
+            parse_str($parsedUri['query'], $queryParams);
+        }
+        
         foreach ($this->routes as $route) {
             $path = '/api' . $route['path'];
     
@@ -50,21 +55,26 @@ class Router
                     $controllerClass = $callback[0];
                     $controllerMethod = $callback[1];
     
-                    // Get the value of the id from the URL
-                    $id = $this->getIdFromPath($route['path'], $uriPath);
-    
                     // Create an instance of the controller
                     $controllerInstance = new $controllerClass();
     
-                    // Call the controller method, passing the id as an argument
-                    // Pass an empty array for the second argument since it's not needed here
-                    return $controllerInstance->$controllerMethod($id, $dataArray);
+                    // Check if the route has an ID placeholder
+                    if (strpos($route['path'], '{id}') !== false) {
+                        // Get the ID from the URI using the getIdFromPath method
+                        $id = $this->getIdFromPath($route['path'], $uriPath);
+                        // Call the controller method, passing the ID and query parameters
+                        return $controllerInstance->$controllerMethod($id, $queryParams, $dataArray);
+                    } else {
+                        // Call the controller method, passing the query parameters
+                        return $controllerInstance->$controllerMethod($queryParams, $dataArray);
+                    }
                 }
             }
         }
     
         return ['error' => 'Route not found'];
     }
+    
 
     private function comparePaths($routePath, $uriPath, $parsedUri)
     {
@@ -77,7 +87,6 @@ class Router
 
         for ($i = 0; $i < count($routeSegments); $i++) {
             if ($routeSegments[$i] !== $uriSegments[$i] && strpos($routeSegments[$i], '{') !== false) {
-                // Restante do código...
             } elseif ($routeSegments[$i] !== $uriSegments[$i]) {
                 return false;
             }
@@ -86,3 +95,4 @@ class Router
         return true;
     }
 }
+?>

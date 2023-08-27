@@ -30,13 +30,14 @@ abstract class Model
     public function getAll()
     {
         $sql = "SELECT * FROM {$this->table}";
-        $result = $this->db->getConnection()->query($sql);
+        $statement = $this->db->getConnection()->prepare($sql);
+        $statement->execute();
 
+        $result = $statement->get_result();
         $results = [];
         while ($row = $result->fetch_assoc()) {
             $results[] = $row;
         }
-
         return $results;
     }
 
@@ -82,10 +83,29 @@ abstract class Model
         $values = array_values($attributes);
         $values[] = $id;
 
-        $types = str_repeat('s', count($values));
-        $statement->bind_param($types . 'i', ...$values);
+        $types = str_repeat('s', count($values) - 1) . 'i'; // Include the ID data type
+        $statement->bind_param($types, ...$values); // Bind all values, including the ID
 
-        $statement->execute();
+        if ($statement->execute()) {
+            // Check if any rows were affected (updated)
+            if ($statement->affected_rows > 0) {
+                return 1; // Updated
+            } else {
+                // No rows were affected, check if the record exists
+                $checkExistence = "SELECT id FROM {$this->table} WHERE id = ?";
+                $existenceStatement = $this->db->getConnection()->prepare($checkExistence);
+                $existenceStatement->bind_param('i', $id);
+                $existenceStatement->execute();
+
+                if ($existenceStatement->fetch()) {
+                    return 2; // No changes made
+                } else {
+                    return 0; // Not found
+                }
+            }
+        } else {
+            return -1; // Error
+        }
     }
 
     public function delete($id)
@@ -93,6 +113,42 @@ abstract class Model
         $sql = "DELETE FROM {$this->table} WHERE id = ?";
         $statement = $this->db->getConnection()->prepare($sql);
         $statement->bind_param('i', $id);
+
+        if ($statement->execute()) {
+            // Check if any rows were affected (deleted)
+            if ($statement->affected_rows > 0) {
+                return 1; // Deleted
+            } else {
+                return 0; // Not found
+            }
+        } else {
+            return -1; // Error
+        }
+    }
+
+    public function countPersonnelInDepartment($departmentId)
+    {
+        $sql = "SELECT COUNT(*) AS count FROM personnel WHERE departmentID = ?";
+        $statement = $this->db->getConnection()->prepare($sql);
+        $statement->bind_param('i', $departmentId);
         $statement->execute();
+
+        $result = $statement->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row['count'];
+    }
+
+    public function countDepartmentsInLocation($locationId)
+    {
+        $sql = "SELECT COUNT(*) AS count FROM department WHERE locationID = ?";
+        $statement = $this->db->getConnection()->prepare($sql);
+        $statement->bind_param('i', $locationId);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row['count'];
     }
 }
