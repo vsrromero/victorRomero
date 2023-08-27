@@ -1,31 +1,32 @@
 <?php
 
-require '../vendor/autoload.php'; // Carrega o autoload do Composer
+require '../vendor/autoload.php'; // Load Composer's autoloader
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/config');
 $dotenv->load();
 
-// Autoloader para carregar classes automaticamente
+// Autoloader to load classes automatically
 spl_autoload_register(function ($className) {
     $className = str_replace('api\\', '', $className);
     require_once __DIR__ . '/' . $className . '.php';
 });
 
-// Configuração de cabeçalhos para permitir CORS
+// Configurations to allow CORS
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-// Instancie o roteador
-$router = new api\Router(); // O namespace raiz é "api"
+// Router instance
+$router = new api\Router(); // Root path is /api
 
-// Inclua as rotas passando a instância do roteador
+// Including routes passing the router instance
 require 'routes/routes.php';
 
-// Defina o método HTTP e o caminho da requisição
+// Set the HTTP method and the request path
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 
-// Roteamento da requisição
+// Routing the request
 $response = $router->route($httpMethod, $uri);
-// Envie a resposta
+
+// Sending the response
 echo json_encode($response);
 ?>
