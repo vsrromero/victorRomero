@@ -59,14 +59,15 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // Populate the row with data
             row.innerHTML = `
+            <td style="display: none;" data-tdID="${person.id}"></td>
             <td class="align-middle text-nowrap">${person.lastName}, ${person.firstName}</td>
             <td>${person.jobTitle}</td>
             <td class="align-middle text-nowrap d-none d-md-table-cell">${person.department}</td>
-            <td style="display: none;">${person.departmentID}</td>
+            <td style="display: none;" data-tdID="${person.departmentID}"></td>
             <td class="align-middle text-nowrap d-none d-md-table-cell">${person.location}</td>
             <td class="align-middle text-nowrap d-none d-md-table-cell">${person.email}</td>
             <td class="text-end text-nowrap">
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-personnel-id="${person.id}" data-department-id="${person.departmentID}">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-personnel-id="${person.id}">
                     <i class="fa-solid fa-pencil fa-fw"></i>
                 </button>
                 <button type="button" class="btn btn-primary btn-sm deletePersonnelBtn" data-id="${person.id}">
@@ -152,8 +153,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fetch data from the API and populate the table
     fetch(`${baseUrl}/departments`)
         .then(response => response.json())
-        .then(data => {
-            populateDepartmentsTable(data);
+        .then(result => {
+            populateDepartmentsTable(result.data.departments);
         })
         .catch(error => {
             console.error("Error fetching data:", error);
@@ -211,8 +212,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Fetch data from the API and populate the table
     fetch(`${baseUrl}/locations`)
         .then(response => response.json())
-        .then(data => {
-            populateLocationsTable(data);
+        .then(result => {
+            populateLocationsTable(result.data.locations);
         })
         .catch(error => {
             console.error("Error fetching data:", error);
@@ -222,46 +223,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
-// Edit personnel modal
-
-$("#editPersonnelModal").on("show.bs.modal", function (e) {
-    var button = $(e.relatedTarget);
-    var personnelId = button.data("personnel-id");
-    var departmentId = button.data("department-id");
-
-    // Faz uma requisição GET ao endpoint com o ID do pessoal
-    $.get("http://localhost:3000/api/personnel/" + personnelId, function (data) {
-        var personnel = data.data.personnel;
-        console.log(personnel);
-
-        // Preenche os campos do modal com as informações obtidas
-        $("#editPersonnelEmployeeID").val(personnel.id);
-        $("#editPersonnelFirstName").val(personnel.firstName);
-        $("#editPersonnelLastName").val(personnel.lastName);
-        $("#editPersonnelJobTitle").val(personnel.jobTitle);
-        $("#editPersonnelEmailAddress").val(personnel.email);
-        
-        // Define o valor selecionado no <select> como a foreign key do departamento
-        $("#editPersonnelDepartment").val(departmentId);
-
-        // Atualiza o campo de seleção do departamento (caso necessário)
-        // Exemplo: $("#editPersonnelDepartment").val(personnel.departmentId);
-    });
-});
-
-
-
 // Populate select options for departments
-function populateDepartmentsSelect(selectElement) {
+function populateDepartmentsSelect(selectElement, personDepartmentId) {
+    console.log("person department id:", personDepartmentId);
+    console.log("selectElement:", selectElement);
     $.get("http://localhost:3000/api/departments", function(data) {
         var departments = data.data.departments;
 
         // Preenche o <select> com as opções de departamento
         for (var i = 0; i < departments.length; i++) {
             var option = $("<option>");
-            option.val(departments[i].locationID); // Define o value como locationID
-            option.text(departments[i].name); // Define o texto da opção como o nome do departamento
-            option.attr("data-departmentID", departments[i].departmentID); // Atributo de dados para departmentID
+            option.val(departments[i].locationID);
+            option.text(departments[i].name);
+            option.attr("data-departmentid", departments[i].id); // Use the correct property name
+
+            if (parseInt(departments[i].id) === personDepartmentId) {
+                option.attr("selected", "selected"); // Define a opção como selecionada
+            }
+
             selectElement.append(option);
         }
     })
@@ -273,11 +252,7 @@ function populateDepartmentsSelect(selectElement) {
 
 // Chama a função para preencher os <select> dos modais quando eles forem abertos
 $(document).ready(function() {
-    $("#editPersonnelModal").on("show.bs.modal", function () {
-        var editPersonnelDepartmentSelect = $("#editPersonnelDepartment");
-        editPersonnelDepartmentSelect.empty(); // Limpa as opções antes de preencher
-        populateDepartmentsSelect(editPersonnelDepartmentSelect);
-    });
+
 
     $("#addPersonnelModal").on("show.bs.modal", function () {
         var addPersonnelDepartmentSelect = $("#addPersonnelDepartment");
@@ -287,13 +262,84 @@ $(document).ready(function() {
 });
 
 
-// Executes when the form button with type="submit" is clicked
+// Edit personnel modal
 
-$("#editPersonnelForm").on("submit", function (e) {
-    // stop the default browser behviour
+$("#editPersonnelModal").on("show.bs.modal", function (e) {
+    var button = $(e.relatedTarget);
+    var personnelId = button.data("personnel-id");
+    
+    // Faz uma requisição GET ao endpoint com o ID do pessoal
+    $.get("http://localhost:3000/api/personnel/" + personnelId, function (data) {
+        var personnel = data.data.personnel;
+        var personDepartmentId = personnel.departmentID; 
+        
+        // Preenche os campos do modal com as informações obtidas
+        $("#editPersonnelEmployeeID").val(personnel.id);
+        $("#editPersonnelFirstName").val(personnel.firstName);
+        $("#editPersonnelLastName").val(personnel.lastName);
+        $("#editPersonnelJobTitle").val(personnel.jobTitle);
+        $("#editPersonnelEmailAddress").val(personnel.email);
+        $("#editPersonnelDepartmentID").val(personnel.departmentID);
+        
+        var editPersonnelDepartmentSelect = $("#editPersonnelDepartment");
+        editPersonnelDepartmentSelect.empty(); // Limpa as opções antes de preencher
+        populateDepartmentsSelect(editPersonnelDepartmentSelect, personDepartmentId);
 
-    e.preventDefault();
+    });
+});
 
-    // AJAX call to save form data
+// Edit personnel save
 
+$(document).ready(function() {
+    // When the "SAVE" button is clicked
+    $("#saveBtn").click(function(e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Get the values from the modal inputs
+        var id = $("#editPersonnelEmployeeID").val();
+        var lastName = $("#editPersonnelLastName").val();
+        var firstName = $("#editPersonnelFirstName").val();
+        var jobTitle = $("#editPersonnelJobTitle").val();
+        var email = $("#editPersonnelEmailAddress").val();
+        
+        // Get the selected option's data-departmentid attribute
+        var selectedDepartmentOption = $("#editPersonnelDepartment option:selected");
+        var departmentID = selectedDepartmentOption.data("departmentid");
+
+        // Create the JSON data to be sent in the PUT request
+        var jsonData = {
+            lastName: lastName,
+            firstName: firstName,
+            jobTitle: jobTitle,
+            email: email,
+            departmentID: departmentID
+        };
+
+        // Send the PUT request
+        $.ajax({
+            url: "http://localhost:3000/api/personnel/" + id,
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(jsonData),
+            success: function(response) {
+                // Handle the successful response
+                console.log("Data updated successfully:", response);
+                // Close the modal
+                $("#editPersonnelModal").modal("hide");
+                // Show success message using Bootstrap's "alert" component
+                var successAlert = $('<div class="alert alert-success" role="alert">Record saved successfully.</div>');
+                $("#editPersonnelModal .modal-content").prepend(successAlert);
+                setTimeout(function() {
+                    successAlert.remove(); // Remove the success message after 2 seconds
+                }, 2000);
+                // Update the table (you will need to implement this part)
+                // updateTable();
+            },
+            error: function(error) {
+                // Handle the error, if needed
+                console.error("Error updating data:", error);
+            }
+        });
+    });
+    
 });
