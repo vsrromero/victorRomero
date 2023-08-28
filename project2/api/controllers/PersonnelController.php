@@ -132,11 +132,16 @@ class PersonnelController extends Controller
             // Validating data before setting attributes
             $jsonData = file_get_contents('php://input');
             $data = json_decode($jsonData, true);
+    
+            // Regular expressions for allowed patterns
+            $namePattern = '/^[a-zA-ZÀ-ÿ\-ç\s]+$/'; // Only letters with accents, hyphen, and ç
+            $emailPattern = '/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/'; // Valid email pattern
+    
             if (
-                isset($data['firstName']) && is_string($data['firstName']) && strlen($data['firstName']) <= 50 &&
-                isset($data['lastName']) && is_string($data['lastName']) && strlen($data['lastName']) <= 50 &&
-                isset($data['jobTitle']) && is_string($data['jobTitle']) && strlen($data['jobTitle']) <= 50 &&
-                isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) &&
+                isset($data['firstName']) && preg_match($namePattern, $data['firstName']) &&
+                isset($data['lastName']) && preg_match($namePattern, $data['lastName']) &&
+                isset($data['jobTitle']) && preg_match($namePattern, $data['jobTitle']) &&
+                isset($data['email']) && preg_match($emailPattern, $data['email']) &&
                 isset($data['departmentID']) && filter_var($data['departmentID'], FILTER_VALIDATE_INT)
             ) {
                 $this->model->setAttributes($data);
@@ -166,6 +171,7 @@ class PersonnelController extends Controller
             return ['error' => 'Internal Server Error'];
         }
     }
+    
     
     public function destroy($id)
     {

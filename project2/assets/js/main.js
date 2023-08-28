@@ -1,3 +1,117 @@
+// Functions to update the table
+
+function updateTable() {
+    // Determine which tab is currently active
+    var activeTab = $(".nav-link.active").attr("id");
+
+    if (activeTab === "personnelBtn") {
+        // Refresh personnel table
+        refreshPersonnelTable();
+    } else if (activeTab === "departmentsBtn") {
+        // Refresh departments table
+        refreshDepartmentsTable();
+    } else if (activeTab === "locationsBtn") {
+        // Refresh locations table
+        refreshLocationsTable();
+    }
+}
+
+// Define the functions to refresh each specific table
+function refreshPersonnelTable() {
+    var personnelTable = $("#personnel-tab-pane");
+    // Fetch data from the API and repopulate the personnel table
+    fetch(`${baseUrl}/personnel`)
+        .then(response => response.json())
+        .then(result => {
+            populatePersonnelTable(result.data.personnel);
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+}
+
+function refreshDepartmentsTable() {
+    var departmentsTable = $("#departments-tab-pane");
+    // Fetch data from the API and repopulate the departments table
+    fetch(`${baseUrl}/departments`)
+        .then(response => response.json())
+        .then(result => {
+            populateDepartmentsTable(result.data.departments);
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+}
+
+function refreshLocationsTable() {
+    var locationsTable = $("#locations-tab-pane");
+    // Fetch data from the API and repopulate the locations table
+    fetch(`${baseUrl}/locations`)
+        .then(response => response.json())
+        .then(result => {
+            populateLocationsTable(result.data.locations);
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+}
+
+async function populatePersonnelTable() {
+    $(".loading-spinner").show();
+
+    try {
+        const response = await fetch(`${baseUrl}/personnel`);
+        const result = await response.json();
+        const data = result.data.personnel;
+
+        // Clear the existing content
+        const personnelTable = $("#personnel-tab-pane");
+        personnelTable.empty();
+
+        // Create the table and table body using jQuery
+        const table = $("<table>").addClass("table table-hover");
+        const tbody = $("<tbody>");
+
+        // Loop through the data and create rows for the table body
+        data.forEach(person => {
+            const row = $("<tr>");
+
+            // Populate the row with data using jQuery
+            row.html(`
+                <td style="display: none;" data-tdID="${person.id}"></td>
+                <td class="align-middle text-nowrap">${person.lastName}, ${person.firstName}</td>
+                <td>${person.jobTitle}</td>
+                <td class="align-middle text-nowrap d-none d-md-table-cell">${person.department}</td>
+                <td style="display: none;" data-tdID="${person.departmentID}"></td>
+                <td class="align-middle text-nowrap d-none d-md-table-cell">${person.location}</td>
+                <td class="align-middle text-nowrap d-none d-md-table-cell">${person.email}</td>
+                <td class="text-end text-nowrap">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-personnel-id="${person.id}">
+                        <i class="fa-solid fa-pencil fa-fw"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm deletePersonnelBtn" data-id="${person.id}">
+                        <i class="fa-solid fa-trash fa-fw"></i>
+                    </button>
+                </td>
+            `);
+
+            // Append the row to the table body
+            tbody.append(row);
+        });
+
+        // Append the table body to the table
+        table.append(tbody);
+
+        // Replace the existing content with the new table using jQuery
+        personnelTable.html(table);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    } finally {
+        $(".loading-spinner").hide();
+    }
+}
+
+
 $("#searchInp").on("keyup", function () {
 
     // your code
@@ -27,7 +141,6 @@ $("#refreshBtn").click(function () {
 });
 
 $("#addBtn").click(function () {
-    console.log("Add button clicked"); // Add this line to check if the event is triggered
 
     if ($("#personnelBtn").hasClass("active")) {
         $("#addPersonnelModal").modal("show");
@@ -43,65 +156,9 @@ const baseUrl = 'http://localhost:3000/api';
 // personnel-tab-pane
 document.addEventListener("DOMContentLoaded", function () {
     const personnelTable = document.getElementById("personnel-tab-pane");
-    
-    // Function to populate the personnel table with data
-    function populatePersonnelTable(data) {
-        personnelTable.innerHTML = ""; // Clear the existing content
-        
-        // Create the table and table body
-        const table = document.createElement("table");
-        table.classList.add("table", "table-hover");
-        const tbody = document.createElement("tbody");
-        
-        // Loop through the data and create rows for the table body
-        data.forEach(person => {
-            const row = document.createElement("tr");
-            
-            // Populate the row with data
-            row.innerHTML = `
-            <td style="display: none;" data-tdID="${person.id}"></td>
-            <td class="align-middle text-nowrap">${person.lastName}, ${person.firstName}</td>
-            <td>${person.jobTitle}</td>
-            <td class="align-middle text-nowrap d-none d-md-table-cell">${person.department}</td>
-            <td style="display: none;" data-tdID="${person.departmentID}"></td>
-            <td class="align-middle text-nowrap d-none d-md-table-cell">${person.location}</td>
-            <td class="align-middle text-nowrap d-none d-md-table-cell">${person.email}</td>
-            <td class="text-end text-nowrap">
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-personnel-id="${person.id}">
-                    <i class="fa-solid fa-pencil fa-fw"></i>
-                </button>
-                <button type="button" class="btn btn-primary btn-sm deletePersonnelBtn" data-id="${person.id}">
-                    <i class="fa-solid fa-trash fa-fw"></i>
-                </button>
-            </td>
-        `;
-            
-            // Append the row to the table body
-            tbody.appendChild(row);
-        });
-        
-        // Append the table body to the table
-        table.appendChild(tbody);
-        
-        // Replace the existing content with the new table
-        personnelTable.innerHTML = "";
-        personnelTable.appendChild(table);
-    }
-    
-    $(".loading-spinner").show();
 
-    // Fetch data from the API and populate the table
-    fetch(`${baseUrl}/personnel`)
-        .then(response => response.json())
-        .then(result => {
-            populatePersonnelTable(result.data.personnel);
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
-        })
-        .finally(() => {
-            $(".loading-spinner").hide();
-        });
+    populatePersonnelTable();
+
 });
 
 // departments-tab-pane
@@ -227,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function populateDepartmentsSelect(selectElement, personDepartmentId) {
     console.log("person department id:", personDepartmentId);
     console.log("selectElement:", selectElement);
-    $.get("http://localhost:3000/api/departments", function(data) {
+    $.get("http://localhost:3000/api/departments", function (data) {
         var departments = data.data.departments;
 
         // Preenche o <select> com as opções de departamento
@@ -244,15 +301,14 @@ function populateDepartmentsSelect(selectElement, personDepartmentId) {
             selectElement.append(option);
         }
     })
-    .fail(function(error) {
-        console.error("Erro ao obter a lista de departamentos:", error);
-    });
+        .fail(function (error) {
+            console.error("Erro ao obter a lista de departamentos:", error);
+        });
 }
 
 
 // Chama a função para preencher os <select> dos modais quando eles forem abertos
-$(document).ready(function() {
-
+$(document).ready(function () {
 
     $("#addPersonnelModal").on("show.bs.modal", function () {
         var addPersonnelDepartmentSelect = $("#addPersonnelDepartment");
@@ -265,14 +321,15 @@ $(document).ready(function() {
 // Edit personnel modal
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
+
     var button = $(e.relatedTarget);
     var personnelId = button.data("personnel-id");
-    
+
     // Faz uma requisição GET ao endpoint com o ID do pessoal
     $.get("http://localhost:3000/api/personnel/" + personnelId, function (data) {
         var personnel = data.data.personnel;
-        var personDepartmentId = personnel.departmentID; 
-        
+        var personDepartmentId = personnel.departmentID;
+
         // Preenche os campos do modal com as informações obtidas
         $("#editPersonnelEmployeeID").val(personnel.id);
         $("#editPersonnelFirstName").val(personnel.firstName);
@@ -280,7 +337,7 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
         $("#editPersonnelJobTitle").val(personnel.jobTitle);
         $("#editPersonnelEmailAddress").val(personnel.email);
         $("#editPersonnelDepartmentID").val(personnel.departmentID);
-        
+
         var editPersonnelDepartmentSelect = $("#editPersonnelDepartment");
         editPersonnelDepartmentSelect.empty(); // Limpa as opções antes de preencher
         populateDepartmentsSelect(editPersonnelDepartmentSelect, personDepartmentId);
@@ -290,9 +347,9 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
 
 // Edit personnel save
 
-$(document).ready(function() {
+$(document).ready(function () {
     // When the "SAVE" button is clicked
-    $("#saveBtn").click(function(e) {
+    $("#saveBtn").click(function (e) {
         e.preventDefault(); // Prevent the default form submission
 
         // Get the values from the modal inputs
@@ -301,7 +358,7 @@ $(document).ready(function() {
         var firstName = $("#editPersonnelFirstName").val();
         var jobTitle = $("#editPersonnelJobTitle").val();
         var email = $("#editPersonnelEmailAddress").val();
-        
+
         // Get the selected option's data-departmentid attribute
         var selectedDepartmentOption = $("#editPersonnelDepartment option:selected");
         var departmentID = selectedDepartmentOption.data("departmentid");
@@ -314,32 +371,44 @@ $(document).ready(function() {
             email: email,
             departmentID: departmentID
         };
-
+        
         // Send the PUT request
         $.ajax({
             url: "http://localhost:3000/api/personnel/" + id,
             type: "PUT",
             contentType: "application/json",
             data: JSON.stringify(jsonData),
-            success: function(response) {
+            success: function (response) {
                 // Handle the successful response
                 console.log("Data updated successfully:", response);
                 // Close the modal
                 $("#editPersonnelModal").modal("hide");
-                // Show success message using Bootstrap's "alert" component
-                var successAlert = $('<div class="alert alert-success" role="alert">Record saved successfully.</div>');
-                $("#editPersonnelModal .modal-content").prepend(successAlert);
-                setTimeout(function() {
-                    successAlert.remove(); // Remove the success message after 2 seconds
-                }, 2000);
-                // Update the table (you will need to implement this part)
-                // updateTable();
+                // Populate and show the alert modal
+                populateAndShowAlertModal("Record saved successfully.");
+                // Update the table 
+                updateTable();
             },
-            error: function(error) {
+            error: function (error) {
                 // Handle the error, if needed
                 console.error("Error updating data:", error);
             }
         });
+
     });
-    
+
+    // Function to populate and show the generic alert modal
+    function populateAndShowAlertModal(message) {
+        var alertModal = $("#genericAlertModal");
+        alertModal.find(".modal-body").text(message);
+
+        // Clear any previous alert classes and add the new alert class
+        alertModal.find(".modal-dialog").removeClass("modal-success modal-warning modal-danger").addClass("text-white bg text-center");
+        var modalContent = alertModal.find(".modal-content");
+        modalContent.removeClass("bg-success bg-warning bg-danger").addClass("bg-success");
+
+        alertModal.modal("show");
+        setTimeout(function () {
+            alertModal.modal("hide");
+        }, 2000);
+    }
 });
