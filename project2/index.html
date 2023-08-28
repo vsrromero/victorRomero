@@ -18,6 +18,82 @@
         <div class="loading-spinner">
             <div class="spinner"></div>
         </div>
+        <!-- Filter modal -->
+        <!-- Filtro Modal -->
+        <div
+            class="modal fade"
+            id="filterModal"
+            tabindex="-1"
+            aria-labelledby="filterModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="filterModalLabel">
+                            Filtrar Tabela
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Fechar"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="filterForm">
+                            <div class="mb-3">
+                                <label for="filterKeyword" class="form-label"
+                                    >Palavra-chave:</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="filterKeyword"
+                                />
+                            </div>
+                            <div class="mb-3">
+                                <label for="filterDepartment" class="form-label"
+                                    >Departamento:</label
+                                >
+                                <select
+                                    class="form-select"
+                                    id="filterDepartment"
+                                >
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="filterLocation" class="form-label"
+                                    >Localização:</label
+                                >
+                                <select class="form-select" id="filterLocation">
+                                    <option value="">Todas</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            id="clearFiltersBtn"
+                            type="button"
+                            class="btn btn-outline-primary"
+                        >
+                            Clear Filters
+                        </button>
+                        <button
+                            id="closeFilterModalBtn"
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Allert modal -->
         <div
             id="genericAlertModal"
@@ -118,6 +194,53 @@
                             type="button"
                             class="btn btn-danger"
                             id="confirmDeleteDepartmentBtn"
+                        >
+                            Yes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Location confirmation modal -->
+        <div
+            id="deleteLocationModal"
+            class="modal fade"
+            tabindex="-1"
+            aria-labelledby="deleteLocation"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteLocationModalTitle">
+                            Delete Location
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <span
+                            class="fw-bold"
+                            id="deleteLocationModalMessage"
+                        ></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            No
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            id="confirmDeleteLocationBtn"
                         >
                             Yes
                         </button>
@@ -645,38 +768,19 @@
             </div>
         </div>
 
-        <!-- edit Location Modal -->
+        <!-- Edit Location Modal -->
         <div
             id="editLocationModal"
             class="modal fade"
             tabindex="-1"
-            data-bs-backdrop="false"
-            data-bs-keyboard="false"
             aria-labelledby="editLocation"
             aria-hidden="true"
         >
-            <!-- Modal content for editing location goes here -->
-        </div>
-
-        <!-- add Location Modal -->
-        <div
-            id="addLocationModal"
-            class="modal fade"
-            tabindex="-1"
-            data-bs-backdrop="false"
-            data-bs-keyboard="false"
-            aria-labelledby="addLocation"
-            aria-hidden="true"
-        >
-            <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
-            <!--   that the header and footer are always on display by making the body scroll -->
-            <div
-                class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable"
-            >
+            <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content shadow">
                     <div class="modal-header bg-primary bg-gradient text-white">
-                        <h5 class="modal-title" id="addDepartment">
-                            Add Department
+                        <h5 class="modal-title" id="editLocation">
+                            Edit Location
                         </h5>
                         <button
                             type="button"
@@ -687,16 +791,17 @@
                     </div>
 
                     <div class="modal-body">
-                        <form id="addDepartmentForm">
+                        <form id="editLocationForm">
+                            <input type="hidden" id="editLocationID" />
                             <div class="form-floating mb-3">
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="addDepartmentFirstName"
-                                    placeholder="First name"
+                                    id="editLocationName"
+                                    placeholder="Location name"
                                     required
                                 />
-                                <label for="addDepartmentFirstName"
+                                <label for="editLocationName"
                                     >Location name</label
                                 >
                             </div>
@@ -705,8 +810,73 @@
 
                     <div class="modal-footer">
                         <button
+                            id="saveLocationBtn"
                             type="submit"
-                            form="addDepartmentForm"
+                            form="editLocationForm"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                        >
+                            SAVE
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                            data-bs-dismiss="modal"
+                        >
+                            CANCEL
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Location Modal -->
+        <div
+            id="addLocationModal"
+            class="modal fade"
+            tabindex="-1"
+            data-bs-backdrop="false"
+            data-bs-keyboard="false"
+            aria-labelledby="addLocation"
+            aria-hidden="true"
+        >
+            <div
+                class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable"
+            >
+                <div class="modal-content shadow">
+                    <div class="modal-header bg-primary bg-gradient text-white">
+                        <h5 class="modal-title" id="addLocation">
+                            Add Location
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="addLocationForm">
+                            <div class="form-floating mb-3">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="addLocationName"
+                                    placeholder="Location name"
+                                    required
+                                />
+                                <label for="addLocationName"
+                                    >Location name</label
+                                >
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button
+                            id="createLocationBtn"
+                            type="submit"
+                            form="addLocationForm"
                             class="btn btn-outline-primary btn-sm myBtn"
                         >
                             ADD

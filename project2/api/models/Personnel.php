@@ -9,7 +9,7 @@ class Personnel extends Model
     public function getAll($includeDetails = false)
     {
         if ($includeDetails) {
-            $sql = 'SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, p.departmentID, d.name as department, l.name as location
+            $sql = 'SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, p.departmentID, d.name as department, d.locationID, l.id as locationID, l.name as location
                 FROM personnel p
                 LEFT JOIN department d ON (d.id = p.departmentID)
                 LEFT JOIN location l ON (l.id = d.locationID)
@@ -32,7 +32,7 @@ class Personnel extends Model
     public function getById($id, $includeDetails = true)
     {
         if ($includeDetails) {
-            $sql = 'SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, p.departmentID, d.name as department, l.name as location
+            $sql = 'SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, p.departmentID, d.name as department, d.locationID, l.id as locationID, l.name as location
             FROM personnel p
             LEFT JOIN department d ON (d.id = p.departmentID)
             LEFT JOIN location l ON (l.id = d.locationID)
@@ -48,4 +48,12 @@ class Personnel extends Model
         $result = $statement->get_result();
         return $result->fetch_assoc();
     }
+
+    public function getJsonById($id)
+    {
+        $data = $this->getById($id);
+        return json_encode($data);
+    }
 }
+
+

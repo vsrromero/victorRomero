@@ -12,7 +12,7 @@ use api\Router;
 
 $router = new Router();
 
-// Department routes
+// Personnel routes
 $router->addRoute('GET', '/personnel', [PersonnelController::class, 'index']);
 $router->addRoute('POST', '/personnel', [PersonnelController::class, 'store']);
 $router->addRoute('GET', '/personnel/{id}', [PersonnelController::class, 'show']);
