@@ -27,10 +27,11 @@ function clearErrors() {
 }
 
 // Function to populate and show the generic alert modal
-function populateAndShowAlertModal(message) {
+function populateAndShowAlertModal(message, type = "success") {
     var alertModal = $("#genericAlertModal");
     alertModal.find(".modal-body").text(message);
 
+    if(type === "success") {
     // Clear any previous alert classes and add the new alert class
     alertModal.find(".modal-dialog").removeClass("modal-success modal-warning modal-danger").addClass("text-white bg text-center");
     var modalContent = alertModal.find(".modal-content");
@@ -40,6 +41,20 @@ function populateAndShowAlertModal(message) {
     setTimeout(function () {
         alertModal.modal("hide");
     }, 2000);
+    } else {
+    $("#deleteDepartmentModal").modal("hide");
+    // Clear any previous alert classes and add the new alert class
+    alertModal.find(".modal-dialog").removeClass("modal-success modal-warning modal-danger").addClass("text-white bg text-center");
+    var modalContent = alertModal.find(".modal-content");
+    modalContent.removeClass("bg-success bg-warning bg-danger").addClass("bg-danger");
+
+    alertModal.modal("show");
+    setTimeout(function () {
+        alertModal.modal("hide");
+    }
+    , 3000);
+    }
+
 }
 
 // Functions to update the table
@@ -388,6 +403,13 @@ $(document).ready(function () {
         addPersonnelDepartmentSelect.empty(); // Limpa as opções antes de preencher
         populateDepartmentsSelect(addPersonnelDepartmentSelect);
     });
+
+    $("#addDepartmentModal").on("show.bs.modal", function () {
+
+        var addDepartmentLocationSelect = $("#addDepartmentLocation");
+        addDepartmentLocationSelect.empty(); // Limpa as opções antes de preencher
+        populateLocationsSelect(addDepartmentLocationSelect);
+    });
 });
 
 // * Personnel modal/tab
@@ -711,4 +733,106 @@ $(document).ready(function () {
         });
 
     });
+});
+
+// Create department add
+$(document).ready(function () {
+    // When the "ADD" button is clicked
+    $("#createDepartmentBtn").click(function (e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Clear previous error states and messages
+        clearErrors();
+
+        // Get the values from the modal inputs
+        var departmentName = $("#addDepartmentName").val();
+        var locationID = $("#addDepartmentLocation").val();
+
+        // Validation checks
+        var isValid = true;
+
+        if (!isValidName(departmentName)) {
+            handleValidationError($("#addDepartmentName"), "Invalid character");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return; // Exit if any validation failed
+        }
+
+        // Create the JSON data to be sent in the POST request
+        var jsonData = {
+            name: departmentName,
+            locationID: locationID
+        };
+
+        // Send the POST request
+        $.ajax({
+            url: "http://localhost:3000/api/departments/",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(jsonData),
+            success: function (response) {
+                // Handle the successful response
+                console.log("Department data created successfully:", response);
+                // Close the modal
+                $("#addDepartmentModal").modal("hide");
+                // Populate and show the alert modal
+                populateAndShowAlertModal("Department record saved successfully.");
+                // Update the department-related elements (e.g., table, etc.)
+                updateTable();
+            },
+            error: function (error) {
+                // Handle the error, if needed
+                console.error("Error creating department data:", error);
+            }
+        });
+
+    });
+});
+
+$(document).ready(function () {
+    var deleteDepartmentId; // Variable to store the ID of the department to be deleted
+    let deleteDepartmentName = "";
+
+    $("#deleteDepartmentModal").on("show.bs.modal", function (e) {
+        clearErrors();
+        var button = $(e.relatedTarget);
+        deleteDepartmentId = button.data("department-id"); // Store the ID of the department to be deleted
+
+        console.log("delete departmentId:", deleteDepartmentId);
+
+        $.get("http://localhost:3000/api/departments/" + deleteDepartmentId, function (data) {
+            var department = data; // Assuming data directly represents the department object
+            deleteDepartmentName = department.name;
+
+            $("#deleteDepartmentModalMessage").text("Are you sure you want to delete department " + department.name + "?");
+        });
+    });
+
+    // When the "Yes" button in the delete department modal is clicked
+    $("#confirmDeleteDepartmentBtn").click(function () {
+        // Send the DELETE request
+        $.ajax({
+            url: "http://localhost:3000/api/departments/" + deleteDepartmentId,
+            type: "DELETE",
+            success: function (response) {
+                // Handle the successful response
+                console.log("Department deleted successfully:", deleteDepartmentName);
+                // Close the delete department modal
+                $("#deleteDepartmentModal").modal("hide");
+                // Populate and show the success alert modal
+                populateAndShowAlertModal("Department deleted successfully.");
+                // Update the department-related elements (e.g., table, etc.)
+                updateTable();
+            },
+            error: function (error) {
+                // Handle the error, if needed
+                console.error("Error deleting department:", error);
+                // Display the error message in the alert modal
+                populateAndShowAlertModal(error.responseJSON.error, "error");
+            }
+        });
+    });
+    
 });
