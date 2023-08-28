@@ -34,6 +34,27 @@
                 </div>
             </div>
         </div>
+
+        <!-- Delete confirmation modal -->
+        <div id="deletePersonnelModal" class="modal fade" tabindex="-1" aria-labelledby="deletePersonnel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteModalTitle"></h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="fw-bold" id="deleteModalMessage"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
         <section>
             <div class="appHeader">
                 <div class="row">
@@ -192,16 +213,21 @@
                     <div class="modal-body">
                         <form id="editPersonnelForm">
                             <input type="hidden" id="editPersonnelEmployeeID" />
-                            <input type="hidden" id="editPersonnelDepartmentID" />
+                            <input
+                                type="hidden"
+                                id="editPersonnelDepartmentID"
+                            />
                             <div class="form-floating mb-3">
                                 <input
-                                type="text"
-                                class="form-control"
-                                id="editPersonnelFirstName"
-                                placeholder="First name"
-                                required
+                                    type="text"
+                                    class="form-control"
+                                    id="editPersonnelFirstName"
+                                    placeholder="First name"
+                                    required
                                 />
-                                <label for="editPersonnelFirstName">First name</label>
+                                <label for="editPersonnelFirstName"
+                                    >First name</label
+                                >
                             </div>
 
                             <div class="form-floating mb-3">
@@ -373,6 +399,7 @@
 
                     <div class="modal-footer">
                         <button
+                            id="createBtn"
                             type="submit"
                             form="addPersonnelForm"
                             class="btn btn-outline-primary btn-sm myBtn"
