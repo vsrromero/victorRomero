@@ -132,3 +132,6 @@ dist
 # sandboxed modules
 
 _sandbox/
+
+# list todo
+todo.md
