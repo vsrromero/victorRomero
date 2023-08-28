@@ -18,7 +18,22 @@
         <div class="loading-spinner">
             <div class="spinner"></div>
         </div>
-        
+        <!-- Allert modal -->
+        <div
+            id="genericAlertModal"
+            class="modal fade"
+            tabindex="-1"
+            aria-labelledby="genericAlertModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <!-- Alert message will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
         <section>
             <div class="appHeader">
                 <div class="row">
@@ -130,9 +145,7 @@
                     role="tabpanel"
                     aria-labelledby="profile-tab"
                     tabindex="0"
-                >
-                    
-                </div>
+                ></div>
                 <!-- Locations table -->
                 <div
                     class="tab-pane"
@@ -140,9 +153,7 @@
                     role="tabpanel"
                     aria-labelledby="contact-tab"
                     tabindex="0"
-                >
-
-                </div>
+                ></div>
             </div>
 
             <footer class="border-top text-center fw-bold">
@@ -181,18 +192,16 @@
                     <div class="modal-body">
                         <form id="editPersonnelForm">
                             <input type="hidden" id="editPersonnelEmployeeID" />
-                            <input type="hidden" id="editPersonnelDepartmentID">
+                            <input type="hidden" id="editPersonnelDepartmentID" />
                             <div class="form-floating mb-3">
                                 <input
-                                    type="text"
-                                    class="form-control"
-                                    id="editPersonnelFirstName"
-                                    placeholder="First name"
-                                    required
+                                type="text"
+                                class="form-control"
+                                id="editPersonnelFirstName"
+                                placeholder="First name"
+                                required
                                 />
-                                <label for="editPersonnelFirstName"
-                                    >First name</label
-                                >
+                                <label for="editPersonnelFirstName">First name</label>
                             </div>
 
                             <div class="form-floating mb-3">
@@ -213,7 +222,6 @@
                                     type="text"
                                     class="form-control"
                                     id="editPersonnelJobTitle"
-                                    placeholder="Job title"
                                     required
                                 />
                                 <label for="editPersonnelJobTitle"
