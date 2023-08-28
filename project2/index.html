@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <!-- Delete confirmation modal -->
+        <!-- Delete Personnel confirmation modal -->
         <div
             id="deletePersonnelModal"
             class="modal fade"
@@ -71,6 +71,53 @@
                             type="button"
                             class="btn btn-danger"
                             id="confirmDeletePersonnelBtn"
+                        >
+                            Yes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Department confirmation modal -->
+        <div
+            id="deleteDepartmentModal"
+            class="modal fade"
+            tabindex="-1"
+            aria-labelledby="deleteDepartment"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteDepartmentModalTitle">
+                            Delete Department
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <span
+                            class="fw-bold"
+                            id="deleteDepartmentModalMessage"
+                        ></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            No
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            id="confirmDeleteDepartmentBtn"
                         >
                             Yes
                         </button>
@@ -445,77 +492,81 @@
 
         <!-- edit Department tModal -->
         <div
-        id="editDepartmentModal"
-        class="modal fade"
-        tabindex="-1"
-        data-bs-backdrop="false"
-        data-bs-keyboard="false"
-        aria-labelledby="editDepartment"
-        aria-hidden="true"
-    >
-        <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
-        <!--   that the header and footer are always on display by making the body scroll -->
-        <div
-            class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable"
+            id="editDepartmentModal"
+            class="modal fade"
+            tabindex="-1"
+            data-bs-backdrop="false"
+            data-bs-keyboard="false"
+            aria-labelledby="editDepartment"
+            aria-hidden="true"
         >
-            <div class="modal-content shadow">
-                <div class="modal-header bg-primary bg-gradient text-white">
-                    <h5 class="modal-title" id="editDepartment">
-                        Edit Department
-                    </h5>
-                    <button
-                        type="button"
-                        class="btn-close btn-close-white"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-    
-                <div class="modal-body">
-                    <form id="editDepartmentForm">
-                        <input type="hidden" id="editDepartmentID" />
-                        <div class="form-floating mb-3">
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="editDepartmentName"
-                                placeholder="Department name"
-                                required
-                            />
-                            <label for="editDepartmentName">Department name</label>
-                        </div>
-    
-                        <div class="form-floating">
-                            <select
-                                class="form-select"
-                                id="editDepartmentLocation"
-                                placeholder="Location"
-                            ></select>
-                            <label for="editDepartmentLocation">Location</label>
-                        </div>
-                    </form>
-                </div>
-    
-                <div class="modal-footer">
-                    <button
-                        id="saveDepartmentBtn"
-                        type="submit"
-                        form="editDepartmentForm"
-                        class="btn btn-outline-primary btn-sm myBtn"
-                    >
-                        SAVE
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-outline-primary btn-sm myBtn"
-                        data-bs-dismiss="modal"
-                    >
-                        CANCEL
-                    </button>
+            <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
+            <!--   that the header and footer are always on display by making the body scroll -->
+            <div
+                class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable"
+            >
+                <div class="modal-content shadow">
+                    <div class="modal-header bg-primary bg-gradient text-white">
+                        <h5 class="modal-title" id="editDepartment">
+                            Edit Department
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="editDepartmentForm">
+                            <input type="hidden" id="editDepartmentID" />
+                            <div class="form-floating mb-3">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="editDepartmentName"
+                                    placeholder="Department name"
+                                    required
+                                />
+                                <label for="editDepartmentName"
+                                    >Department name</label
+                                >
+                            </div>
+
+                            <div class="form-floating">
+                                <select
+                                    class="form-select"
+                                    id="editDepartmentLocation"
+                                    placeholder="Location"
+                                ></select>
+                                <label for="editDepartmentLocation"
+                                    >Location</label
+                                >
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button
+                            id="saveDepartmentBtn"
+                            type="submit"
+                            form="editDepartmentForm"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                        >
+                            SAVE
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                            data-bs-dismiss="modal"
+                        >
+                            CANCEL
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
         <!-- add Department Modal -->
         <div
@@ -551,11 +602,11 @@
                                 <input
                                     type="text"
                                     class="form-control"
-                                    id="addDepartmentFirstName"
-                                    placeholder="First name"
+                                    id="addDepartmentName"
+                                    placeholder="Department name"
                                     required
                                 />
-                                <label for="addDepartmentFirstName"
+                                <label for="addDepartmentName"
                                     >Department name</label
                                 >
                             </div>
@@ -563,10 +614,10 @@
                             <div class="form-floating">
                                 <select
                                     class="form-select"
-                                    id="addDepartmentDepartment"
+                                    id="addDepartmentLocation"
                                     placeholder="Department"
                                 ></select>
-                                <label for="addDepartmentDepartment"
+                                <label for="addDepartmentLocation"
                                     >Locations</label
                                 >
                             </div>
@@ -575,6 +626,7 @@
 
                     <div class="modal-footer">
                         <button
+                            id="createDepartmentBtn"
                             type="submit"
                             form="addDepartmentForm"
                             class="btn btn-outline-primary btn-sm myBtn"
