@@ -138,7 +138,7 @@ async function populatePersonnelTable() {
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-personnel-id="${person.id}">
                         <i class="fa-solid fa-pencil fa-fw"></i>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm deletePersonnelBtn" data-id="${person.id}">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-personnel-id="${person.id}">
                         <i class="fa-solid fa-trash fa-fw"></i>
                     </button>
                 </td>
@@ -233,10 +233,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td class="align-middle text-nowrap">${department.name}</td>
                 <td class="align-middle text-nowrap d-none d-md-table-cell">${department.location}</td>
                 <td class="text-end text-nowrap">
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-id="${department.id}">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-department-id="${department.id}">
                         <i class="fa-solid fa-pencil fa-fw"></i>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm deleteDepartmentBtn" data-id="${department.id}">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-department-id="${department.id}">
                         <i class="fa-solid fa-trash fa-fw"></i>
                     </button>
                 </td>
@@ -292,10 +292,10 @@ document.addEventListener("DOMContentLoaded", function () {
             row.innerHTML = `
                 <td class="align-middle text-nowrap">${location.name}</td>
                 <td class="text-end text-nowrap">
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editLocationModal" data-id="${location.id}">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editLocationModal" data-location-id="${location.id}">
                         <i class="fa-solid fa-pencil fa-fw"></i>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm deleteLocationBtn" data-id="${location.id}">
+                    <button type="button" class="btn btn-primary btn-sm deleteLocationBtn" data-location-id="${location.id}">
                         <i class="fa-solid fa-trash fa-fw"></i>
                     </button>
                 </td>
@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Populate select options for departments
 function populateDepartmentsSelect(selectElement, personDepartmentId) {
-    
+
     $.get("http://localhost:3000/api/departments", function (data) {
         var departments = data.data.departments;
 
@@ -451,7 +451,7 @@ $(document).ready(function () {
             email: email,
             departmentID: departmentID
         };
-        
+
         // Send the PUT request
         $.ajax({
             url: "http://localhost:3000/api/personnel/" + id,
@@ -474,6 +474,134 @@ $(document).ready(function () {
             }
         });
 
+    });
+});
+
+// Create personnel add
+
+
+$(document).ready(function () {
+    // When the "ADD" button is clicked
+    $("#createBtn").click(function (e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Clear previous error states and messages
+        clearErrors();
+
+        // Get the values from the modal inputs
+        var lastName = $("#addPersonnelLastName").val();
+        var firstName = $("#addPersonnelFirstName").val();
+        var jobTitle = $("#addPersonnelJobTitle").val();
+        var email = $("#addPersonnelEmailAddress").val();
+        var departmentID = $("#addPersonnelDepartment").val();
+
+        // Validation checks
+        var isValid = true;
+
+        if (!isValidName(firstName)) {
+            handleValidationError($("#addPersonnelFirstName"), "Invalid character");
+            isValid = false;
+        }
+
+        if (!isValidName(lastName)) {
+            handleValidationError($("#addPersonnelLastName"), "Invalid character");
+            isValid = false;
+        }
+
+        if (!isValidJobTitle(jobTitle)) {
+            handleValidationError($("#addPersonnelJobTitle"), "Invalid character");
+            isValid = false;
+        }
+
+        if (!isValidEmail(email)) {
+            handleValidationError($("#addPersonnelEmailAddress"), "Invalid email");
+            isValid = false;
+        }
+
+        if (!isValidDepartmentID(departmentID)) {
+            handleValidationError($("#addPersonnelDepartment"), "Invalid department");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return; // Exit if any validation failed
+        }
+
+        // Create the JSON data to be sent in the PUT request
+        var jsonData = {
+            lastName: lastName,
+            firstName: firstName,
+            jobTitle: jobTitle,
+            email: email,
+            departmentID: departmentID
+        };
+
+        // Send the PUT request
+        $.ajax({
+            url: "http://localhost:3000/api/personnel/",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(jsonData),
+            success: function (response) {
+                // Handle the successful response
+                console.log("Data created successfully:", response);
+                // Close the modal
+                $("#addPersonnelModal").modal("hide");
+                // Populate and show the alert modal
+                populateAndShowAlertModal("Record saved successfully.");
+                // Update the table 
+                updateTable();
+            },
+            error: function (error) {
+                // Handle the error, if needed
+                console.error("Error updating data:", error);
+            }
+        });
+
+    });
+});
+
+$(document).ready(function () {
+    var deletePersonnelId; // Variável para armazenar o ID da pessoa a ser excluída
+
+    $("#deletePersonnelModal").on("show.bs.modal", function (e) {
+        clearErrors();
+        var button = $(e.relatedTarget);
+        deletePersonnelId = button.data("personnel-id"); // Armazena o ID da pessoa a ser excluída
+
+        console.log("delete personnelId:", deletePersonnelId);
+
+        $("#deleteModalTitle").text("Delete Personnel");
+        $("#deletionType").text("personnel");
+
+        $.get("http://localhost:3000/api/personnel/" + deletePersonnelId, function (data) {
+            var personnel = data.data.personnel;
+
+            $("#deleteModalMessage").text("Are you sure you want to delete " + personnel.firstName + " " + personnel.lastName + "?");
+        });
+    });
+
+    // When the "Yes" button in the delete modal is clicked
+    $("#confirmDeleteBtn").click(function () {
+        // Send the DELETE request
+        $.ajax({
+            url: "http://localhost:3000/api/personnel/" + deletePersonnelId,
+            type: "DELETE",
+            success: function (response) {
+                // Handle the successful response
+                console.log("Data deleted successfully:", response);
+                // Close the delete modal
+                $("#deletePersonnelModal").modal("hide");
+                // Populate and show the alert modal
+                populateAndShowAlertModal("Record deleted successfully.");
+                // Update the table 
+                updateTable();
+            },
+            error: function (error) {
+                // Handle the error, if needed
+                console.error("Error deleting data:", error);
+            }
+        });
     });
 });
 
