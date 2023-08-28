@@ -36,24 +36,48 @@
         </div>
 
         <!-- Delete confirmation modal -->
-        <div id="deletePersonnelModal" class="modal fade" tabindex="-1" aria-labelledby="deletePersonnel" aria-hidden="true">
+        <div
+            id="deletePersonnelModal"
+            class="modal fade"
+            tabindex="-1"
+            aria-labelledby="deletePersonnel"
+            aria-hidden="true"
+        >
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteModalTitle"></h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="deleteModalTitle">
+                            Delete Personnel
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
                     </div>
                     <div class="modal-body">
                         <span class="fw-bold" id="deleteModalMessage"></span>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes</button>
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            No
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            id="confirmDeletePersonnelBtn"
+                        >
+                            Yes
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-        
 
         <section>
             <div class="appHeader">
@@ -150,6 +174,7 @@
                     </li>
                 </ul>
             </div>
+            <!-- Tables -->
             <div class="tab-content bg-white">
                 <!-- Personnel table -->
                 <div
@@ -420,16 +445,77 @@
 
         <!-- edit Department tModal -->
         <div
-            id="editDepartmentModal"
-            class="modal fade"
-            tabindex="-1"
-            data-bs-backdrop="false"
-            data-bs-keyboard="false"
-            aria-labelledby="editDepartment"
-            aria-hidden="true"
+        id="editDepartmentModal"
+        class="modal fade"
+        tabindex="-1"
+        data-bs-backdrop="false"
+        data-bs-keyboard="false"
+        aria-labelledby="editDepartment"
+        aria-hidden="true"
+    >
+        <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
+        <!--   that the header and footer are always on display by making the body scroll -->
+        <div
+            class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable"
         >
-            <!-- Modal content for editing department goes here -->
+            <div class="modal-content shadow">
+                <div class="modal-header bg-primary bg-gradient text-white">
+                    <h5 class="modal-title" id="editDepartment">
+                        Edit Department
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+    
+                <div class="modal-body">
+                    <form id="editDepartmentForm">
+                        <input type="hidden" id="editDepartmentID" />
+                        <div class="form-floating mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="editDepartmentName"
+                                placeholder="Department name"
+                                required
+                            />
+                            <label for="editDepartmentName">Department name</label>
+                        </div>
+    
+                        <div class="form-floating">
+                            <select
+                                class="form-select"
+                                id="editDepartmentLocation"
+                                placeholder="Location"
+                            ></select>
+                            <label for="editDepartmentLocation">Location</label>
+                        </div>
+                    </form>
+                </div>
+    
+                <div class="modal-footer">
+                    <button
+                        id="saveDepartmentBtn"
+                        type="submit"
+                        form="editDepartmentForm"
+                        class="btn btn-outline-primary btn-sm myBtn"
+                    >
+                        SAVE
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary btn-sm myBtn"
+                        data-bs-dismiss="modal"
+                    >
+                        CANCEL
+                    </button>
+                </div>
+            </div>
         </div>
+    </div>
 
         <!-- add Department Modal -->
         <div
