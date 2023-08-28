@@ -1,3 +1,52 @@
+// Validation functions
+function handleValidationError(field, errorMessage) {
+    field.addClass("is-invalid");
+    field.get(0).setCustomValidity(errorMessage); // Set custom validation message
+    field.siblings(".invalid-feedback").text(errorMessage);
+}
+
+function isValidName(value) {
+    return /^[A-Za-zÀ-ÿ\s]{1,50}$/.test(value);
+}
+
+function isValidJobTitle(value) {
+    return /^[A-Za-zÀ-ÿ\s]{1,50}$/.test(value);
+}
+
+function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function isValidDepartmentID(value) {
+    return /^\d+$/.test(value);
+}
+
+// function handleValidationError(field, errorMessage) {
+//     field.addClass("is-invalid");
+//     field.siblings(".invalid-feedback").text(errorMessage);
+// }
+
+function clearErrors() {
+    $(".form-control").removeClass("is-invalid");
+    $(".invalid-feedback").text("");
+}
+
+// Function to populate and show the generic alert modal
+function populateAndShowAlertModal(message) {
+    var alertModal = $("#genericAlertModal");
+    alertModal.find(".modal-body").text(message);
+
+    // Clear any previous alert classes and add the new alert class
+    alertModal.find(".modal-dialog").removeClass("modal-success modal-warning modal-danger").addClass("text-white bg text-center");
+    var modalContent = alertModal.find(".modal-content");
+    modalContent.removeClass("bg-success bg-warning bg-danger").addClass("bg-success");
+
+    alertModal.modal("show");
+    setTimeout(function () {
+        alertModal.modal("hide");
+    }, 2000);
+}
+
 // Functions to update the table
 
 function updateTable() {
@@ -282,8 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Populate select options for departments
 function populateDepartmentsSelect(selectElement, personDepartmentId) {
-    console.log("person department id:", personDepartmentId);
-    console.log("selectElement:", selectElement);
+    
     $.get("http://localhost:3000/api/departments", function (data) {
         var departments = data.data.departments;
 
@@ -321,7 +369,7 @@ $(document).ready(function () {
 // Edit personnel modal
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
-
+    clearErrors();
     var button = $(e.relatedTarget);
     var personnelId = button.data("personnel-id");
 
@@ -352,16 +400,48 @@ $(document).ready(function () {
     $("#saveBtn").click(function (e) {
         e.preventDefault(); // Prevent the default form submission
 
+        // Clear previous error states and messages
+        clearErrors();
+
         // Get the values from the modal inputs
         var id = $("#editPersonnelEmployeeID").val();
         var lastName = $("#editPersonnelLastName").val();
         var firstName = $("#editPersonnelFirstName").val();
         var jobTitle = $("#editPersonnelJobTitle").val();
         var email = $("#editPersonnelEmailAddress").val();
+        var departmentID = $("#editPersonnelDepartment").val();
 
-        // Get the selected option's data-departmentid attribute
-        var selectedDepartmentOption = $("#editPersonnelDepartment option:selected");
-        var departmentID = selectedDepartmentOption.data("departmentid");
+        // Validation checks
+        var isValid = true;
+
+        if (!isValidName(firstName)) {
+            handleValidationError($("#editPersonnelFirstName"), "Invalid character");
+            isValid = false;
+        }
+
+        if (!isValidName(lastName)) {
+            handleValidationError($("#editPersonnelLastName"), "Invalid character");
+            isValid = false;
+        }
+
+        if (!isValidJobTitle(jobTitle)) {
+            handleValidationError($("#editPersonnelJobTitle"), "Invalid character");
+            isValid = false;
+        }
+
+        if (!isValidEmail(email)) {
+            handleValidationError($("#editPersonnelEmailAddress"), "Invalid email");
+            isValid = false;
+        }
+
+        if (!isValidDepartmentID(departmentID)) {
+            handleValidationError($("#editPersonnelDepartment"), "Invalid department");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return; // Exit if any validation failed
+        }
 
         // Create the JSON data to be sent in the PUT request
         var jsonData = {
@@ -395,20 +475,5 @@ $(document).ready(function () {
         });
 
     });
-
-    // Function to populate and show the generic alert modal
-    function populateAndShowAlertModal(message) {
-        var alertModal = $("#genericAlertModal");
-        alertModal.find(".modal-body").text(message);
-
-        // Clear any previous alert classes and add the new alert class
-        alertModal.find(".modal-dialog").removeClass("modal-success modal-warning modal-danger").addClass("text-white bg text-center");
-        var modalContent = alertModal.find(".modal-content");
-        modalContent.removeClass("bg-success bg-warning bg-danger").addClass("bg-success");
-
-        alertModal.modal("show");
-        setTimeout(function () {
-            alertModal.modal("hide");
-        }, 2000);
-    }
 });
+
