@@ -11,7 +11,7 @@ class SearchUtility
         $db = new Database(); // Criar uma instância da classe Database
         $connection = $db->getConnection(); // Obter a conexão do banco de dados
 
-        $sql = 'SELECT p.lastName, p.firstName, p.jobTitle, p.email, d.name as department, l.name as location
+        $sql = 'SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, p.departmentID, d.name as department, d.locationID, l.id as locationID, l.name as location
         FROM personnel p
         LEFT JOIN department d ON (d.id = p.departmentID)
         LEFT JOIN location l ON (l.id = d.locationID)
@@ -39,7 +39,7 @@ class SearchUtility
         $db = new Database();
         $connection = $db->getConnection();
 
-        $sql = 'SELECT d.name as department, l.name as location
+        $sql = 'SELECT d.id, d.name, d.locationID, l.name as location
         FROM department d
         LEFT JOIN location l ON (l.id = d.locationID)
         WHERE d.name LIKE ? OR l.name LIKE ?
@@ -66,10 +66,7 @@ class SearchUtility
         $db = new Database();
         $connection = $db->getConnection();
 
-        $sql = 'SELECT l.name as location
-        FROM location l
-        WHERE l.name LIKE ?
-        ORDER BY l.name;';
+        $sql = 'SELECT id, name FROM location WHERE name LIKE ? ORDER BY name;';
 
         // get the value of the search term
         $term = $term['term'];
