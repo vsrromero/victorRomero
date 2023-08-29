@@ -1,6 +1,7 @@
 // Filter functions
 function applyFilters(filterTab) {
     let keyword = $("#filterKeyword").val().toLowerCase(); // from input field
+    let locationKeyword = $("#filterLocationKeyword").val().toLowerCase(); // from input field
     let departmentId = $("#filterDepartment option:selected").data("departmentid"); // from select menu
     let locationId = $("#filterLocation").val(); // from select menu
     let departmentFilterId = $("#departmentFilterDepartment option:selected").data("departmentid"); // from select menu
@@ -56,7 +57,21 @@ function applyFilters(filterTab) {
         row.toggle(shouldShow);
     });
 
-    var isAnyFilterApplied = keyword || departmentId || locationId || departmentFilterId || locationFilterId;
+    $("#locations-tab-pane tbody tr").each(function () {
+        var row = $(this);
+        var shouldShow = false;
+
+        row.find("td").each(function () {
+            var cellText = $(this).text().toLowerCase();
+            if (cellText.includes(locationKeyword)) {
+                shouldShow = true;
+                return false;
+            }
+        });
+        row.toggle(shouldShow);
+    });
+
+    var isAnyFilterApplied = keyword || departmentId || locationId || departmentFilterId || locationFilterId || locationKeyword;
     var filterBtn = $("#filterBtn");
 
     if (isAnyFilterApplied) {
@@ -67,10 +82,13 @@ function applyFilters(filterTab) {
 }
 
 
-function clearFiltersPersonnel() {
+function clearFilters() {
     $("#filterKeyword").val(""); // Clear the input field
     $("#filterDepartment").val(""); // Clear the department filter
     $("#filterLocation").val(""); // Clear the location filter
+    $("#departmentFilterDepartment").val(""); // Clear the department filter
+    $("#departmentFilterLocation").val(""); // Clear the location filter
+    $("#filterLocationKeyword").val(""); // Clear the input field
     applyFilters(); // Apply filters to reset the table
 }
 
@@ -360,11 +378,141 @@ async function populatePersonnelTable() {
 }
 
 
-$("#searchInp").on("keyup", function () {
+$("#searchInp").on("keyup", async function () {
+    const searchTerm = $(this).val();
 
-    // your code
+    if (!searchTerm) {
+        updateTable();
+    }
 
+    if ($("#personnelBtn").hasClass("active")) {
+        try {
+            $(".loading-spinner").show();
+
+            let response = await fetch(`${baseUrl}/search-personnel?term=${searchTerm}`);
+            let result = await response.json();
+            let data = result;
+
+            const personnelTable = $("#personnel-tab-pane");
+            personnelTable.empty();
+
+            const table = $("<table>").addClass("table table-hover");
+            const tbody = $("<tbody>");
+
+            data.forEach(person => {
+                const row = $("<tr>");
+                row.html(`
+                <td style="display: none;" data-tdid="${person.id}"></td>
+                <td style="display: none;" data-tddpid="${person.departmentID}"></td>
+                <td style="display: none;" data-tdloid="${person.locationID}"></td>
+                <td class="align-middle text-nowrap">${person.lastName}, ${person.firstName}</td>
+                <td>${person.jobTitle}</td>
+                <td class="align-middle text-nowrap d-none d-md-table-cell">${person.department}</td>
+                <td class="align-middle text-nowrap d-none d-md-table-cell">${person.location}</td>
+                <td class="align-middle text-nowrap d-none d-md-table-cell">${person.email}</td>
+                <td class="text-end text-nowrap">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-personnel-id="${person.id}">
+                        <i class="fa-solid fa-pencil fa-fw"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-personnel-id="${person.id}">
+                        <i class="fa-solid fa-trash fa-fw"></i>
+                    </button>
+                </td>
+            `);
+                tbody.append(row);
+            });
+
+            table.append(tbody);
+            personnelTable.html(table);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            $(".loading-spinner").hide();
+        }
+    } else if ($("#departmentsBtn").hasClass("active")) {
+        try {
+            $(".loading-spinner").show();
+
+            let response = await fetch(`${baseUrl}/search-department?term=${searchTerm}`);
+            let result = await response.json();
+            let data = result;
+
+            const locationsTable = $("#department-tab-pane");
+            locationsTable.empty();
+
+            const table = $("<table>").addClass("table table-hover");
+            const tbody = $("<tbody>");
+
+            data.forEach(department => {
+                const row = $("<tr>");
+                row.html(`
+                <td style="display: none;" data-tddepartmentid="${department.id}"></td>
+                <td style="display: none;" data-tdlocationid="${department.locationID}"></td>
+                <td class="align-middle text-nowrap">${department.name}</td>
+                <td class="align-middle text-nowrap d-none d-md-table-cell">${department.location}</td>
+                <td class="text-end text-nowrap">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-department-id="${department.id}">
+                        <i class="fa-solid fa-pencil fa-fw"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDepartmentModal" data-department-id="${department.id}">
+                        <i class="fa-solid fa-trash fa-fw"></i>
+                    </button>
+                </td>
+            `);
+                tbody.append(row);
+            });
+
+            table.append(tbody);
+            locationsTable.html(table);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            $(".loading-spinner").hide();
+        }
+    } else if ($("#locationsBtn").hasClass("active")) {
+        try {
+            $(".loading-spinner").show();
+
+            let response = await fetch(`${baseUrl}/search-location?term=${searchTerm}`);
+            let result = await response.json();
+            let data = result;
+
+            const locationsTable = $("#locations-tab-pane");
+            locationsTable.empty();
+
+            const table = $("<table>").addClass("table table-hover");
+            const tbody = $("<tbody>");
+
+            data.forEach(location => {
+                const row = $("<tr>");
+                row.html(`
+                <td class="align-middle text-nowrap">${location.name}</td>
+                <td class="text-end text-nowrap">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editLocationModal" data-location-id="${location.id}">
+                        <i class="fa-solid fa-pencil fa-fw"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteLocationModal" data-location-id="${location.id}">
+                        <i class="fa-solid fa-trash fa-fw"></i>
+                    </button>
+                </td>
+            `);
+                tbody.append(row);
+            });
+
+            table.append(tbody);
+            locationsTable.html(table);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            $(".loading-spinner").hide();
+        }
+    }
 });
+
+
 
 
 
@@ -373,7 +521,7 @@ $("#refreshBtn").click(function () {
     if ($("#personnelBtn").hasClass("active")) {
 
         alert("refresh personnel table");
-        clearFiltersPersonnel()
+        clearFilters();
         populatePersonnelTable();
 
 
@@ -382,13 +530,13 @@ $("#refreshBtn").click(function () {
         if ($("#departmentsBtn").hasClass("active")) {
 
             alert("refresh department table");
-            clearFiltersPersonnel()
+            clearFilters();
             populateDeparmentsTable();
 
         } else {
 
             alert("refresh location table");
-            clearFiltersPersonnel()
+            clearFilters();
             populateLocationsTable();
 
         }
@@ -1136,7 +1284,7 @@ $(document).ready(function () {
     // on personnel modal
     // When the "Clear Filters" button is clicked
     $("#clearFiltersBtn").click(function () {
-        clearFiltersPersonnel();
+        clearFilters();
     });
 
     // on personnel modal
@@ -1152,6 +1300,12 @@ $(document).ready(function () {
     });
 
     // on department modal
+    // When the "Clear Filters" button is clicked
+    $("#departmentClearFiltersBtn").click(function () {
+        clearFilters();
+    });
+
+    // on department modal
     // When location filter changes
     $("#departmentFilterLocation").change(function () {
         applyFilters();
@@ -1161,6 +1315,19 @@ $(document).ready(function () {
     //when department filter changes
     $("#departmentFilterDepartment").change(function () {
         applyFilters();
+    });
+
+    // on location modal
+    // When the input field changes (user types)
+    $("#filterLocationKeyword").on("input", function () {
+        clearTimeout(timer);
+        timer = setTimeout(applyFilters, 300);
+    });
+
+    // on location modal
+    // When the "Clear Filters" button is clicked
+    $("#clearLocationFiltersBtn").click(function () {
+        clearFilters();
     });
 });
 
@@ -1177,5 +1344,5 @@ function openDepartmentFilterModal() {
 }
 
 function openLocationFilterModal() {
-    // Handle opening location filter modal if needed
+    $("#filterLocationModal").modal("show");
 }

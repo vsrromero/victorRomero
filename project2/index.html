@@ -30,7 +30,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="filterModalLabel">
-                            Filtrar Tabela
+                            Filter Personnel
                         </h5>
                         <button
                             type="button"
@@ -43,7 +43,7 @@
                         <form id="filterForm">
                             <div class="mb-3">
                                 <label for="filterKeyword" class="form-label"
-                                    >Palavra-chave:</label
+                                    >Search Term:</label
                                 >
                                 <input
                                     type="text"
@@ -53,21 +53,21 @@
                             </div>
                             <div class="mb-3">
                                 <label for="filterDepartment" class="form-label"
-                                    >Departamento:</label
+                                    >Departament:</label
                                 >
                                 <select
                                     class="form-select"
                                     id="filterDepartment"
                                 >
-                                    <option value="">Todos</option>
+                                    <option value="">All</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="filterLocation" class="form-label"
-                                    >Localização:</label
+                                    >Location:</label
                                 >
                                 <select class="form-select" id="filterLocation">
-                                    <option value="">Todas</option>
+                                    <option value="">All</option>
                                 </select>
                             </div>
                         </form>
@@ -117,7 +117,9 @@
                     <div class="modal-body">
                         <form id="departmentFilterForm">
                             <div class="mb-3">
-                                <label for="departmentFilterDepartment" class="form-label"
+                                <label
+                                    for="departmentFilterDepartment"
+                                    class="form-label"
                                     >Department:</label
                                 >
                                 <select
@@ -128,7 +130,9 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="departmentFilterLocation" class="form-label"
+                                <label
+                                    for="departmentFilterLocation"
+                                    class="form-label"
                                     >Location:</label
                                 >
                                 <select
@@ -141,9 +145,79 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button id="departmentClearFiltersBtn" type="button" class="btn btn-outline-primary">Clear Filters</button>
-                        <button id="departmentCloseFilterModalBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button
+                            id="departmentClearFiltersBtn"
+                            type="button"
+                            class="btn btn-outline-primary"
+                        >
+                            Clear Filters
+                        </button>
+                        <button
+                            id="departmentCloseFilterModalBtn"
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location Filter modal -->
+        <div
+            class="modal fade"
+            id="filterLocationModal"
+            tabindex="-1"
+            aria-labelledby="filterLocationModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="filterLocationModalLabel">
+                            Filter Location
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Fechar"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="filterLocationForm">
+                            <div class="mb-3">
+                                <label
+                                    for="filterLocationKeyword"
+                                    class="form-label"
+                                    >Search Term:</label
+                                >
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="filterLocationKeyword"
+                                />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            id="clearLocationFiltersBtn"
+                            type="button"
+                            class="btn btn-outline-primary"
+                        >
+                            Clear Filters
+                        </button>
+                        <button
+                            id="closeLocationFilterModalBtn"
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
                     </div>
                 </div>
             </div>
