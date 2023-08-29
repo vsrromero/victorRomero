@@ -343,6 +343,8 @@ $("#searchInp").on("keyup", function () {
 
 });
 
+
+
 $("#refreshBtn").click(function () {
 
     if ($("#personnelBtn").hasClass("active")) {
@@ -1085,68 +1087,188 @@ $(document).ready(function () {
 
 // Filter button - Check with tab is active
 
-$("#filterBtn").click(function () {
+// $("#filterBtn").click(function () {
+    
+//     if ($("#personnelBtn").hasClass("active")) {
+        // $(document).ready(function () {
+        //     var timer; // Timer for search delay
 
-    if ($("#personnelBtn").hasClass("active")) {
+        //     populateDepartmentsSelect($("#filterDepartment")); // Populate the department filter
+        //     populateLocationsSelect($("#filterLocation")); // Populate the location filter
 
-        $(document).ready(function () {
-            var timer; // Timer for search delay
+        //     // Open the filter modal when the filter button is clicked
+        //     $("#filterBtn").click(function () {
+        //         $("#filterModal").modal("show");
+        //     });
 
-            populateDepartmentsSelect($("#filterDepartment")); // Populate the department filter
-            populateLocationsSelect($("#filterLocation")); // Populate the location filter
+        //     // When the input field changes (user types)
+        //     $("#filterKeyword").on("input", function () {
+        //         clearTimeout(timer); // Clear the previous timer
+        //         timer = setTimeout(applyFilters, 300); // Set a new timer to apply filters after 300 milliseconds
+        //     });
 
-            // Open the filter modal when the filter button is clicked
-            $("#filterBtn").click(function () {
-                $("#filterModal").modal("show");
-            });
+        //     // When the "Clear Filters" button is clicked
+        //     $("#clearFiltersBtn").click(function () {
+        //         clearFilters();
+        //     });
 
-            // When the input field changes (user types)
-            $("#filterKeyword").on("input", function () {
-                clearTimeout(timer); // Clear the previous timer
-                timer = setTimeout(applyFilters, 300); // Set a new timer to apply filters after 300 milliseconds
-            });
+        //     // When the "Apply Filters" button is clicked
+        //     $("#applyFiltersBtn").click(function () {
+        //         applyFilters();
+        //         $("#filterModal").modal("hide");
+        //     });
 
-            // When the "Clear Filters" button is clicked
-            $("#clearFiltersBtn").click(function () {
-                clearFilters();
-            });
+        //     // When the department filter changes
+        //     $("#filterDepartment").change(function () {
+        //         applyFilters();
+        //     });
 
-            // When the "Apply Filters" button is clicked
-            $("#applyFiltersBtn").click(function () {
-                applyFilters();
-                $("#filterModal").modal("hide");
-            });
+        //     // When the location filter changes
+        //     $("#filterLocation").change(function () {
+        //         applyFilters();
+        //     });
+        // });
 
-            // When the department filter changes
-            $("#filterDepartment").change(function () {
-                applyFilters();
-            });
+        // $(document).ready(function () {
+        //     var timer; // Timer for search delay
 
-            // When the location filter changes
-            $("#filterLocation").change(function () {
-                applyFilters();
-            });
-        });
+        //     // When the input field changes (user types)
+        //     $("#filterKeyword").on("input", function () {
+        //         clearTimeout(timer); // Clear the previous timer
+        //         timer = setTimeout(applyFilters, 300); // Set a new timer to apply filters after 300 milliseconds
+        //     });
 
-        $(document).ready(function () {
-            var timer; // Timer for search delay
+        //     // When the "Clear Filters" button is clicked
+        //     $("#clearFiltersBtn").click(function () {
+        //         clearFilters();
+        //     });
 
-            // When the input field changes (user types)
-            $("#filterKeyword").on("input", function () {
-                clearTimeout(timer); // Clear the previous timer
-                timer = setTimeout(applyFilters, 300); // Set a new timer to apply filters after 300 milliseconds
-            });
+        //     // When the "Apply Filters" button is clicked
+        //     $("#applyFiltersBtn").click(function () {
+        //         applyFilters();
+        //         $("#filterModal").modal("hide");
+        //     });
+        // });
+//     } else {
+//         if ($("#departmentsBtn").hasClass("active")) {
+//             $(document).ready(function () {
+//                 var timer; // Timer for search delay
+            
+//                 populateDepartmentsSelect($("#filterDepartment")); // Populate the personnel department filter
+//                 populateLocationsSelect($("#filterLocation")); // Populate the personnel location filter
+            
+//                 // Open the personnel filter modal when the filter button is clicked
+//                 $("#filterBtn").click(function () {
+//                     $("#departmentFilterModal").modal("show");
+//                 });
+            
+//                 // Open the department filter modal when the department filter button is clicked
+//                 $("#departmentFilterBtn").click(function () {
+//                     $("#departmentFilterModal").modal("show");
+//                 });
+            
+//                 // When the input field changes (user types) in the personnel filter
+//                 $("#filterKeyword").on("input", function () {
+//                     clearTimeout(timer);
+//                     timer = setTimeout(applyFilters, 300);
+//                 });
+            
+//                 // When the "Clear Filters" button is clicked in the personnel filter
+//                 $("#clearFiltersBtn").click(function () {
+//                     clearFilters();
+//                 });
+            
+//                 // When the "Apply Filters" button is clicked in the personnel filter
+//                 $("#applyFiltersBtn").click(function () {
+//                     applyFilters();
+//                     $("#filterModal").modal("hide");
+//                 });
+            
+//                 // When the department filter changes in the personnel filter
+//                 $("#filterDepartment").change(function () {
+//                     applyFilters();
+//                 });
+            
+//                 // When the location filter changes in the personnel filter
+//                 $("#filterLocation").change(function () {
+//                     applyFilters();
+//                 });
+            
+//                 // When the "Clear Filters" button is clicked in the department filter modal
+//                 $("#departmentClearFiltersBtn").click(function () {
+//                     clearDepartmentFilters();
+//                 });
+            
+//                 // When the "Apply Filters" button is clicked in the department filter modal
+//                 $("#departmentApplyFiltersBtn").click(function () {
+//                     applyDepartmentFilters();
+//                     $("#departmentFilterModal").modal("hide");
+//                 });
+//             });
+//         } else {
+//             alert ("location");
+//         }
+//     }
+// });
 
-            // When the "Clear Filters" button is clicked
-            $("#clearFiltersBtn").click(function () {
-                clearFilters();
-            });
+$(document).ready(function () {
+    var timer; // Timer for search delay
 
-            // When the "Apply Filters" button is clicked
-            $("#applyFiltersBtn").click(function () {
-                applyFilters();
-                $("#filterModal").modal("hide");
-            });
-        });
-    } 
+    // Populate departments and locations selects
+    populateDepartmentsSelect($("#filterDepartment"));
+    populateLocationsSelect($("#filterLocation"));
+
+    // Open the filter modal when the filter button is clicked
+    $("#filterBtn").click(function () {
+        if ($("#personnelBtn").hasClass("active")) {
+            openPersonnelFilterModal();
+        } else if ($("#departmentsBtn").hasClass("active")) {
+            openDepartmentFilterModal();
+        } else if ($("#locationsBtn").hasClass("active")) {
+            openLocationFilterModal();
+        }
+    });
+
+    // When the input field changes (user types)
+    $("#filterKeyword").on("input", function () {
+        clearTimeout(timer);
+        timer = setTimeout(applyFilters, 300);
+    });
+
+    // When the "Clear Filters" button is clicked
+    $("#clearFiltersBtn").click(function () {
+        clearFilters();
+    });
+
+    // When the "Apply Filters" button is clicked
+    $("#applyFiltersBtn").click(function () {
+        applyFilters();
+        $("#filterModal").modal("hide");
+    });
+
+    // When the department filter changes
+    $("#filterDepartment").change(function () {
+        applyFilters();
+    });
+
+    // When the location filter changes
+    $("#filterLocation").change(function () {
+        applyFilters();
+    });
 });
+
+function openPersonnelFilterModal() {
+    populateDepartmentsSelect($("#filterDepartment"));
+    populateLocationsSelect($("#filterLocation"));
+    $("#filterModal").modal("show");
+}
+
+function openDepartmentFilterModal() {
+    populateDepartmentsSelect($("#departmentFilterDepartment"));
+    populateLocationsSelect($("#departmentFilterLocation"));
+    $("#departmentFilterModal").modal("show");
+}
+
+function openLocationFilterModal() {
+    // Handle opening location filter modal if needed
+}
