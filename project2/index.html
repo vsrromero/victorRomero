@@ -105,7 +105,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="departmentFilterModalLabel">
-                            Filtrar Departamentos
+                            Department Filters
                         </h5>
                         <button
                             type="button"
@@ -117,32 +117,32 @@
                     <div class="modal-body">
                         <form id="departmentFilterForm">
                             <div class="mb-3">
-                                <label for="filterDepartment" class="form-label"
-                                    >Departamento:</label
+                                <label for="departmentFilterDepartment" class="form-label"
+                                    >Department:</label
                                 >
                                 <select
                                     class="form-select"
                                     id="departmentFilterDepartment"
                                 >
-                                    <option value="">Todos</option>
+                                    <option value="">All</option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="filterLocation" class="form-label"
-                                    >Localização:</label
+                                <label for="departmentFilterLocation" class="form-label"
+                                    >Location:</label
                                 >
                                 <select
                                     class="form-select"
                                     id="departmentFilterLocation"
                                 >
-                                    <option value="">Todas</option>
+                                    <option value="">All</option>
                                 </select>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button id="departmentClearFiltersBtn" type="button" class="btn btn-outline-primary">Limpar Filtros</button>
-                        <button id="departmentCloseFilterModalBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button id="departmentClearFiltersBtn" type="button" class="btn btn-outline-primary">Clear Filters</button>
+                        <button id="departmentCloseFilterModalBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                     </div>
                 </div>
@@ -369,7 +369,7 @@
                             class="nav-link"
                             id="departmentsBtn"
                             data-bs-toggle="tab"
-                            data-bs-target="#departments-tab-pane"
+                            data-bs-target="#department-tab-pane"
                             type="button"
                             role="tab"
                             aria-controls="profile-tab-pane"
@@ -412,7 +412,7 @@
                 <!-- Departments table -->
                 <div
                     class="tab-pane"
-                    id="departments-tab-pane"
+                    id="department-tab-pane"
                     role="tabpanel"
                     aria-labelledby="profile-tab"
                     tabindex="0"
