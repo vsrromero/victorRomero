@@ -83,8 +83,8 @@ abstract class Model
         $values = array_values($attributes);
         $values[] = $id;
 
-        $types = str_repeat('s', count($values) - 1) . 'i'; // Include the ID data type
-        $statement->bind_param($types, ...$values); // Bind all values, including the ID
+        $types = str_repeat('s', count($values) - 1) . 'i'; 
+        $statement->bind_param($types, ...$values); 
 
         if ($statement->execute()) {
             // Check if any rows were affected (updated)

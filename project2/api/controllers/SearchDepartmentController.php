@@ -15,7 +15,7 @@ class SearchDepartmentController extends Controller
     public function searchDepartment($term)
     {
         try {
-            // Validate input: Make sure $term is a non-empty string without special characters
+            
             if (!isset($term['term']) || !is_string($term['term']) || trim($term['term']) === '') {
                 http_response_code(400);
                 header('Content-Type: application/json');

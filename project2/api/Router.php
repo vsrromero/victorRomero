@@ -16,7 +16,7 @@ class Router
                 return $uriSegments[$i + 1]; // Get the next segment after the placeholder
             }
         }
-        return null; // Return null if no ID is found
+        return null;
     }
         
     public function addRoute($method, $path, $callback)
@@ -30,7 +30,7 @@ class Router
 
     public function route($httpMethod, $uri)
     {
-        $jsonData = file_get_contents('php://input');
+        $jsonData = file_get_contents('php://input'); //get id from uri
         $dataArray = json_decode($jsonData, true);
         
         // Parse the query string parameters from the URI
@@ -41,7 +41,8 @@ class Router
         }
         
         foreach ($this->routes as $route) {
-            $path = '/api' . $route['path'];
+            //$path = '/portfolio/cdirectory/api' . $route['path']; // production
+            $path = '/api' . $route['path']; // development
     
             $parsedUri = parse_url($uri);
             $uriPath = $parsedUri['path'];
@@ -55,7 +56,6 @@ class Router
                     $controllerClass = $callback[0];
                     $controllerMethod = $callback[1];
     
-                    // Create an instance of the controller
                     $controllerInstance = new $controllerClass();
     
                     // Check if the route has an ID placeholder
@@ -71,7 +71,7 @@ class Router
                 }
             }
         }
-    
+        
         return ['error' => 'Route not found'];
     }
     

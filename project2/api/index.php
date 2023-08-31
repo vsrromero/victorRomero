@@ -1,10 +1,9 @@
 <?php
-
-require '../vendor/autoload.php'; // Load Composer's autoloader
+ini_set('display_errors', 1);
+require '../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/config');
 $dotenv->load();
 
-// Autoloader to load classes automatically
 spl_autoload_register(function ($className) {
     $className = str_replace('api\\', '', $className);
     require_once __DIR__ . '/' . $className . '.php';
@@ -14,10 +13,8 @@ spl_autoload_register(function ($className) {
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-// Router instance
-$router = new api\Router(); // Root path is /api
+$router = new api\Router();
 
-// Including routes passing the router instance
 require 'routes/routes.php';
 
 // Set the HTTP method and the request path
@@ -27,6 +24,5 @@ $uri = $_SERVER['REQUEST_URI'];
 // Routing the request
 $response = $router->route($httpMethod, $uri);
 
-// Sending the response
 echo json_encode($response);
 ?>

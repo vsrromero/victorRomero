@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Company Directory</title>
         <link rel="stylesheet" href="./assets/styles/style.css" />
         <link
             rel="stylesheet"
@@ -13,6 +13,7 @@
             rel="stylesheet"
             href="./node_modules/bootstrap/dist/css/bootstrap.css"
         />
+        <link rel="shortcut icon" href="./assets/img/favicon.ico" />
     </head>
     <body>
         <div class="loading-spinner">
@@ -41,16 +42,6 @@
                     </div>
                     <div class="modal-body">
                         <form id="filterForm">
-                            <div class="mb-3">
-                                <label for="filterKeyword" class="form-label"
-                                    >Search Term:</label
-                                >
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    id="filterKeyword"
-                                />
-                            </div>
                             <div class="mb-3">
                                 <label for="filterDepartment" class="form-label"
                                     >Departament:</label
@@ -610,13 +601,13 @@
                             id="saveBtn"
                             type="submit"
                             form="editPersonnelForm"
-                            class="btn btn-outline-primary btn-sm myBtn"
+                            class="myBtn btn btn-outline-primary btn-sm"
                         >
                             SAVE
                         </button>
                         <button
                             type="button"
-                            class="btn btn-outline-primary btn-sm myBtn"
+                            class="myBtn btn btn-outline-primary btn-sm cancelBtn"
                             data-bs-dismiss="modal"
                         >
                             CANCEL
@@ -713,7 +704,9 @@
                                     class="form-select"
                                     id="addPersonnelDepartment"
                                     placeholder="Department"
-                                ></select>
+                                    >
+                                    <option value="">All</option>
+                                </select>
                                 <label for="addPersonnelDepartment"
                                     >Department</label
                                 >
@@ -732,7 +725,7 @@
                         </button>
                         <button
                             type="button"
-                            class="btn btn-outline-primary btn-sm myBtn"
+                            class="btn btn-outline-primary btn-sm myBtn cancelBtn"
                             data-bs-dismiss="modal"
                         >
                             CANCEL
@@ -810,7 +803,7 @@
                         </button>
                         <button
                             type="button"
-                            class="btn btn-outline-primary btn-sm myBtn"
+                            class="btn btn-outline-primary btn-sm myBtn cancelBtn"
                             data-bs-dismiss="modal"
                         >
                             CANCEL
@@ -887,7 +880,7 @@
                         </button>
                         <button
                             type="button"
-                            class="btn btn-outline-primary btn-sm myBtn"
+                            class="btn btn-outline-primary btn-sm myBtn cancelBtn"
                             data-bs-dismiss="modal"
                         >
                             CANCEL
@@ -948,7 +941,7 @@
                         </button>
                         <button
                             type="button"
-                            class="btn btn-outline-primary btn-sm myBtn"
+                            class="btn btn-outline-primary btn-sm myBtn cancelBtn"
                             data-bs-dismiss="modal"
                         >
                             CANCEL
@@ -1012,7 +1005,7 @@
                         </button>
                         <button
                             type="button"
-                            class="btn btn-outline-primary btn-sm myBtn"
+                            class="btn btn-outline-primary btn-sm myBtn cancelBtn"
                             data-bs-dismiss="modal"
                         >
                             CANCEL

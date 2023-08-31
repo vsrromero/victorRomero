@@ -8,8 +8,8 @@ class SearchUtility
 {
     public static function searchPersonnel($term)
     {
-        $db = new Database(); // Criar uma instância da classe Database
-        $connection = $db->getConnection(); // Obter a conexão do banco de dados
+        $db = new Database(); 
+        $connection = $db->getConnection(); 
 
         $sql = 'SELECT p.id, p.lastName, p.firstName, p.jobTitle, p.email, p.departmentID, d.name as department, d.locationID, l.id as locationID, l.name as location
         FROM personnel p

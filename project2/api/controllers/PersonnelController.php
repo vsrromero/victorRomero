@@ -43,7 +43,7 @@ class PersonnelController extends Controller
             header('Content-Type: application/json');
             return $response;
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500);
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }
@@ -56,7 +56,7 @@ class PersonnelController extends Controller
             $dataArray = json_decode($jsonData, true);
     
             if ($dataArray) {
-                // Validating data
+
                 if (
                     isset($dataArray['firstName']) && is_string($dataArray['firstName']) && strlen($dataArray['firstName']) <= 50 &&
                     isset($dataArray['lastName']) && is_string($dataArray['lastName']) && strlen($dataArray['lastName']) <= 50 &&
@@ -66,21 +66,21 @@ class PersonnelController extends Controller
                 ) {
                     $this->model->setAttributes($dataArray);
                     $this->model->store();
-                    http_response_code(201); // Created
+                    http_response_code(201);
                     header('Content-Type: application/json');
                     return ['success' => 'Personnel added successfully'];
                 } else {
-                    http_response_code(400); // Bad Request
+                    http_response_code(400);
                     header('Content-Type: application/json');
                     return ['error' => 'Invalid JSON data'];
                 }
             } else {
-                http_response_code(400); // Bad Request
+                http_response_code(400);
                 header('Content-Type: application/json');
                 return ['error' => 'Invalid JSON data'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500);
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }
@@ -115,12 +115,12 @@ class PersonnelController extends Controller
                 header('Content-Type: application/json');
                 return $response;
             } else {
-                http_response_code(404); // Not Found
+                http_response_code(404); 
                 header('Content-Type: application/json');
-                return ['error' => 'Personnel not found'];
+                return ['error' => 'Personnel id ' . $id . ' not found'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500); 
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }
@@ -129,7 +129,7 @@ class PersonnelController extends Controller
     public function update($id, $data)
     {
         try {
-            // Validating data before setting attributes
+            
             $jsonData = file_get_contents('php://input');
             $data = json_decode($jsonData, true);
     
@@ -148,25 +148,25 @@ class PersonnelController extends Controller
                 $response = $this->model->update($id);
     
                 if ($response === 0) {
-                    http_response_code(404); // Not Found
+                    http_response_code(404); 
                     header('Content-Type: application/json');
                     return ['error' => 'Personnel not found'];
                 } elseif ($response === -1) {
-                    http_response_code(500); // Internal Server Error
+                    http_response_code(500); 
                     header('Content-Type: application/json');
                     return ['error' => 'Internal Server Error'];
                 }
     
-                http_response_code(200); // OK
+                http_response_code(200); 
                 header('Content-Type: application/json');
                 return ['success' => 'Personnel updated successfully'];
             } else {
-                http_response_code(400); // Bad Request
+                http_response_code(400); 
                 header('Content-Type: application/json');
                 return ['error' => 'Invalid JSON data'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500); 
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }
@@ -178,20 +178,20 @@ class PersonnelController extends Controller
         try {
             $response = $this->model->delete($id);
             if ($response === 1) {
-                http_response_code(204); // No Content
+                http_response_code(204); 
                 header('Content-Type: application/json');
                 return ['success' => 'Personnel deleted successfully'];
             } elseif ($response === 0) {
-                http_response_code(404); // Not Found
+                http_response_code(404); 
                 header('Content-Type: application/json');
                 return ['error' => 'Personnel not found'];
             } else {
-                http_response_code(500); // Internal Server Error
+                http_response_code(500); 
                 header('Content-Type: application/json');
                 return ['error' => 'Internal Server Error'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500); 
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }

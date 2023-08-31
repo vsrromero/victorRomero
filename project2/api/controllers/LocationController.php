@@ -80,27 +80,27 @@ class LocationController extends Controller
             $dataArray = json_decode($jsonData, true);
 
             if ($dataArray) {
-                // Validating data
+
                 if (
                     isset($dataArray['name']) && is_string($dataArray['name']) && strlen($dataArray['name']) <= 50
                 ) {
                     $this->model->setAttributes($dataArray);
                     $this->model->store();
-                    http_response_code(201); // Created
+                    http_response_code(201);
                     header('Content-Type: application/json');
                     return ['success' => 'Location added successfully'];
                 } else {
-                    http_response_code(400); // Bad Request
+                    http_response_code(400);
                     header('Content-Type: application/json');
                     return ['error' => 'Invalid JSON data'];
                 }
             } else {
-                http_response_code(400); // Bad Request
+                http_response_code(400);
                 header('Content-Type: application/json');
                 return ['error' => 'Invalid JSON data'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500);
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }
@@ -109,7 +109,7 @@ class LocationController extends Controller
     public function update($id, $data)
     {
         try {
-            // Validating data before setting attributes
+
             $jsonData = file_get_contents('php://input');
             $data = json_decode($jsonData, true);
             if (
@@ -119,25 +119,25 @@ class LocationController extends Controller
                 $response = $this->model->update($id);
 
                 if ($response === 0) {
-                    http_response_code(404); // Not Found
+                    http_response_code(404);
                     header('Content-Type: application/json');
                     return ['error' => 'Location not found'];
                 } elseif ($response === -1) {
-                    http_response_code(500); // Internal Server Error
+                    http_response_code(500);
                     header('Content-Type: application/json');
                     return ['error' => 'Internal Server Error'];
                 }
 
-                http_response_code(200); // OK
+                http_response_code(200);
                 header('Content-Type: application/json');
                 return ['success' => 'Location updated successfully'];
             } else {
-                http_response_code(400); // Bad Request
+                http_response_code(400);
                 header('Content-Type: application/json');
                 return ['error' => 'Invalid JSON data'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500);
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }
@@ -150,27 +150,27 @@ class LocationController extends Controller
             $departmentCount = $this->model->countDepartmentsInLocation($id);
 
             if ($departmentCount > 0) {
-                http_response_code(400); // Bad Request
+                http_response_code(400);
                 header('Content-Type: application/json');
                 return ['error' => 'Cannot delete location with associated departments'];
             }
 
             $response = $this->model->delete($id);
             if ($response === 1) {
-                http_response_code(204); // No Content
+                http_response_code(204); 
                 header('Content-Type: application/json');
                 return ['success' => 'Location deleted successfully'];
             } elseif ($response === 0) {
-                http_response_code(404); // Not Found
+                http_response_code(404);
                 header('Content-Type: application/json');
                 return ['error' => 'Location not found'];
             } else {
-                http_response_code(500); // Internal Server Error
+                http_response_code(500);
                 header('Content-Type: application/json');
                 return ['error' => 'Internal Server Error'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500);
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }

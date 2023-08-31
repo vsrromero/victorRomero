@@ -95,28 +95,28 @@ class DepartmentController extends Controller
             $dataArray = json_decode($jsonData, true);
     
             if ($dataArray) {
-                // Validating data
+
                 if (
                     isset($dataArray['name']) && is_string($dataArray['name']) && strlen($dataArray['name']) <= 50 &&
                     isset($dataArray['locationID']) && filter_var($dataArray['locationID'], FILTER_VALIDATE_INT)
                 ) {
                     $this->model->setAttributes($dataArray);
                     $this->model->store();
-                    http_response_code(201); // Created
+                    http_response_code(201); 
                     header('Content-Type: application/json');
                     return ['success' => 'Department added successfully'];
                 } else {
-                    http_response_code(400); // Bad Request
+                    http_response_code(400); 
                     header('Content-Type: application/json');
                     return ['error' => 'Invalid JSON data'];
                 }
             } else {
-                http_response_code(400); // Bad Request
+                http_response_code(400); 
                 header('Content-Type: application/json');
                 return ['error' => 'Invalid JSON data'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500); 
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }
@@ -125,7 +125,6 @@ class DepartmentController extends Controller
     public function update($id, $data)
     {
         try {
-            // Validating data before setting attributes
             $jsonData = file_get_contents('php://input');
             $data = json_decode($jsonData, true);
             if (
@@ -136,25 +135,25 @@ class DepartmentController extends Controller
                 $response = $this->model->update($id);
     
                 if ($response === 0) {
-                    http_response_code(404); // Not Found
+                    http_response_code(404); 
                     header('Content-Type: application/json');
                     return ['error' => 'Department not found'];
                 } elseif ($response === -1) {
-                    http_response_code(500); // Internal Server Error
+                    http_response_code(500); 
                     header('Content-Type: application/json');
                     return ['error' => 'Internal Server Error'];
                 }
     
-                http_response_code(200); // OK
+                http_response_code(200);
                 header('Content-Type: application/json');
                 return ['success' => 'Department updated successfully'];
             } else {
-                http_response_code(400); // Bad Request
+                http_response_code(400); 
                 header('Content-Type: application/json');
                 return ['error' => 'Invalid JSON data'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500); 
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }
@@ -174,20 +173,20 @@ class DepartmentController extends Controller
     
             $response = $this->model->delete($id);
             if ($response === 1) {
-                http_response_code(204); // No Content
+                http_response_code(204); 
                 header('Content-Type: application/json');
                 return ['success' => 'Department deleted successfully'];
             } elseif ($response === 0) {
-                http_response_code(404); // Not Found
+                http_response_code(404); 
                 header('Content-Type: application/json');
                 return ['error' => 'Department not found'];
             } else {
-                http_response_code(500); // Internal Server Error
+                http_response_code(500); 
                 header('Content-Type: application/json');
                 return ['error' => 'Internal Server Error'];
             }
         } catch (\Exception $e) {
-            http_response_code(500); // Internal Server Error
+            http_response_code(500); 
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
         }

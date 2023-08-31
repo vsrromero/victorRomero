@@ -4,18 +4,6 @@ namespace api\utilities;
 
 class HttpStatusHelper
 {
-    public static function getStatusCodeDescription($statusCode)
-    {
-        $statusCodes = [
-            100 => 'Continue',
-            101 => 'Switching Protocols',
-            // ... (complete the list)
-            500 => 'Internal Server Error'
-        ];
-
-        return isset($statusCodes[$statusCode]) ? $statusCodes[$statusCode] : 'Unknown Status Code';
-    }
-
     public static function getStatusCodeName($statusCode)
     {
         $statusNames = [
