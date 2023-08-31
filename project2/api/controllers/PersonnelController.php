@@ -63,7 +63,7 @@ class PersonnelController extends Controller
      * @param array $data The data to be stored.
      * @return mixed The stored record.
      */
-    public function store($data): array
+    public function store(array $data): array
     {
         try {
             $jsonData = file_get_contents('php://input');
@@ -106,7 +106,7 @@ class PersonnelController extends Controller
      * @param int $id The ID of the record to retrieve.
      * @return mixed The retrieved record.
      */
-    public function show($id): array
+    public function show(int $id): array
     {
         try {
             $results = $this->model->getById($id);
@@ -153,7 +153,7 @@ class PersonnelController extends Controller
      * @param array $data The data to update the record with.
      * @return mixed The updated record.
      */
-    public function update($id, $data): array
+    public function update(int $id, array $data): array
     {
         try {
             
@@ -205,7 +205,7 @@ class PersonnelController extends Controller
      * @param int $id The ID of the record to delete.
      * @return mixed The deleted record.
      */
-    public function destroy($id): array
+    public function destroy(int $id): array
     {
         try {
             $response = $this->model->delete($id);
