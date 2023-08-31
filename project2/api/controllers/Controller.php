@@ -5,7 +5,7 @@ namespace api\controllers;
 use api\models\Model;
 
 /**
- * Base Controller class that provides common CRUD operations.
+ * Abstract Controller class that provides common CRUD operations.
  */
 abstract class Controller
 {

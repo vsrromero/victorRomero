@@ -2,11 +2,20 @@
 
 namespace api\models;
 
+/**
+ * Department model class.
+ */
 class Department extends Model
 {
     protected $table = 'department';
 
-    public function getAll($includeDetails = false)
+    /**
+     * Get all department records.
+     *
+     * @param bool $includeDetails Whether to include additional details.
+     * @return array An array of department records.
+     */
+    public function getAll($includeDetails = false): array
     {
         if ($includeDetails) {
             $sql = 'SELECT d.id, d.name, d.locationID, l.name as location
@@ -16,18 +25,25 @@ class Department extends Model
         } else {
             $sql = "SELECT id, name FROM {$this->table}";
         }
-    
+
         $result = $this->db->getConnection()->query($sql);
-    
+
         $results = [];
         while ($row = $result->fetch_assoc()) {
             $results[] = $row;
         }
-    
+
         return $results;
     }
 
-    public function getById($id, $includeDetails = true)
+    /**
+     * Get a record by its ID.
+     *
+     * @param int $id The ID of the record.
+     * @param bool $includeDetails Whether to include additional details.
+     * @return array|null The record, or null if not found.
+     */
+    public function getById($id, $includeDetails = true): ?array
     {
         if ($includeDetails) {
             $sql = 'SELECT d.id, d.name, d.locationID, l.name as location
