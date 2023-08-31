@@ -16,8 +16,7 @@ function applyFilters(filterTab) {
         if ($("#personnelBtn").hasClass("active")) {
             var department = row.find("td[data-tddpid]").data("tddpid");
             var location = row.find("td[data-tdloid]").data("tdloid");
-            console.log("department:", department);
-            console.log("departmentId:", departmentId);
+
             if (parseInt(departmentId) && parseInt(department) !== parseInt(departmentId)) {
                 shouldShow = false;
             }
@@ -37,7 +36,6 @@ function applyFilters(filterTab) {
         if ($("#departmentsBtn").hasClass("active")) {
             var departmentIdInRow = row.find("td[data-tddepartmentid]").data("tddepartmentid");
             var locationIdInRow = row.find("td[data-tdlocationid]").data("tdlocationid");
-            console.log("locationIdInRow:", locationIdInRow);
 
             if (parseInt(departmentFilterId) && parseInt(departmentIdInRow) !== parseInt(departmentFilterId)) {
                 shouldShow = false;
@@ -403,7 +401,6 @@ $("#searchInp").on("keyup", async function () {
 
     if ($("#personnelBtn").hasClass("active")) {
         let keyword = $("#searchInp").val().toLowerCase();
-        console.log("keyword:", keyword);
         $("#personnel-tab-pane tbody tr").each(function () {
             var row = $(this);
             var shouldShow = false;
@@ -464,7 +461,6 @@ $("#searchInp").on("keyup", async function () {
         // }
     } else if ($("#departmentsBtn").hasClass("active")) {
         let keyword = $("#searchInp").val().toLowerCase();
-        console.log("keyword:", keyword);
         $("#department-tab-pane tbody tr").each(function () {
             var row = $(this);
             var shouldShow = false;
@@ -522,7 +518,6 @@ $("#searchInp").on("keyup", async function () {
         // }
     } else if ($("#locationsBtn").hasClass("active")) {
         let keyword = $("#searchInp").val().toLowerCase();
-        console.log("keyword:", keyword);
         $("#locations-tab-pane tbody tr").each(function () {
             var row = $(this);
             var shouldShow = false;
@@ -670,7 +665,7 @@ function populateDepartmentsSelect(selectElement, personDepartmentId) {
         }
     })
         .fail(function (error) {
-            console.error("Erro ao obter a lista de departamentos:", error);
+            console.error("Error fetching departments data", error);
         });
 }
 
@@ -692,7 +687,7 @@ function populateLocationsSelect(selectElement, departmentLocationId) {
         }
     })
         .fail(function (error) {
-            console.error("Erro ao obter a lista de localizações:", error);
+            console.error("Error fetching locations data:", error);
         });
 }
 
@@ -702,7 +697,7 @@ $(document).ready(function () {
 
     $("#addPersonnelModal").on("show.bs.modal", function () {
         var addPersonnelDepartmentSelect = $("#addPersonnelDepartment");
-        addPersonnelDepartmentSelect.empty(); // Limpa as opções antes de preencher
+        addPersonnelDepartmentSelect.empty(); 
 
 
         addPersonnelDepartmentSelect.append('<option value="">Select a department</option>');
@@ -713,7 +708,7 @@ $(document).ready(function () {
     $("#addDepartmentModal").on("show.bs.modal", function () {
 
         var addDepartmentLocationSelect = $("#addDepartmentLocation");
-        addDepartmentLocationSelect.empty(); // Limpa as opções antes de preencher
+        addDepartmentLocationSelect.empty(); 
 
 
         addDepartmentLocationSelect.append('<option value="">Select a location</option>');
@@ -733,7 +728,6 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
     var personnelId = button.data("personnel-id");
 
     $.get(baseUrl + "/personnel/" + personnelId, function (data) {
-        console.log("data:", data);
         var personnel = data.data.personnel;
         var personDepartmentId = personnel.departmentID;
 
@@ -745,8 +739,7 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
         $("#editPersonnelDepartmentID").val(personnel.departmentID);
 
         var editPersonnelDepartmentSelect = $("#editPersonnelDepartment");
-        editPersonnelDepartmentSelect.empty(); // Limpa as opções antes de preencher
-        console.log("editPersonnelDepartmentSelect:", editPersonnelDepartmentSelect);
+        editPersonnelDepartmentSelect.empty(); 
         populateDepartmentsSelect(editPersonnelDepartmentSelect, personDepartmentId);
 
     });
@@ -849,7 +842,7 @@ $(document).ready(function () {
         var firstName = $("#addPersonnelFirstName").val();
         var jobTitle = $("#addPersonnelJobTitle").val();
         var email = $("#addPersonnelEmailAddress").val();
-        var departmentID = parseInt($("#addPersonnelDepartment").val());
+        var departmentID = $("#addPersonnelDepartment option:selected").data("departmentid");
 
         // Validation checks
         var isValid = true;
@@ -926,7 +919,6 @@ $(document).ready(function () {
         var button = $(e.relatedTarget);
         deletePersonnelId = button.data("personnel-id"); 
 
-        console.log("delete personnelId:", deletePersonnelId);
 
         $.get(baseUrl + "/personnel/" + deletePersonnelId, function (data) {
             var personnel = data.data.personnel;
@@ -1006,8 +998,6 @@ $(document).ready(function () {
             return;
         }
 
-        console.log("name:", departmentName);
-        console.log("locationID:", locationID);
         // Create the JSON data to be sent in the PUT request
         var jsonData = {
             name: departmentName,
@@ -1108,8 +1098,6 @@ $(document).ready(function () {
         clearErrors();
         var button = $(e.relatedTarget);
         deleteDepartmentId = button.data("department-id"); 
-
-        console.log("delete departmentId:", deleteDepartmentId);
 
         $.get(baseUrl + "/departments/" + deleteDepartmentId, function (data) {
             var department = data; 
@@ -1281,8 +1269,6 @@ $(document).ready(function () {
         var button = $(e.relatedTarget);
         deleteLocationId = parseInt(button.data("location-id")); 
 
-        console.log("delete locationId:", deleteLocationId);
-
         $.get(baseUrl + "/locations/" + deleteLocationId, function (data) {
             var location = data;
             deleteLocationName = location.name;
@@ -1293,7 +1279,6 @@ $(document).ready(function () {
 
     $("#confirmDeleteLocationBtn").click(function () {
         // Send the DELETE request
-        console.log(baseUrl + "/locations/" + deleteLocationId);
         $.ajax({
             url: baseUrl + "/locations/" + deleteLocationId,
             type: "DELETE",
@@ -1392,6 +1377,16 @@ $(document).ready(function () {
     // on location modal
 
     $("#clearLocationFiltersBtn").click(function () {
-        clearValidationClasses();
+        clearFilters();
     });
+
+    // Disable enter key on #filterLocationFilterModal
+    $(document).ready(function () {
+        $("#filterLocationModal").on("keydown", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault(); 
+            }
+        });
+    });
+    
 });
