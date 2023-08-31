@@ -37,7 +37,7 @@ abstract class Controller
      * @param array $data The data to be stored.
      * @return mixed The stored record.
      */
-    public function store($data): mixed
+    public function store(array $data): mixed
     {
         $this->model->setAttributes($data);
         $this->model->store();
@@ -50,7 +50,7 @@ abstract class Controller
      * @param int $id The ID of the record to retrieve.
      * @return mixed The retrieved record.
      */
-    public function show($id): mixed
+    public function show(int $id): mixed
     {
         return $this->model->getById($id);
     }
@@ -62,7 +62,7 @@ abstract class Controller
      * @param array $data The data to update the record with.
      * @return mixed The updated record.
      */
-    public function update($id, $data): mixed
+    public function update(int $id, array $data): mixed
     {
         $this->model->setAttributes($data);
         $this->model->update($id);
@@ -74,7 +74,7 @@ abstract class Controller
      * @param int $id The ID of the record to delete.
      * @return mixed The deleted record.
      */
-    public function destroy($id): mixed
+    public function destroy(int $id): mixed
     {
         $this->model->delete($id);
     }

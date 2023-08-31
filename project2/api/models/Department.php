@@ -15,7 +15,7 @@ class Department extends Model
      * @param bool $includeDetails Whether to include additional details.
      * @return array An array of department records.
      */
-    public function getAll($includeDetails = false): array
+    public function getAll(bool $includeDetails = false): array
     {
         if ($includeDetails) {
             $sql = 'SELECT d.id, d.name, d.locationID, l.name as location
@@ -43,7 +43,7 @@ class Department extends Model
      * @param bool $includeDetails Whether to include additional details.
      * @return array|null The record, or null if not found.
      */
-    public function getById($id, $includeDetails = true): ?array
+    public function getById(int $id, bool $includeDetails = true): ?array
     {
         if ($includeDetails) {
             $sql = 'SELECT d.id, d.name, d.locationID, l.name as location

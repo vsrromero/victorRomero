@@ -18,10 +18,10 @@ class SearchDepartmentController extends Controller
     /**
      * Retrieve and return a specific record from the associated model.
      *
-     * @param array $term The search term.
+     * @param string $term The search term.
      * @return array The JSON response containing the list of departments.
      */
-    public function searchDepartment($term): array
+    public function searchDepartment(string $term): array
     {
         try {
 

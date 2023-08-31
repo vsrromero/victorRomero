@@ -18,10 +18,10 @@ class SearchLocationController extends Controller
     /**
      * Retrieve and return a specific record from the associated model.
      *
-     * @param array $term The search term.
+     * @param string $term The search term.
      * @return array The JSON response containing the list of locations.
      */
-    public function searchLocation($term): array
+    public function searchLocation(string $term): array
     {
         try {
 

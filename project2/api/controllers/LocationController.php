@@ -62,7 +62,7 @@ class LocationController extends Controller
      * @param int $id The ID of the record to retrieve.
      * @return array The JSON response containing the retrieved location.
      */
-    public function show($id): array
+    public function show(int $id): array
     {
         try {
             $results = $this->model->getById($id);
@@ -88,7 +88,7 @@ class LocationController extends Controller
      * 
      * @param array $data The data to be stored.
      */
-    public function store($data): array
+    public function store(array $data): array
     {
         try {
             $jsonData = file_get_contents('php://input');
@@ -128,7 +128,7 @@ class LocationController extends Controller
      * @param array $data The data to update the record with.
      * @return array The JSON response indicating the success or failure of the operation.
      */
-    public function update($id, $data): array
+    public function update(int $id, array $data): array
     {
         try {
 
@@ -171,7 +171,7 @@ class LocationController extends Controller
      * @param int $id The ID of the record to delete.
      * @return array The JSON response indicating the success or failure of the operation.
      */
-    public function destroy($id): array
+    public function destroy(int $id): array
     {
         try {
             // Check if any departments are using this location

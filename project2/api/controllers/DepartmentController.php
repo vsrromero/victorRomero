@@ -62,7 +62,7 @@ class DepartmentController extends Controller
      * @param int $id The ID of the department to retrieve.
      * @return array The JSON response containing the department data.
      */
-    public function show($id): array
+    public function show(int $id): array
     {
         try {
             $results = $this->model->getById($id);
@@ -108,7 +108,7 @@ class DepartmentController extends Controller
      * @param array $data The data of the new department.
      * @return array The JSON response indicating the success or failure of the operation.
      */
-    public function store($data): array
+    public function store(array $data): array
     {
         try {
             $jsonData = file_get_contents('php://input');
@@ -149,7 +149,7 @@ class DepartmentController extends Controller
      * @param array $data The updated data for the department.
      * @return array The JSON response indicating the success or failure of the operation.
      */
-    public function update($id, $data): array
+    public function update(int $id, array $data): array
     {
         try {
             $jsonData = file_get_contents('php://input');
@@ -192,7 +192,7 @@ class DepartmentController extends Controller
      * @param int $id The ID of the department to delete.
      * @return array The JSON response indicating the success or failure of the operation.
      */
-    public function destroy($id): array
+    public function destroy(int $id): array
     {
         try {
             // Check if any personnel records are using this department
