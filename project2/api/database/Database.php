@@ -1,19 +1,25 @@
 <?php
 
 namespace api\database;
+
 use Dotenv\Dotenv;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../config/');
 $dotenv->load();
 
-class Database {
+/**
+ * Database class.
+ */
+class Database
+{
 
     private static $instance;
     private $connection;
 
-    public function __construct() {
-        
+    public function __construct()
+    {
+
         $host = $_ENV['DB_HOST'];
         $port = $_ENV['DB_PORT'];
         $db   = $_ENV['DB_DATABASE'];
@@ -27,18 +33,36 @@ class Database {
         }
     }
 
-    public static function getInstance() {
+    /**
+     * Get the singleton instance of the Database class.
+     *
+     * @return Database The singleton instance of the Database class.
+     */
+    public static function getInstance(): Database
+    {
         if (!self::$instance) {
             self::$instance = new Database();
         }
         return self::$instance;
     }
 
-    public function getConnection() {
+    /**
+     * Get the database connection.
+     *
+     * @return mysqli The database connection.
+     */
+    public function getConnection()
+    {
         return $this->connection;
     }
 
-    public function closeConnection() {
+    /**
+     * Close the database connection.
+     *
+     * @return void
+     */
+    public function closeConnection(): void
+    {
         $this->connection->close();
     }
 }

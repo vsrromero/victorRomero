@@ -5,6 +5,9 @@ namespace api\controllers;
 use api\utilities\SearchUtility;
 use api\models\Personnel;
 
+/**
+ * Controller class for searching personnel.
+ */
 class SearchPersonnelController extends Controller
 {
     public function __construct()
@@ -12,10 +15,16 @@ class SearchPersonnelController extends Controller
         parent::__construct(new Personnel());
     }
 
-    public function searchPersonnel($term)
+    /**
+     * Retrieve and return a specific record from the associated model.
+     *
+     * @param array $term The search term.
+     * @return array The JSON response containing the list of personnel.
+     */
+    public function searchPersonnel($term): array
     {
         try {
-            
+
             if (!isset($term['term']) || !is_string($term['term']) || trim($term['term']) === '') {
                 http_response_code(400);
                 header('Content-Type: application/json');
@@ -64,4 +73,3 @@ class SearchPersonnelController extends Controller
         }
     }
 }
-

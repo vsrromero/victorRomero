@@ -5,6 +5,9 @@ namespace api\controllers;
 use api\utilities\SearchUtility;
 use api\models\Location;
 
+/**
+ * Controller class for searching locations.
+ */
 class SearchLocationController extends Controller
 {
     public function __construct()
@@ -12,10 +15,16 @@ class SearchLocationController extends Controller
         parent::__construct(new Location());
     }
 
-    public function searchLocation($term)
+    /**
+     * Retrieve and return a specific record from the associated model.
+     *
+     * @param array $term The search term.
+     * @return array The JSON response containing the list of locations.
+     */
+    public function searchLocation($term): array
     {
         try {
-            
+
             if (!isset($term['term']) || !is_string($term['term']) || trim($term['term']) === '') {
                 http_response_code(400);
                 header('Content-Type: application/json');
@@ -64,7 +73,6 @@ class SearchLocationController extends Controller
             http_response_code(200);
             header('Content-Type: application/json');
             return $results;
-            
         } catch (\Exception $e) {
             http_response_code(500);
             header('Content-Type: application/json');
@@ -72,4 +80,3 @@ class SearchLocationController extends Controller
         }
     }
 }
-

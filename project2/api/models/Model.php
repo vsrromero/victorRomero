@@ -4,6 +4,9 @@ namespace api\models;
 
 use api\database\Database;
 
+/**
+ * Abstract model class.
+ */
 abstract class Model
 {
     protected $table = '';
@@ -15,19 +18,36 @@ abstract class Model
         $this->db = new Database();
     }
 
-    public function setAttributes(array $attributes)
+
+    /**
+     * Set attributes for the model.
+     *
+     * @param array $attributes The attributes to set.
+     * @return void
+     */
+    public function setAttributes(array $attributes): void
     {
         foreach ($attributes as $key => $value) {
             $this->attributes[$key] = $value;
         }
     }
 
-    public function getAttributes()
+    /**
+     * Get the attributes of the model.
+     *
+     * @return array The attributes of the model.
+     */
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    public function getAll()
+    /**
+     * Get all records from the table.
+     *
+     * @return array An array of records from the table.
+     */
+    public function getAll(): array
     {
         $sql = "SELECT * FROM {$this->table}";
         $statement = $this->db->getConnection()->prepare($sql);
@@ -41,7 +61,13 @@ abstract class Model
         return $results;
     }
 
-    public function getById($id)
+    /**
+     * Get a record by its ID.
+     *
+     * @param int $id The ID of the record.
+     * @return array|null The record, or null if not found.
+     */
+    public function getById(int $id): ?array
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ?";
         $statement = $this->db->getConnection()->prepare($sql);
@@ -52,7 +78,12 @@ abstract class Model
         return $result->fetch_assoc();
     }
 
-    public function store()
+    /**
+     * Store a new record in the table.
+     *
+     * @return void
+     */
+    public function store(): void
     {
         $attributes = $this->getAttributes();
         $columns = implode(', ', array_keys($attributes));
@@ -69,7 +100,13 @@ abstract class Model
         $statement->execute();
     }
 
-    public function update($id)
+    /**
+     * Update a record by its ID.
+     *
+     * @param int $id The ID of the record to update.
+     * @return int The result code (1 for Updated, 2 for No changes, 0 for Not found, -1 for Error).
+     */
+    public function update(int $id): int
     {
         $attributes = $this->getAttributes();
         $updates = implode(', ', array_map(function ($column) {
@@ -83,8 +120,8 @@ abstract class Model
         $values = array_values($attributes);
         $values[] = $id;
 
-        $types = str_repeat('s', count($values) - 1) . 'i'; 
-        $statement->bind_param($types, ...$values); 
+        $types = str_repeat('s', count($values) - 1) . 'i';
+        $statement->bind_param($types, ...$values);
 
         if ($statement->execute()) {
             // Check if any rows were affected (updated)
@@ -108,7 +145,13 @@ abstract class Model
         }
     }
 
-    public function delete($id)
+    /**
+     * Delete a record by its ID.
+     *
+     * @param int $id The ID of the record to delete.
+     * @return int The result code (1 for Deleted, 0 for Not found, -1 for Error).
+     */
+    public function delete(int $id): int
     {
         $sql = "DELETE FROM {$this->table} WHERE id = ?";
         $statement = $this->db->getConnection()->prepare($sql);
@@ -126,7 +169,13 @@ abstract class Model
         }
     }
 
-    public function countPersonnelInDepartment($departmentId)
+    /**
+     * Count personnel in a specific department.
+     *
+     * @param int $departmentId The ID of the department.
+     * @return int The count of personnel in the department.
+     */
+    public function countPersonnelInDepartment(int $departmentId): int
     {
         $sql = "SELECT COUNT(*) AS count FROM personnel WHERE departmentID = ?";
         $statement = $this->db->getConnection()->prepare($sql);
@@ -139,7 +188,13 @@ abstract class Model
         return $row['count'];
     }
 
-    public function countDepartmentsInLocation($locationId)
+    /**
+     * Count departments in a specific location.
+     *
+     * @param int $locationId The ID of the location.
+     * @return int The count of departments in the location.
+     */
+    public function countDepartmentsInLocation(int $locationId): int
     {
         $sql = "SELECT COUNT(*) AS count FROM department WHERE locationID = ?";
         $statement = $this->db->getConnection()->prepare($sql);
