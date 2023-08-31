@@ -7,7 +7,8 @@ use api\models\Model;
 /**
  * Base Controller class that provides common CRUD operations.
  */
-abstract class Controller {
+abstract class Controller
+{
     protected $model;
 
     /**
@@ -15,7 +16,8 @@ abstract class Controller {
      *
      * @param Model $model The model associated with this controller.
      */
-    public function __construct(Model $model) {
+    public function __construct(Model $model)
+    {
         $this->model = $model;
     }
 
@@ -24,27 +26,56 @@ abstract class Controller {
      *
      * @return array An array of all records.
      */
-    public function index(): array {
+    public function index(): array
+    {
         return $this->model->getAll();
     }
 
-    public function store($data) {
+    /**
+     * Store a new record in the associated model.
+     *
+     * @param array $data The data to be stored.
+     * @return mixed The stored record.
+     */
+    public function store($data): mixed
+    {
         $this->model->setAttributes($data);
         $this->model->store();
+
     }
 
-    public function show($id) {
+    /**
+     * Retrieve a specific record from the associated model.
+     *
+     * @param int $id The ID of the record to retrieve.
+     * @return mixed The retrieved record.
+     */
+    public function show($id): mixed
+    {
         return $this->model->getById($id);
     }
 
-    public function update($id, $data) {
+    /**
+     * Update a specific record in the associated model.
+     *
+     * @param int $id The ID of the record to update.
+     * @param array $data The data to update the record with.
+     * @return mixed The updated record.
+     */
+    public function update($id, $data): mixed
+    {
         $this->model->setAttributes($data);
         $this->model->update($id);
     }
 
-    public function destroy($id) {
+    /**
+     * Delete a specific record from the associated model.
+     *
+     * @param int $id The ID of the record to delete.
+     * @return mixed The deleted record.
+     */
+    public function destroy($id): mixed
+    {
         $this->model->delete($id);
     }
 }
-
-?>

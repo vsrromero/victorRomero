@@ -5,6 +5,9 @@ namespace api\controllers;
 use api\models\Personnel;
 use api\utilities\HttpStatusHelper as HttpStatus;
 
+/**
+ * Controller class for managing personnel.
+ */
 class PersonnelController extends Controller
 {
     public function __construct()
@@ -12,7 +15,12 @@ class PersonnelController extends Controller
         parent::__construct(new Personnel());
     }
 
-    public function index()
+    /**
+     * Retrieve and return all records from the associated model.
+     *
+     * @return array The JSON response containing the list of personnel.
+     */
+    public function index(): array
     {
         try {
             $results = $this->model->getAll(true);
@@ -49,7 +57,13 @@ class PersonnelController extends Controller
         }
     }
 
-    public function store($data)
+    /**
+     * Store a new record in the associated model.
+     *
+     * @param array $data The data to be stored.
+     * @return mixed The stored record.
+     */
+    public function store($data): array
     {
         try {
             $jsonData = file_get_contents('php://input');
@@ -86,7 +100,13 @@ class PersonnelController extends Controller
         }
     }
 
-    public function show($id)
+    /**
+     * Retrieve a specific record from the associated model.
+     *
+     * @param int $id The ID of the record to retrieve.
+     * @return mixed The retrieved record.
+     */
+    public function show($id): array
     {
         try {
             $results = $this->model->getById($id);
@@ -126,7 +146,14 @@ class PersonnelController extends Controller
         }
     }
 
-    public function update($id, $data)
+    /**
+     * Update a specific record in the associated model.
+     *
+     * @param int $id The ID of the record to update.
+     * @param array $data The data to update the record with.
+     * @return mixed The updated record.
+     */
+    public function update($id, $data): array
     {
         try {
             
@@ -172,8 +199,13 @@ class PersonnelController extends Controller
         }
     }
     
-    
-    public function destroy($id)
+    /**
+     * Delete a specific record from the associated model.
+     *
+     * @param int $id The ID of the record to delete.
+     * @return mixed The deleted record.
+     */
+    public function destroy($id): array
     {
         try {
             $response = $this->model->delete($id);

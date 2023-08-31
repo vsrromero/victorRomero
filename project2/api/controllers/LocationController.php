@@ -5,6 +5,9 @@ namespace api\controllers;
 use api\models\Location;
 use api\utilities\HttpStatusHelper as HttpStatus;
 
+/**
+ * Controller class for managing locations.
+ */
 class LocationController extends Controller
 {
     public function __construct()
@@ -12,7 +15,12 @@ class LocationController extends Controller
         parent::__construct(new Location());
     }
 
-    public function index()
+    /**
+     * Retrieve and return all records from the associated model.
+     *
+     * @return array The JSON response containing the list of locations.
+     */
+    public function index(): array
     {
         try {
             $results = $this->model->getAll(true);
@@ -48,11 +56,13 @@ class LocationController extends Controller
         }
     }
 
-
-
-
-
-    public function show($id)
+    /**
+     * Retrieve and return a specific record from the associated model.
+     *
+     * @param int $id The ID of the record to retrieve.
+     * @return array The JSON response containing the retrieved location.
+     */
+    public function show($id): array
     {
         try {
             $results = $this->model->getById($id);
@@ -73,7 +83,12 @@ class LocationController extends Controller
         }
     }
 
-    public function store($data)
+    /**
+     * Store a new record in the associated model.
+     * 
+     * @param array $data The data to be stored.
+     */
+    public function store($data): array
     {
         try {
             $jsonData = file_get_contents('php://input');
@@ -106,7 +121,14 @@ class LocationController extends Controller
         }
     }
 
-    public function update($id, $data)
+    /**
+     * Update a specific record in the associated model.
+     *
+     * @param int $id The ID of the record to update.
+     * @param array $data The data to update the record with.
+     * @return array The JSON response indicating the success or failure of the operation.
+     */
+    public function update($id, $data): array
     {
         try {
 
@@ -143,7 +165,13 @@ class LocationController extends Controller
         }
     }
 
-    public function destroy($id)
+    /**
+     * Delete a specific record from the associated model.
+     *
+     * @param int $id The ID of the record to delete.
+     * @return array The JSON response indicating the success or failure of the operation.
+     */
+    public function destroy($id): array
     {
         try {
             // Check if any departments are using this location
@@ -157,7 +185,7 @@ class LocationController extends Controller
 
             $response = $this->model->delete($id);
             if ($response === 1) {
-                http_response_code(204); 
+                http_response_code(204);
                 header('Content-Type: application/json');
                 return ['success' => 'Location deleted successfully'];
             } elseif ($response === 0) {
