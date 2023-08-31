@@ -1,6 +1,12 @@
 const baseUrl = "http://localhost/api";
 
 // Filter functions
+/**
+ * Apply filters to the displayed data based on the provided filterTab.
+ * This function updates the visibility of rows in different tabs according to applied filters.
+ *
+ * @param {string} filterTab - The current active tab, either "personnel", "departments", or "locations".
+ */
 function applyFilters(filterTab) {
     let locationKeyword = $("#filterLocationKeyword").val().toLowerCase();
     let departmentId = $("#filterDepartment option:selected").data("departmentid");
@@ -72,8 +78,14 @@ function applyFilters(filterTab) {
     }
 }
 
-
+/**
+ * Clear all filter values and trigger the filter application.
+ */
 function clearFilters() {
+    /**
+     * Clears the filter values for various filter elements and triggers the filter application.
+     * @function
+     */
     $("#filterKeyword").val("");
     $("#filterDepartment").val("");
     $("#filterLocation").val("");
@@ -86,50 +98,89 @@ function clearFilters() {
 }
 
 // Validation functions
+/**
+ * Handle validation error.
+ * @param {jQuery} field - The jQuery object representing the form field.
+ * @param {string} errorMessage - The error message to be displayed for the validation error.
+ */
 function handleValidationError(field, errorMessage) {
+    /**
+     * Adds the "is-invalid" class to the field, sets custom validity message,
+     * and updates the invalid feedback message for the field's siblings.
+     * @function
+     * @param {jQuery} field - The jQuery object representing the form field.
+     * @param {string} errorMessage - The error message to be displayed for the validation error.
+     */
     field.addClass("is-invalid");
     field.get(0).setCustomValidity(errorMessage);
     field.siblings(".invalid-feedback").text(errorMessage);
 }
 
-function handleValidationSuccess(field) {
-    field.addClass("is-valid");
+/**
+ * Checks if a given value is a valid name.
+ * @param {string} value - The value to be validated.
+ * @returns {boolean} Returns true if the value is a valid name, otherwise false.
+ */
+function isValidName(value) {
+    return /^[A-Za-zÀ-ÿ\s]{1,50}$/.test(value);
 }
 
+/**
+ * Checks if a given value is a valid job title.
+ * @param {string} value - The value to be validated.
+ * @returns {boolean} Returns true if the value is a valid job title, otherwise false.
+ */
+function isValidJobTitle(value) {
+    return /^[A-Za-zÀ-ÿ\s]{1,50}$/.test(value);
+}
+
+/**
+ * Checks if a given value is a valid email address.
+ * @param {string} value - The value to be validated.
+ * @returns {boolean} Returns true if the value is a valid email address, otherwise false.
+ */
+function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+/**
+ * Checks if a given value is a valid department ID.
+ * @param {string} value - The value to be validated.
+ * @returns {boolean} Returns true if the value is a valid department ID, otherwise false.
+ */
+function isValidDepartmentID(value) {
+    return /^\d+$/.test(value);
+}
+
+/**
+ * Checks if a given value is a valid location ID.
+ * @param {string} value - The value to be validated.
+ * @returns {boolean} Returns true if the value is a valid location ID, otherwise false.
+ */
+function isValidLocationID(value) {
+    return /^\d+$/.test(value);
+}
+
+/**
+ * Clears validation-related classes and messages from various form elements.
+ */
 function clearValidationClasses() {
+    /**
+     * Removes the "is-invalid" class from form fields, clears invalid feedback messages,
+     * and specifically clears validation classes for department and location elements once they do not clear if not directed.
+     * @function
+     */
     $(".form-control").removeClass("is-invalid");
     $(".invalid-feedback").text("");
     $("#addPersonnelDepartment").removeClass("is-invalid");
     $("#addDepartmentLocation").removeClass("is-invalid");
 }
 
-
-function isValidName(value) {
-    return /^[A-Za-zÀ-ÿ\s]{1,50}$/.test(value);
-}
-
-function isValidJobTitle(value) {
-    return /^[A-Za-zÀ-ÿ\s]{1,50}$/.test(value);
-}
-
-function isValidEmail(value) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-function isValidDepartmentID(value) {
-    return /^\d+$/.test(value);
-}
-
-function isValidLocationID(value) {
-    return /^\d+$/.test(value);
-}
-
-function clearErrors() {
-    $(".form-control").removeClass("is-invalid");
-    $(".invalid-feedback").text("");
-}
-
-// Function to populate and show the generic alert modal
+/**
+ * Populate and display the generic alert modal with the specified message and type.
+ * @param {string} message - The message to be displayed in the alert modal.
+ * @param {string} [type="success"] - The type of alert (success, warning, or error).
+ */
 function populateAndShowAlertModal(message, type = "success") {
     var alertModal = $("#genericAlertModal");
     alertModal.find(".modal-body").text(message);
@@ -175,6 +226,9 @@ function populateAndShowAlertModal(message, type = "success") {
 
 // Functions to update the table
 
+/**
+ * Update the table content based on the currently active tab.
+ */
 function updateTable() {
     // Determine which tab is currently active
     var activeTab = $(".nav-link.active").attr("id");
@@ -189,14 +243,24 @@ function updateTable() {
 }
 
 // Define the functions to refresh each specific table
+
+/**
+ * Refreshes the personnel table by populating it with updated data.
+ */
 function refreshPersonnelTable() {
     populatePersonnelTable();
 }
 
+/**
+ * Refreshes the departments table by populating it with updated data.
+ */
 function refreshDepartmentsTable() {
     populateDeparmentsTable();
 }
 
+/**
+ * Refreshes the locations table by populating it with updated data.
+ */
 function refreshLocationsTable() {
     populateLocationsTable();
 }
@@ -250,6 +314,9 @@ async function populateLocationsTable() {
     }
 }
 
+/**
+ * Populate the locations table with data retrieved from the server.
+ */
 async function populateDeparmentsTable() {
     $(".loading-spinner").show();
     try {
@@ -299,6 +366,9 @@ async function populateDeparmentsTable() {
 
 }
 
+/**
+ * Populate the personnel table with data retrieved from the server.
+ */
 async function populatePersonnelTable() {
     $(".loading-spinner").show();
 
@@ -373,20 +443,42 @@ $(document).ready(function () {
 });
 
 // Modal Functions
-
+/**
+ * Open the personnel filter modal and populate select elements with department and location options.
+ */
 function openPersonnelFilterModal() {
+    /**
+     * Opens the personnel filter modal, populates department and location select elements,
+     * and displays the modal for filtering personnel.
+     * @function
+     */
     populateDepartmentsSelect($("#filterDepartment"));
     populateLocationsSelect($("#filterLocation"));
     $("#filterModal").modal("show");
 }
 
+/**
+ * Open the department filter modal and populate select elements with department and location options.
+ */
 function openDepartmentFilterModal() {
+    /**
+     * Opens the department filter modal, populates department and location select elements,
+     * and displays the modal for filtering departments.
+     * @function
+     */
     populateDepartmentsSelect($("#departmentFilterDepartment"));
     populateLocationsSelect($("#departmentFilterLocation"));
     $("#departmentFilterModal").modal("show");
 }
 
+/**
+ * Open the location filter modal.
+ */
 function openLocationFilterModal() {
+    /**
+     * Opens the location filter modal and displays it for filtering locations.
+     * @function
+     */
     $("#filterLocationModal").modal("show");
 }
 
@@ -644,8 +736,19 @@ $(document).ready(function () {
     populateLocationsTable();
 });
 
-// Populate select options for departments
+// Populate select options
+/**
+ * Populate select options for departments.
+ * @param {jQuery} selectElement - The jQuery object representing the select element to be populated.
+ * @param {number} [personDepartmentId] - The department ID to be pre-selected (optional).
+ */
 function populateDepartmentsSelect(selectElement, personDepartmentId) {
+    /**
+     * Populates the provided select element with options retrieved from the server for departments.
+     * @function
+     * @param {jQuery} selectElement - The jQuery object representing the select element to be populated.
+     * @param {number} [personDepartmentId] - The department ID to be pre-selected (optional).
+     */
 
     $.get(baseUrl + "/departments", function (data) {
         var departments = data.data.departments;
@@ -669,8 +772,18 @@ function populateDepartmentsSelect(selectElement, personDepartmentId) {
         });
 }
 
-// Populate select options for locations
+/**
+ * Populate select options for locations.
+ * @param {jQuery} selectElement - The jQuery object representing the select element to be populated.
+ * @param {number} [departmentLocationId] - The location ID to be pre-selected (optional).
+ */
 function populateLocationsSelect(selectElement, departmentLocationId) {
+    /**
+     * Populates the provided select element with options retrieved from the server for locations.
+     * @function
+     * @param {jQuery} selectElement - The jQuery object representing the select element to be populated.
+     * @param {number} [departmentLocationId] - The location ID to be pre-selected (optional).
+     */
     $.get(baseUrl + "/locations", function (data) {
         var locations = data.data.locations;
 
@@ -723,7 +836,7 @@ $(document).ready(function () {
 // Edit personnel modal
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
-    clearErrors();
+    clearValidationClasses();
     var button = $(e.relatedTarget);
     var personnelId = button.data("personnel-id");
 
@@ -752,7 +865,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         
-        clearErrors();
+        clearValidationClasses();
 
         
         var id = $("#editPersonnelEmployeeID").val();
@@ -835,7 +948,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         
-        clearErrors();
+        clearValidationClasses();
 
         
         var lastName = $("#addPersonnelLastName").val();
@@ -915,7 +1028,7 @@ $(document).ready(function () {
     let deletePersonnelName = "";
 
     $("#deletePersonnelModal").on("show.bs.modal", function (e) {
-        clearErrors();
+        clearValidationClasses();
         var button = $(e.relatedTarget);
         deletePersonnelId = button.data("personnel-id"); 
 
@@ -957,7 +1070,7 @@ $(document).ready(function () {
 // Edit department modal
 
 $("#editDepartmentModal").on("show.bs.modal", function (e) {
-    clearErrors();
+    clearValidationClasses();
     const button = $(e.relatedTarget);
     let departmentId = button.data("department-id");
 
@@ -980,7 +1093,7 @@ $(document).ready(function () {
     $("#saveDepartmentBtn").click(function (e) {
         e.preventDefault();
 
-        clearErrors();
+        clearValidationClasses();
         
         var departmentId = $("#editDepartmentID").val();
         var departmentName = $("#editDepartmentName").val();
@@ -1035,7 +1148,7 @@ $(document).ready(function () {
     $("#createDepartmentBtn").click(function (e) {
         e.preventDefault();
 
-        clearErrors();
+        clearValidationClasses();
 
         
         var departmentName = $("#addDepartmentName").val();
@@ -1095,7 +1208,7 @@ $(document).ready(function () {
     let deleteDepartmentName = "";
 
     $("#deleteDepartmentModal").on("show.bs.modal", function (e) {
-        clearErrors();
+        clearValidationClasses();
         var button = $(e.relatedTarget);
         deleteDepartmentId = button.data("department-id"); 
 
@@ -1140,7 +1253,7 @@ $(document).ready(function () {
 // Edit location modal
 
 $("#editLocationModal").on("show.bs.modal", function (e) {
-    clearErrors();
+    clearValidationClasses();
     const button = $(e.relatedTarget);
     let locationId = button.data("location-id");
 
@@ -1158,7 +1271,7 @@ $(document).ready(function () {
     $("#saveLocationBtn").click(function (e) {
         e.preventDefault();
 
-        clearErrors();
+        clearValidationClasses();
 
         
         var locationId = $("#editLocationID").val();
@@ -1212,7 +1325,7 @@ $(document).ready(function () {
     $("#createLocationBtn").click(function (e) {
         e.preventDefault();
         
-        clearErrors();
+        clearValidationClasses();
 
         
         var locationName = $("#addLocationName").val();
@@ -1265,7 +1378,7 @@ $(document).ready(function () {
     let deleteLocationName = "";
 
     $("#deleteLocationModal").on("show.bs.modal", function (e) {
-        clearErrors();
+        clearValidationClasses();
         var button = $(e.relatedTarget);
         deleteLocationId = parseInt(button.data("location-id")); 
 
