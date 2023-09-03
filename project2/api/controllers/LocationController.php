@@ -97,7 +97,9 @@ class LocationController extends Controller
             if ($dataArray) {
 
                 if (
-                    isset($dataArray['name']) && is_string($dataArray['name']) && strlen($dataArray['name']) <= 50
+                    isset($dataArray['name']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\s-]+$/', $dataArray['name']) && strlen($dataArray['name']) <= 50 &&
+                    // Check for SQL keywords
+                    !preg_match('/\b(SELECT|UPDATE|DELETE|INSERT|DROP|ALTER|TRUNCATE)\b/i', $jsonData)
                 ) {
                     $this->model->setAttributes($dataArray);
                     $this->model->store();
@@ -135,7 +137,9 @@ class LocationController extends Controller
             $jsonData = file_get_contents('php://input');
             $data = json_decode($jsonData, true);
             if (
-                isset($data['name']) && is_string($data['name']) && strlen($data['name']) <= 50
+                isset($data['name']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\s-]+$/', $data['name']) && strlen($data['name']) <= 50 &&
+                // Check for SQL keywords
+                !preg_match('/\b(SELECT|UPDATE|DELETE|INSERT|DROP|ALTER|TRUNCATE)\b/i', $jsonData)
             ) {
                 $this->model->setAttributes($data);
                 $response = $this->model->update($id);

@@ -135,3 +135,5 @@ _sandbox/
 
 # list todo
 todo.md
+vendor/
+
