@@ -32,8 +32,8 @@ class Location extends Model
     {
         // Verifique as dependências
         $checkDependencies = "SELECT COUNT(*) as locationCount
-    FROM department
-    WHERE locationID = ?";
+        FROM department
+        WHERE locationID = ?";
         $statement = $this->db->getConnection()->prepare($checkDependencies);
         $statement->bind_param('i', $id);
         $statement->execute();
@@ -48,20 +48,20 @@ class Location extends Model
             $statement->bind_param('i', $id);
 
             if ($statement->execute()) {
-                // Verifique se alguma linha foi afetada (excluída)
+                // Check if any rows were affected (deleted)
                 if ($statement->affected_rows > 0) {
                     $debug = ['msg' => 'Location model::delete() returning 1'];
                     var_dump($debug);
-                    return 1; // Excluído
+                    return 1; // Deleted
                 } else {
                     $debug = ['msg' => 'Location model::delete() returning 0'];
                     var_dump($debug);
-                    return 0; // Não encontrado
+                    return 0; // Not found
                 }
             } else {
                 $debug = ['msg' => 'Location model::delete() returning -1'];
                 var_dump($debug);
-                return -1; // Erro
+                return -1; // Error
             }
         } else {
             return -2;

@@ -211,7 +211,7 @@ class DepartmentController extends Controller
             } else {
                 http_response_code(400);
                 header('Content-Type: application/json');
-                return ['error' => 'Cannot delete location with associated personnel'];
+                return ['error' => 'Cannot delete department with associated personnel'];
             }
         } catch (\Exception $e) {
             http_response_code(500);

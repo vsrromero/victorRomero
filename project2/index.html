@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="UTF-8" >
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" >
         <title>Company Directory</title>
-        <link rel="stylesheet" href="./assets/styles/style.css" />
+        <link rel="stylesheet" href="./assets/styles/style.css" >
         <link
             rel="stylesheet"
             href="./node_modules/@fortawesome/fontawesome-free/css/all.css"
-        />
+        >
         <link
             rel="stylesheet"
             href="./node_modules/bootstrap/dist/css/bootstrap.css"
-        />
-        <link rel="shortcut icon" href="./assets/img/favicon.ico" />
+        >
+        <link rel="shortcut icon" href="./assets/img/favicon.ico" >
     </head>
     <body>
         <div class="loading-spinner">
@@ -24,8 +24,7 @@
             class="modal fade"
             id="filterModal"
             tabindex="-1"
-            aria-labelledby="filterModalLabel"
-            aria-hidden="true"
+
         >
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -37,7 +36,7 @@
                             type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
-                            aria-label="Fechar"
+
                         ></button>
                     </div>
                     <div class="modal-body">
@@ -89,8 +88,7 @@
             class="modal fade"
             id="departmentFilterModal"
             tabindex="-1"
-            aria-labelledby="departmentFilterModalLabel"
-            aria-hidden="true"
+
         >
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -102,7 +100,7 @@
                             type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
-                            aria-label="Fechar"
+
                         ></button>
                     </div>
                     <div class="modal-body">
@@ -161,8 +159,7 @@
             class="modal fade"
             id="filterLocationModal"
             tabindex="-1"
-            aria-labelledby="filterLocationModalLabel"
-            aria-hidden="true"
+
         >
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -174,7 +171,7 @@
                             type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
-                            aria-label="Fechar"
+
                         ></button>
                     </div>
                     <div class="modal-body">
@@ -189,7 +186,7 @@
                                     type="text"
                                     class="form-control"
                                     id="filterLocationKeyword"
-                                />
+                                >
                             </div>
                         </form>
                     </div>
@@ -219,8 +216,7 @@
             id="genericAlertModal"
             class="modal fade"
             tabindex="-1"
-            aria-labelledby="genericAlertModalLabel"
-            aria-hidden="true"
+
         >
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -231,145 +227,7 @@
             </div>
         </div>
 
-        <!-- Delete Personnel confirmation modal -->
-        <div
-            id="deletePersonnelModal"
-            class="modal fade"
-            tabindex="-1"
-            aria-labelledby="deletePersonnel"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteModalTitle">
-                            Delete Personnel
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <span class="fw-bold" id="deleteModalMessage"></span>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            No
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            id="confirmDeletePersonnelBtn"
-                        >
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Department confirmation modal -->
-        <div
-            id="deleteDepartmentModal"
-            class="modal fade"
-            tabindex="-1"
-            aria-labelledby="deleteDepartment"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteDepartmentModalTitle">
-                            Delete Department
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <span
-                            class="fw-bold"
-                            id="deleteDepartmentModalMessage"
-                        ></span>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            No
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            id="confirmDeleteDepartmentBtn"
-                        >
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Location confirmation modal -->
-        <div
-            id="deleteLocationModal"
-            class="modal fade"
-            tabindex="-1"
-            aria-labelledby="deleteLocation"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteLocationModalTitle">
-                            Delete Location
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <span
-                            class="fw-bold"
-                            id="deleteLocationModalMessage"
-                        ></span>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            No
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            id="confirmDeleteLocationBtn"
-                        >
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <section>
+        <div class="contentTable">
             <div class="appHeader">
                 <div class="row">
                     <div class="col">
@@ -377,14 +235,14 @@
                             id="searchInp"
                             class="form-control mb-3"
                             placeholder="search"
-                        />
+                        >
                     </div>
 
                     <div class="col-6 text-end me-2">
                         <div
                             class="btn-group"
                             role="group"
-                            aria-label="buttons"
+
                         >
                             <button
                                 id="refreshBtn"
@@ -421,8 +279,6 @@
                             data-bs-target="#personnel-tab-pane"
                             type="button"
                             role="tab"
-                            aria-controls="home-tab-pane"
-                            aria-selected="true"
                         >
                             <i class="fa-solid fa-person fa-lg fa-fw"></i
                             ><span class="d-none d-sm-block">Personnel</span>
@@ -437,8 +293,6 @@
                             data-bs-target="#department-tab-pane"
                             type="button"
                             role="tab"
-                            aria-controls="profile-tab-pane"
-                            aria-selected="false"
                         >
                             <i class="fa-solid fa-building fa-lg fa-fw"></i
                             ><span class="d-none d-sm-block">Departments</span>
@@ -453,8 +307,7 @@
                             data-bs-target="#locations-tab-pane"
                             type="button"
                             role="tab"
-                            aria-controls="contact-tab-pane"
-                            aria-selected="false"
+
                         >
                             <i
                                 class="fa-solid fa-map-location-dot fa-lg fa-fw"
@@ -471,7 +324,7 @@
                     class="tab-pane show active"
                     id="personnel-tab-pane"
                     role="tabpanel"
-                    aria-labelledby="home-tab"
+
                     tabindex="0"
                 ></div>
                 <!-- Departments table -->
@@ -479,7 +332,7 @@
                     class="tab-pane"
                     id="department-tab-pane"
                     role="tabpanel"
-                    aria-labelledby="profile-tab"
+
                     tabindex="0"
                 ></div>
                 <!-- Locations table -->
@@ -487,7 +340,6 @@
                     class="tab-pane"
                     id="locations-tab-pane"
                     role="tabpanel"
-                    aria-labelledby="contact-tab"
                     tabindex="0"
                 ></div>
             </div>
@@ -495,7 +347,7 @@
             <footer class="border-top text-center fw-bold">
                 <p class="fw-light my-3">Company Directory version 1.0</p>
             </footer>
-        </section>
+        </div>
 
         <!-- edit Personnel Modal -->
         <div
@@ -504,8 +356,7 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-            aria-labelledby="editEmployee"
-            aria-hidden="true"
+
         >
             <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
             <!--   that the header and footer are always on display by making the body scroll -->
@@ -521,17 +372,17 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-                            aria-label="Close"
+
                         ></button>
                     </div>
 
                     <div class="modal-body">
                         <form id="editPersonnelForm">
-                            <input type="hidden" id="editPersonnelEmployeeID" />
+                            <input type="hidden" id="editPersonnelEmployeeID" >
                             <input
                                 type="hidden"
                                 id="editPersonnelDepartmentID"
-                            />
+                            >
                             <div class="form-floating mb-3">
                                 <input
                                     type="text"
@@ -540,7 +391,7 @@
                                     maxlength="50"
                                     placeholder="First name"
                                     required
-                                />
+                                >
                                 <label for="editPersonnelFirstName"
                                     >First name</label
                                 >
@@ -554,7 +405,7 @@
                                     maxlength="50"
                                     placeholder="Last name"
                                     required
-                                />
+                                >
                                 <label for="editPersonnelLastName"
                                     >Last name</label
                                 >
@@ -568,7 +419,7 @@
                                     maxlength="50"
                                     placeholder="Job title"
                                     required
-                                />
+                                >
                                 <label for="editPersonnelJobTitle"
                                     >Job Title</label
                                 >
@@ -582,7 +433,7 @@
                                     maxlength="50"
                                     placeholder="Email address"
                                     required
-                                />
+                                >
                                 <label for="editPersonnelEmailAddress"
                                     >Email Address</label
                                 >
@@ -592,7 +443,6 @@
                                 <select
                                     class="form-select"
                                     id="editPersonnelDepartment"
-                                    placeholder="Department"
                                 ></select>
                                 <label for="editPersonnelDepartment"
                                     >Department</label
@@ -622,8 +472,7 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-            aria-labelledby="addEmployee"
-            aria-hidden="true"
+
         >
             <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
             <!--   that the header and footer are always on display by making the body scroll -->
@@ -639,7 +488,7 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-                            aria-label="Close"
+
                         ></button>
                     </div>
 
@@ -653,7 +502,7 @@
                                     maxlength="50"
                                     placeholder="First name"
                                     required
-                                />
+                                >
                                 <label for="addPersonnelFirstName"
                                     >First name</label
                                 >
@@ -667,7 +516,7 @@
                                     maxlength="50"
                                     placeholder="Last name"
                                     required
-                                />
+                                >
                                 <label for="addPersonnelLastName"
                                     >Last name</label
                                 >
@@ -681,7 +530,7 @@
                                     maxlength="50"
                                     placeholder="Job title"
                                     required
-                                />
+                                >
                                 <label for="addPersonnelJobTitle"
                                     >Job Title</label
                                 >
@@ -695,7 +544,7 @@
                                     maxlength="50"
                                     placeholder="Email address"
                                     required
-                                />
+                                >
                                 <label for="addPersonnelEmailAddress"
                                     >Email Address</label
                                 >
@@ -705,7 +554,6 @@
                                 <select
                                     class="form-select"
                                     id="addPersonnelDepartment"
-                                    placeholder="Department"
                                     >
                                     <option value="">All</option>
                                 </select>
@@ -744,8 +592,7 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-            aria-labelledby="editDepartment"
-            aria-hidden="true"
+
         >
             <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
             <!--   that the header and footer are always on display by making the body scroll -->
@@ -761,13 +608,13 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-                            aria-label="Close"
+
                         ></button>
                     </div>
 
                     <div class="modal-body">
                         <form id="editDepartmentForm">
-                            <input type="hidden" id="editDepartmentID" />
+                            <input type="hidden" id="editDepartmentID" >
                             <div class="form-floating mb-3">
                                 <input
                                     type="text"
@@ -776,7 +623,7 @@
                                     maxlength="50"
                                     placeholder="Department name"
                                     required
-                                />
+                                >
                                 <label for="editDepartmentName"
                                     >Department name</label
                                 >
@@ -786,7 +633,6 @@
                                 <select
                                     class="form-select"
                                     id="editDepartmentLocation"
-                                    placeholder="Location"
                                 ></select>
                                 <label for="editDepartmentLocation"
                                     >Location</label
@@ -823,8 +669,7 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-            aria-labelledby="addDepartment"
-            aria-hidden="true"
+
         >
             <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
             <!--   that the header and footer are always on display by making the body scroll -->
@@ -840,7 +685,7 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-                            aria-label="Close"
+
                         ></button>
                     </div>
 
@@ -854,7 +699,7 @@
                                     maxlength="50"
                                     placeholder="Department name"
                                     required
-                                />
+                                >
                                 <label for="addDepartmentName"
                                     >Department name</label
                                 >
@@ -864,7 +709,6 @@
                                 <select
                                     class="form-select"
                                     id="addDepartmentLocation"
-                                    placeholder="Department"
                                 ></select>
                                 <label for="addDepartmentLocation"
                                     >Locations</label
@@ -901,8 +745,7 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-            aria-labelledby="editLocation"
-            aria-hidden="true"
+
         >
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content shadow">
@@ -914,13 +757,13 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-                            aria-label="Close"
+
                         ></button>
                     </div>
 
                     <div class="modal-body">
                         <form id="editLocationForm">
-                            <input type="hidden" id="editLocationID" />
+                            <input type="hidden" id="editLocationID" >
                             <div class="form-floating mb-3">
                                 <input
                                     type="text"
@@ -929,7 +772,7 @@
                                     maxlength="50"
                                     placeholder="Location name"
                                     required
-                                />
+                                >
                                 <label for="editLocationName"
                                     >Location name</label
                                 >
@@ -965,8 +808,7 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-            aria-labelledby="addLocation"
-            aria-hidden="true"
+
         >
             <div
                 class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable"
@@ -980,7 +822,7 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-                            aria-label="Close"
+
                         ></button>
                     </div>
 
@@ -994,7 +836,7 @@
                                     maxlength="50"
                                     placeholder="Location name"
                                     required
-                                />
+                                >
                                 <label for="addLocationName"
                                     >Location name</label
                                 >

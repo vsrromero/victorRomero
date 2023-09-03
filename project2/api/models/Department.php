@@ -62,43 +62,6 @@ class Department extends Model
         return $result->fetch_assoc();
     }
 
-    public function deletec(int $id): int
-    {
-        try {
-            // Verifique as dependências
-            $checkDependencies = "SELECT COUNT(*) as departmentCount
-            FROM personnel
-            WHERE departmentID = ?";
-            $statement = $this->db->getConnection()->prepare($checkDependencies);
-            $statement->bind_param('i', $id);
-            $statement->execute();
-    
-            $result = $statement->get_result();
-            $row = $result->fetch_assoc();
-            $departmentCount = $row['departmentCount'];
-    
-            if ($departmentCount < 1) {
-                // Exclua se não houver dependências
-                $deleteSql = "DELETE FROM {$this->table} WHERE id = ?";
-                $deleteStatement = $this->db->getConnection()->prepare($deleteSql);
-                $deleteStatement->bind_param('i', $id);
-                $deleteStatement->execute();
-    
-                if ($deleteStatement->affected_rows > 0) {
-                    return 1; // Deletado com sucesso
-                } else {
-                    return 0; // Registro não encontrado
-                }
-            } else {
-                return -1; // Existe uma dependência
-            }
-        } catch (\Exception $e) {
-            $debug = ['msg' => 'Department model::delete() Exception: ' . $e];
-            // Trate a exceção aqui (por exemplo, registre-a ou retorne um código de erro apropriado)
-            return 2; // Erro
-        }
-    }
-
     public function delete(int $id): int 
     {
         // Verifique as dependências

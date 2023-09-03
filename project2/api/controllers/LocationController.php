@@ -178,15 +178,6 @@ class LocationController extends Controller
     public function destroy(int $id): array
     {
         try {
-            // Check if any departments are using this location
-            $departmentCount = $this->model->countDepartmentsInLocation($id);
-
-            if ($departmentCount > 0) {
-                http_response_code(400);
-                header('Content-Type: application/json');
-                return ['error' => 'Cannot delete location with associated departments'];
-            }
-
             $response = $this->model->delete($id);
             if ($response === 1) {
                 http_response_code(204);
@@ -197,9 +188,9 @@ class LocationController extends Controller
                 header('Content-Type: application/json');
                 return ['error' => 'Location not found'];
             } else {
-                http_response_code(500);
+                http_response_code(400);
                 header('Content-Type: application/json');
-                return ['error' => 'Internal Server Error'];
+                return ['error' => 'Cannot delete location with associated personnel'];
             }
         } catch (\Exception $e) {
             http_response_code(500);

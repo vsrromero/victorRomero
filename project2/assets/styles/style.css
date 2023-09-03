@@ -6,7 +6,7 @@ body {
   overflow: hidden;
 }
 
-section {
+.contentTable {
   background-color: #f9f6ee;
   display: flex;
   flex-flow: column;

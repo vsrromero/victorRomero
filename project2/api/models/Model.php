@@ -169,41 +169,4 @@ abstract class Model
         }
     }
 
-    /**
-     * Count personnel in a specific department.
-     *
-     * @param int $departmentId The ID of the department.
-     * @return int The count of personnel in the department.
-     */
-    public function countPersonnelInDepartment(int $departmentId): int
-    {
-        $sql = "SELECT COUNT(*) AS count FROM personnel WHERE departmentID = ?";
-        $statement = $this->db->getConnection()->prepare($sql);
-        $statement->bind_param('i', $departmentId);
-        $statement->execute();
-
-        $result = $statement->get_result();
-        $row = $result->fetch_assoc();
-
-        return $row['count'];
-    }
-
-    /**
-     * Count departments in a specific location.
-     *
-     * @param int $locationId The ID of the location.
-     * @return int The count of departments in the location.
-     */
-    public function countDepartmentsInLocation(int $locationId): int
-    {
-        $sql = "SELECT COUNT(*) AS count FROM department WHERE locationID = ?";
-        $statement = $this->db->getConnection()->prepare($sql);
-        $statement->bind_param('i', $locationId);
-        $statement->execute();
-
-        $result = $statement->get_result();
-        $row = $result->fetch_assoc();
-
-        return $row['count'];
-    }
 }

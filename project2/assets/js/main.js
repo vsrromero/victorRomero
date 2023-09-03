@@ -228,7 +228,7 @@ async function populateLocationsTable() {
 
         locationsTable.html(table);
     } catch (error) {
-        console.error("Error fetching data:", error);
+        //console.error("Error fetching data:", error);
     } finally {
         $(".loading-spinner").hide();
     }
@@ -279,7 +279,7 @@ async function populateDeparmentsTable() {
 
         departmentsTable.html(table);
     } catch (error) {
-        console.error("Error fetching data:", error);
+        //console.error("Error fetching data:", error);
     } finally {
         $(".loading-spinner").hide();
     }
@@ -337,7 +337,7 @@ async function populatePersonnelTable() {
 
         personnelTable.html(table);
     } catch (error) {
-        console.error("Error fetching data:", error);
+        //console.error("Error fetching data:", error);
     } finally {
         $(".loading-spinner").hide();
     }
@@ -579,7 +579,7 @@ function populateDepartmentsSelect(selectElement, personDepartmentId) {
         }
     })
         .fail(function (error) {
-            console.error("Error fetching departments data", error);
+            //console.error("Error fetching departments data", error);
         });
 }
 
@@ -611,7 +611,7 @@ function populateLocationsSelect(selectElement, departmentLocationId) {
         }
     })
         .fail(function (error) {
-            console.error("Error fetching locations data:", error);
+            //console.error("Error fetching locations data:", error);
         });
 }
 
@@ -703,7 +703,7 @@ $("#editPersonnelForm").on("submit", function (e) {
         },
         error: function (error) {
 
-            console.error("Error updating data:", error);
+            //console.error("Error updating data:", error);
         }
     });
 
@@ -747,7 +747,7 @@ $("#addPersonnelForm").on("submit", function (e) {
         },
         error: function (error) {
 
-            console.error("Error updating data:", error);
+            //console.error("Error updating data:", error);
         }
     });
 
@@ -768,7 +768,7 @@ $(document).ready(function () {
                 updateTable();
             },
             error: function (error) {
-                console.error("Error deleting personnel:", error);
+                //console.error("Error deleting personnel:", error);
                 populateAndShowAlertModal(error.responseJSON.error, "error");
             }
         });
@@ -829,7 +829,7 @@ $("#editDepartmentForm").on("submit", function (e) {
         },
         error: function (error) {
 
-            console.error("Error updating department data:", error);
+            //console.error("Error updating department data:", error);
         }
     });
     clearFilters();
@@ -857,7 +857,7 @@ $("#addDepartmentForm").on("submit", function (e) {
         data: JSON.stringify(jsonData),
         success: function (response) {
 
-            console.log("Department data created successfully:", response);
+            //console.log("Department data created successfully:", response);
 
             $("#addDepartmentModal").modal("hide");
 
@@ -867,7 +867,7 @@ $("#addDepartmentForm").on("submit", function (e) {
         },
         error: function (error) {
 
-            console.error("Error creating department data:", error);
+            //console.error("Error creating department data:", error);
         }
     });
     clearFilters();
@@ -887,7 +887,7 @@ $(document).ready(function () {
                 updateTable();
             },
             error: function (error) {
-                console.error("Error deleting department:", error);
+                //console.error("Error deleting department:", error);
                 populateAndShowAlertModal(error.responseJSON.error, "error");
             }
         });
@@ -942,7 +942,7 @@ $("#editLocationForm").on("submit", function (e) {
         },
         error: function (error) {
 
-            console.error("Error updating location data:", error);
+            //console.error("Error updating location data:", error);
         }
     });
 
@@ -978,7 +978,7 @@ $("#addLocationForm").on("submit", function (e) {
         },
         error: function (error) {
 
-            console.error("Error creating location data:", error);
+            //console.error("Error creating location data:", error);
         }
     });
 
@@ -999,7 +999,7 @@ $(document).ready(function () {
                 updateTable();
             },
             error: function (error) {
-                console.error("Error deleting location:", error);
+                //console.error("Error deleting location:", error);
                 populateAndShowAlertModal(error.responseJSON.error, "error");
             }
         });
