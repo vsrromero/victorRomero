@@ -70,13 +70,16 @@ class PersonnelController extends Controller
             $dataArray = json_decode($jsonData, true);
     
             if ($dataArray) {
-
+                // Verificar se os campos não contêm caracteres especiais indesejados
+                // e palavras-chave SQL
                 if (
-                    isset($dataArray['firstName']) && is_string($dataArray['firstName']) && strlen($dataArray['firstName']) <= 50 &&
-                    isset($dataArray['lastName']) && is_string($dataArray['lastName']) && strlen($dataArray['lastName']) <= 50 &&
-                    isset($dataArray['jobTitle']) && is_string($dataArray['jobTitle']) && strlen($dataArray['jobTitle']) <= 50 &&
+                    isset($dataArray['firstName']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\-ç\s\',\']+$/u', $dataArray['firstName']) && strlen($dataArray['firstName']) <= 50 &&
+                    isset($dataArray['lastName']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\-ç\s\',\']+$/u', $dataArray['lastName']) && strlen($dataArray['lastName']) <= 50 &&
+                    isset($dataArray['jobTitle']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\s-]+$/', $dataArray['jobTitle']) && strlen($dataArray['jobTitle']) <= 50 &&
                     isset($dataArray['email']) && filter_var($dataArray['email'], FILTER_VALIDATE_EMAIL) &&
-                    isset($dataArray['departmentID']) && filter_var($dataArray['departmentID'], FILTER_VALIDATE_INT)
+                    isset($dataArray['departmentID']) && filter_var($dataArray['departmentID'], FILTER_VALIDATE_INT) &&
+                    // Check for SQL keywords
+                    !preg_match('/\b(SELECT|UPDATE|DELETE|INSERT|DROP|ALTER|TRUNCATE)\b/i', $jsonData)
                 ) {
                     $this->model->setAttributes($dataArray);
                     $this->model->store();
@@ -161,15 +164,17 @@ class PersonnelController extends Controller
             $data = json_decode($jsonData, true);
     
             // Regular expressions for allowed patterns
-            $namePattern = '/^[a-zA-ZÀ-ÿ\-ç\s]+$/'; // Only letters with accents, hyphen, and ç
+            $namePattern = '/^[a-zA-ZÀ-ÿ0-9\-ç\s\',\']+$/u'; // Letters, numbers, hyphen, spaces, accents, and 'ç'
             $emailPattern = '/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/'; // Valid email pattern
     
             if (
-                isset($data['firstName']) && preg_match($namePattern, $data['firstName']) &&
-                isset($data['lastName']) && preg_match($namePattern, $data['lastName']) &&
-                isset($data['jobTitle']) && preg_match($namePattern, $data['jobTitle']) &&
-                isset($data['email']) && preg_match($emailPattern, $data['email']) &&
-                isset($data['departmentID']) && filter_var($data['departmentID'], FILTER_VALIDATE_INT)
+                isset($data['firstName']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\-ç\s\',\']+$/u', $data['firstName']) && strlen($data['firstName']) <= 50 &&
+                isset($data['lastName']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\-ç\s\',\']+$/u', $data['lastName']) && strlen($data['lastName']) <= 50 &&
+                isset($data['jobTitle']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\s-]+$/', $data['jobTitle']) && strlen($data['jobTitle']) <= 50 &&
+                isset($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL) &&
+                isset($data['departmentID']) && filter_var($data['departmentID'], FILTER_VALIDATE_INT) &&
+                // Check for SQL keywords
+                !preg_match('/\b(SELECT|UPDATE|DELETE|INSERT|DROP|ALTER|TRUNCATE)\b/i', $jsonData)
             ) {
                 $this->model->setAttributes($data);
                 $response = $this->model->update($id);

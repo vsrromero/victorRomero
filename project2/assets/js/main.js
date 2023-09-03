@@ -2,12 +2,11 @@ const baseUrl = "http://localhost/api";
 
 // Filter functions
 /**
- * Apply filters to the displayed data based on the provided filterTab.
+ *
  * This function updates the visibility of rows in different tabs according to applied filters.
  *
- * @param {string} filterTab - The current active tab, either "personnel", "departments", or "locations".
  */
-function applyFilters(filterTab) {
+function applyFilters() {
     let locationKeyword = $("#filterLocationKeyword").val().toLowerCase();
     let departmentId = $("#filterDepartment option:selected").data("departmentid");
     let locationId = $("#filterLocation").val();
@@ -95,85 +94,6 @@ function clearFilters() {
     $("#searchInp").val("");
     $("#filterLocationKeyword").val("");
     applyFilters();
-}
-
-// Validation functions
-/**
- * Handle validation error.
- * @param {jQuery} field - The jQuery object representing the form field.
- * @param {string} errorMessage - The error message to be displayed for the validation error.
- */
-function handleValidationError(field, errorMessage) {
-    /**
-     * Adds the "is-invalid" class to the field, sets custom validity message,
-     * and updates the invalid feedback message for the field's siblings.
-     * @function
-     * @param {jQuery} field - The jQuery object representing the form field.
-     * @param {string} errorMessage - The error message to be displayed for the validation error.
-     */
-    field.addClass("is-invalid");
-    field.get(0).setCustomValidity(errorMessage);
-    field.siblings(".invalid-feedback").text(errorMessage);
-}
-
-/**
- * Checks if a given value is a valid name.
- * @param {string} value - The value to be validated.
- * @returns {boolean} Returns true if the value is a valid name, otherwise false.
- */
-function isValidName(value) {
-    return /^[A-Za-zÀ-ÿ\s]{1,50}$/.test(value);
-}
-
-/**
- * Checks if a given value is a valid job title.
- * @param {string} value - The value to be validated.
- * @returns {boolean} Returns true if the value is a valid job title, otherwise false.
- */
-function isValidJobTitle(value) {
-    return /^[A-Za-zÀ-ÿ\s]{1,50}$/.test(value);
-}
-
-/**
- * Checks if a given value is a valid email address.
- * @param {string} value - The value to be validated.
- * @returns {boolean} Returns true if the value is a valid email address, otherwise false.
- */
-function isValidEmail(value) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-/**
- * Checks if a given value is a valid department ID.
- * @param {string} value - The value to be validated.
- * @returns {boolean} Returns true if the value is a valid department ID, otherwise false.
- */
-function isValidDepartmentID(value) {
-    return /^\d+$/.test(value);
-}
-
-/**
- * Checks if a given value is a valid location ID.
- * @param {string} value - The value to be validated.
- * @returns {boolean} Returns true if the value is a valid location ID, otherwise false.
- */
-function isValidLocationID(value) {
-    return /^\d+$/.test(value);
-}
-
-/**
- * Clears validation-related classes and messages from various form elements.
- */
-function clearValidationClasses() {
-    /**
-     * Removes the "is-invalid" class from form fields, clears invalid feedback messages,
-     * and specifically clears validation classes for department and location elements once they do not clear if not directed.
-     * @function
-     */
-    $(".form-control").removeClass("is-invalid");
-    $(".invalid-feedback").text("");
-    $("#addPersonnelDepartment").removeClass("is-invalid");
-    $("#addDepartmentLocation").removeClass("is-invalid");
 }
 
 /**
@@ -293,7 +213,7 @@ async function populateLocationsTable() {
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editLocationModal" data-location-id="${location.id}">
                         <i class="fa-solid fa-pencil fa-fw"></i>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteLocationModal" data-location-id="${location.id}">
+                    <button type="button" class="btn btn-primary btn-sm delete-location-btn" data-location-id="${location.id}">
                         <i class="fa-solid fa-trash fa-fw"></i>
                     </button>
                 </td>
@@ -346,7 +266,7 @@ async function populateDeparmentsTable() {
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-department-id="${department.id}">
                         <i class="fa-solid fa-pencil fa-fw"></i>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDepartmentModal" data-department-id="${department.id}">
+                    <button type="button" class="btn btn-primary btn-sm delete-department-btn" data-department-id="${department.id}">
                         <i class="fa-solid fa-trash fa-fw"></i>
                     </button>
                 </td>
@@ -394,7 +314,7 @@ async function populatePersonnelTable() {
                 <td style="display: none;" data-tddpid="${person.departmentID}"></td>
                 <td style="display: none;" data-tdloid="${person.locationID}"></td>
                 <td class="align-middle text-nowrap">${person.lastName}, ${person.firstName}</td>
-                <td>${person.jobTitle}</td>
+                <td class="align-middle text-nowrap">${person.jobTitle}</td>
                 <td class="align-middle text-nowrap d-none d-md-table-cell">${person.department}</td>
                 <td class="align-middle text-nowrap d-none d-md-table-cell">${person.location}</td>
                 <td class="align-middle text-nowrap d-none d-md-table-cell">${person.email}</td>
@@ -402,7 +322,7 @@ async function populatePersonnelTable() {
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-personnel-id="${person.id}">
                         <i class="fa-solid fa-pencil fa-fw"></i>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-personnel-id="${person.id}">
+                    <button type="button" class="btn btn-primary btn-sm delete-personnel-btn" data-personnel-id="${person.id}">
                         <i class="fa-solid fa-trash fa-fw"></i>
                     </button>
                 </td>
@@ -489,6 +409,23 @@ $("#searchInp").on("keyup", async function () {
 
     if (!searchTerm) {
         updateTable();
+    } else {
+        // Verifique se algum filtro está ativo e limpe-os se necessário
+        if ($("#filterLocationKeyword").val() ||
+            $("#filterDepartment").val() ||
+            $("#filterLocation").val() ||
+            $("#departmentFilterDepartment").val() ||
+            $("#departmentFilterLocation").val()) {
+            // Limpe os filtros aqui, por exemplo:
+            $("#filterLocationKeyword").val("");
+            $("#filterDepartment").val("");
+            $("#filterLocation").val("");
+            $("#departmentFilterDepartment").val("");
+            $("#departmentFilterLocation").val("");
+
+            // Também redefina a aparência do botão de filtro, se necessário
+            $("#filterBtn").removeClass("btn-danger");
+        }
     }
 
     if ($("#personnelBtn").hasClass("active")) {
@@ -507,50 +444,7 @@ $("#searchInp").on("keyup", async function () {
 
             row.toggle(shouldShow);
         });
-        // try {
-        //     $(".loading-spinner").show();
 
-        //     let response = await fetch(`${baseUrl}/search-personnel?term=${searchTerm}`);
-        //     let result = await response.json();
-        //     let data = result;
-
-        //     const personnelTable = $("#personnel-tab-pane");
-        //     personnelTable.empty();
-
-        //     const table = $("<table>").addClass("table table-hover");
-        //     const tbody = $("<tbody>");
-
-        //     data.forEach(person => {
-        //         const row = $("<tr>");
-        //         row.html(`
-        //         <td style="display: none;" data-tdid="${person.id}"></td>
-        //         <td style="display: none;" data-tddpid="${person.departmentID}"></td>
-        //         <td style="display: none;" data-tdloid="${person.locationID}"></td>
-        //         <td class="align-middle text-nowrap">${person.lastName}, ${person.firstName}</td>
-        //         <td>${person.jobTitle}</td>
-        //         <td class="align-middle text-nowrap d-none d-md-table-cell">${person.department}</td>
-        //         <td class="align-middle text-nowrap d-none d-md-table-cell">${person.location}</td>
-        //         <td class="align-middle text-nowrap d-none d-md-table-cell">${person.email}</td>
-        //         <td class="text-end text-nowrap">
-        //             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-personnel-id="${person.id}">
-        //                 <i class="fa-solid fa-pencil fa-fw"></i>
-        //             </button>
-        //             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-personnel-id="${person.id}">
-        //                 <i class="fa-solid fa-trash fa-fw"></i>
-        //             </button>
-        //         </td>
-        //     `);
-        //         tbody.append(row);
-        //     });
-
-        //     table.append(tbody);
-        //     personnelTable.html(table);
-
-        // } catch (error) {
-        //     console.error("Error fetching data:", error);
-        // } finally {
-        //     $(".loading-spinner").hide();
-        // }
     } else if ($("#departmentsBtn").hasClass("active")) {
         let keyword = $("#searchInp").val().toLowerCase();
         $("#department-tab-pane tbody tr").each(function () {
@@ -568,46 +462,6 @@ $("#searchInp").on("keyup", async function () {
             row.toggle(shouldShow);
         });
 
-        // try {
-        //     $(".loading-spinner").show();
-
-        //     let response = await fetch(`${baseUrl}/search-department?term=${searchTerm}`);
-        //     let result = await response.json();
-        //     let data = result;
-
-        //     const locationsTable = $("#department-tab-pane");
-        //     locationsTable.empty();
-
-        //     const table = $("<table>").addClass("table table-hover");
-        //     const tbody = $("<tbody>");
-
-        //     data.forEach(department => {
-        //         const row = $("<tr>");
-        //         row.html(`
-        //         <td style="display: none;" data-tddepartmentid="${department.id}"></td>
-        //         <td style="display: none;" data-tdlocationid="${department.locationID}"></td>
-        //         <td class="align-middle text-nowrap">${department.name}</td>
-        //         <td class="align-middle text-nowrap d-none d-md-table-cell">${department.location}</td>
-        //         <td class="text-end text-nowrap">
-        //             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-department-id="${department.id}">
-        //                 <i class="fa-solid fa-pencil fa-fw"></i>
-        //             </button>
-        //             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDepartmentModal" data-department-id="${department.id}">
-        //                 <i class="fa-solid fa-trash fa-fw"></i>
-        //             </button>
-        //         </td>
-        //     `);
-        //         tbody.append(row);
-        //     });
-
-        //     table.append(tbody);
-        //     locationsTable.html(table);
-
-        // } catch (error) {
-        //     console.error("Error fetching data:", error);
-        // } finally {
-        //     $(".loading-spinner").hide();
-        // }
     } else if ($("#locationsBtn").hasClass("active")) {
         let keyword = $("#searchInp").val().toLowerCase();
         $("#locations-tab-pane tbody tr").each(function () {
@@ -625,43 +479,6 @@ $("#searchInp").on("keyup", async function () {
             row.toggle(shouldShow);
         });
 
-        // try {
-        //     $(".loading-spinner").show();
-
-        //     let response = await fetch(`${baseUrl}/search-location?term=${searchTerm}`);
-        //     let result = await response.json();
-        //     let data = result;
-
-        //     const locationsTable = $("#locations-tab-pane");
-        //     locationsTable.empty();
-
-        //     const table = $("<table>").addClass("table table-hover");
-        //     const tbody = $("<tbody>");
-
-        //     data.forEach(location => {
-        //         const row = $("<tr>");
-        //         row.html(`
-        //         <td class="align-middle text-nowrap">${location.name}</td>
-        //         <td class="text-end text-nowrap">
-        //             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editLocationModal" data-location-id="${location.id}">
-        //                 <i class="fa-solid fa-pencil fa-fw"></i>
-        //             </button>
-        //             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteLocationModal" data-location-id="${location.id}">
-        //                 <i class="fa-solid fa-trash fa-fw"></i>
-        //             </button>
-        //         </td>
-        //     `);
-        //         tbody.append(row);
-        //     });
-
-        //     table.append(tbody);
-        //     locationsTable.html(table);
-
-        // } catch (error) {
-        //     console.error("Error fetching data:", error);
-        // } finally {
-        //     $(".loading-spinner").hide();
-        // }
     }
 });
 
@@ -669,7 +486,6 @@ $("#refreshBtn").click(function () {
 
     if ($("#personnelBtn").hasClass("active")) {
 
-        alert("refresh personnel table");
         clearFilters();
         populatePersonnelTable();
 
@@ -678,13 +494,11 @@ $("#refreshBtn").click(function () {
 
         if ($("#departmentsBtn").hasClass("active")) {
 
-            alert("refresh department table");
             clearFilters();
             populateDeparmentsTable();
 
         } else {
 
-            alert("refresh location table");
             clearFilters();
             populateLocationsTable();
 
@@ -705,20 +519,17 @@ $("#addBtn").click(function () {
         $("#addPersonnelDepartment").val("");
 
         $("#addPersonnelModal").modal("show");
-        clearValidationClasses();
     } else if ($("#departmentsBtn").hasClass("active")) {
 
         $("#addDepartmentName").val("");
         $("#addDepartmentLocation").val("");
 
         $("#addDepartmentModal").modal("show");
-        clearValidationClasses();
     } else if ($("#locationsBtn").hasClass("active")) {
 
         $("#addLocationName").val("");
 
         $("#addLocationModal").modal("show");
-        clearValidationClasses();
     }
 });
 
@@ -810,7 +621,7 @@ $(document).ready(function () {
 
     $("#addPersonnelModal").on("show.bs.modal", function () {
         var addPersonnelDepartmentSelect = $("#addPersonnelDepartment");
-        addPersonnelDepartmentSelect.empty(); 
+        addPersonnelDepartmentSelect.empty();
 
 
         addPersonnelDepartmentSelect.append('<option value="">Select a department</option>');
@@ -821,7 +632,7 @@ $(document).ready(function () {
     $("#addDepartmentModal").on("show.bs.modal", function () {
 
         var addDepartmentLocationSelect = $("#addDepartmentLocation");
-        addDepartmentLocationSelect.empty(); 
+        addDepartmentLocationSelect.empty();
 
 
         addDepartmentLocationSelect.append('<option value="">Select a location</option>');
@@ -833,14 +644,12 @@ $(document).ready(function () {
 
 // * Personnel modal/tab
 
-// Edit personnel modal
-
+// Populate edit personnel modal
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
-    clearValidationClasses();
     var button = $(e.relatedTarget);
     var personnelId = button.data("personnel-id");
 
-    $.get(baseUrl + "/personnel/" + personnelId, function (data) {
+    $.post(baseUrl + "/personnel/" + personnelId, function (data) {
         var personnel = data.data.personnel;
         var personDepartmentId = personnel.departmentID;
 
@@ -852,229 +661,131 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
         $("#editPersonnelDepartmentID").val(personnel.departmentID);
 
         var editPersonnelDepartmentSelect = $("#editPersonnelDepartment");
-        editPersonnelDepartmentSelect.empty(); 
+        editPersonnelDepartmentSelect.empty();
         populateDepartmentsSelect(editPersonnelDepartmentSelect, personDepartmentId);
 
     });
 });
 
 // Edit personnel save
+$("#editPersonnelForm").on("submit", function (e) {
+    e.preventDefault();
 
-$(document).ready(function () {
-    $("#saveBtn").click(function (e) {
-        e.preventDefault();
+    var id = $("#editPersonnelEmployeeID").val();
+    var lastName = $("#editPersonnelLastName").val();
+    var firstName = $("#editPersonnelFirstName").val();
+    var jobTitle = $("#editPersonnelJobTitle").val();
+    var email = $("#editPersonnelEmailAddress").val();
+    var departmentID = $("#editPersonnelDepartment option:selected").data("departmentid");
 
-        
-        clearValidationClasses();
+    // Create the JSON data to be sent in the PUT request
+    var jsonData = {
+        lastName: lastName,
+        firstName: firstName,
+        jobTitle: jobTitle,
+        email: email,
+        departmentID: departmentID
+    };
 
-        
-        var id = $("#editPersonnelEmployeeID").val();
-        var lastName = $("#editPersonnelLastName").val();
-        var firstName = $("#editPersonnelFirstName").val();
-        var jobTitle = $("#editPersonnelJobTitle").val();
-        var email = $("#editPersonnelEmailAddress").val();
-        var departmentID = $("#editPersonnelDepartment option:selected").data("departmentid");
+    // Send the PUT request
+    $.ajax({
+        url: baseUrl + "/personnel/" + id,
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(jsonData),
+        success: function (response) {
 
-        // Validation checks
-        var isValid = true;
+            $("#editPersonnelModal").modal("hide");
 
-        if (!isValidName(firstName)) {
-            handleValidationError($("#editPersonnelFirstName"), "Invalid character");
-            isValid = false;
+            populateAndShowAlertModal("Personnel saved successfully.");
+
+            updateTable();
+        },
+        error: function (error) {
+
+            console.error("Error updating data:", error);
         }
-
-        if (!isValidName(lastName)) {
-            handleValidationError($("#editPersonnelLastName"), "Invalid character");
-            isValid = false;
-        }
-
-        if (!isValidJobTitle(jobTitle)) {
-            handleValidationError($("#editPersonnelJobTitle"), "Invalid character");
-            isValid = false;
-        }
-
-        if (!isValidEmail(email)) {
-            handleValidationError($("#editPersonnelEmailAddress"), "Invalid email");
-            isValid = false;
-        }
-
-        if (!isValidDepartmentID(parseInt(departmentID))) {
-            handleValidationError($("#editPersonnelDepartment"), "Invalid department");
-            isValid = false;
-        }
-
-        if (!isValid) {
-            return;
-        }
-
-        // Create the JSON data to be sent in the PUT request
-        var jsonData = {
-            lastName: lastName,
-            firstName: firstName,
-            jobTitle: jobTitle,
-            email: email,
-            departmentID: departmentID
-        };
-
-        // Send the PUT request
-        $.ajax({
-            url: baseUrl + "/personnel/" + id,
-            type: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify(jsonData),
-            success: function (response) {
-
-                console.log("Data updated successfully:", response);
-
-                $("#editPersonnelModal").modal("hide");
-
-                populateAndShowAlertModal("Record saved successfully.");
-
-                updateTable();
-            },
-            error: function (error) {
-
-                console.error("Error updating data:", error);
-            }
-        });
-
     });
+
+    clearFilters();
+
 });
+
 
 // Create personnel add
-$(document).ready(function () {
-    
-    $("#createBtn").click(function (e) {
-        e.preventDefault();
+$("#addPersonnelForm").on("submit", function (e) {
+    e.preventDefault();
 
-        
-        clearValidationClasses();
+    var lastName = $("#addPersonnelLastName").val();
+    var firstName = $("#addPersonnelFirstName").val();
+    var jobTitle = $("#addPersonnelJobTitle").val();
+    var email = $("#addPersonnelEmailAddress").val();
+    var departmentID = $("#addPersonnelDepartment option:selected").data("departmentid");
 
-        
-        var lastName = $("#addPersonnelLastName").val();
-        var firstName = $("#addPersonnelFirstName").val();
-        var jobTitle = $("#addPersonnelJobTitle").val();
-        var email = $("#addPersonnelEmailAddress").val();
-        var departmentID = $("#addPersonnelDepartment option:selected").data("departmentid");
+    // Create the JSON data to be sent in the PUT request
+    var jsonData = {
+        firstName: firstName,
+        lastName: lastName,
+        jobTitle: jobTitle,
+        email: email,
+        departmentID: departmentID
+    };
 
-        // Validation checks
-        var isValid = true;
+    // Send the POST request
+    $.ajax({
+        url: baseUrl + "/personnel",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(jsonData),
+        success: function (response) {
 
-        if (!isValidName(firstName)) {
-            handleValidationError($("#addPersonnelFirstName"), "Invalid character");
-            isValid = false;
+            $("#addPersonnelModal").modal("hide");
+
+            populateAndShowAlertModal("Personnel created successfully.");
+
+            updateTable();
+        },
+        error: function (error) {
+
+            console.error("Error updating data:", error);
         }
-
-        if (!isValidName(lastName)) {
-            handleValidationError($("#addPersonnelLastName"), "Invalid character");
-            isValid = false;
-        }
-
-        if (!isValidJobTitle(jobTitle)) {
-            handleValidationError($("#addPersonnelJobTitle"), "Invalid character");
-            isValid = false;
-        }
-
-        if (!isValidEmail(email)) {
-            handleValidationError($("#addPersonnelEmailAddress"), "Invalid email");
-            isValid = false;
-        }
-
-        if (!isValidDepartmentID(departmentID)) {
-            handleValidationError($("#addPersonnelDepartment"), "Invalid department");
-            isValid = false;
-        }
-
-        if (!isValid) {
-            return;
-        }
-
-        // Create the JSON data to be sent in the PUT request
-        var jsonData = {
-            firstName: firstName,
-            lastName: lastName,
-            jobTitle: jobTitle,
-            email: email,
-            departmentID: departmentID
-        };
-
-        // Send the POST request
-        $.ajax({
-            url: baseUrl + "/personnel",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(jsonData),
-            success: function (response) {
-
-                console.log("Data created successfully:", response);
-
-                $("#addPersonnelModal").modal("hide");
-
-                populateAndShowAlertModal("Record saved successfully.");
-
-                updateTable();
-            },
-            error: function (error) {
-
-                console.error("Error updating data:", error);
-            }
-        });
-
     });
+
+    clearFilters();
+
 });
 
+// Delete personnel
 $(document).ready(function () {
-    var deletePersonnelId; 
-    let deletePersonnelName = "";
+    $(document).on("click", ".delete-personnel-btn", function () {
+        let deletePersonneltId = $(this).data("personnel-id");
 
-    $("#deletePersonnelModal").on("show.bs.modal", function (e) {
-        clearValidationClasses();
-        var button = $(e.relatedTarget);
-        deletePersonnelId = button.data("personnel-id"); 
-
-
-        $.get(baseUrl + "/personnel/" + deletePersonnelId, function (data) {
-            var personnel = data.data.personnel;
-            deletePersonnelName = personnel.firstName + " " + personnel.lastName;
-
-            $("#deleteModalMessage").text("Are you sure you want to delete " + personnel.firstName + " " + personnel.lastName + "?");
-        });
-    });
-    
-    $("#confirmDeletePersonnelBtn").click(function () {
-        // Send the DELETE request
         $.ajax({
-            url: baseUrl + "/personnel/" + deletePersonnelId,
+            url: baseUrl + "/personnel/" + deletePersonneltId,
             type: "DELETE",
             success: function (response) {
-
-                console.log("Data deleted successfully:", deletePersonnelName);
-                
-                $("#deletePersonnelModal").modal("hide");
-
-                populateAndShowAlertModal("Record deleted successfully.");
-
+                populateAndShowAlertModal("Personnel deleted successfully:");
                 updateTable();
             },
             error: function (error) {
-
-                console.error("Error deleting data:", error);
+                console.error("Error deleting personnel:", error);
+                populateAndShowAlertModal(error.responseJSON.error, "error");
             }
         });
+
         clearFilters();
     });
 });
 
+
 // * Departments modal/tab
 
-// Edit department modal
-
+// Populate edit department modal
 $("#editDepartmentModal").on("show.bs.modal", function (e) {
-    clearValidationClasses();
     const button = $(e.relatedTarget);
     let departmentId = button.data("department-id");
 
-    $.get(baseUrl + "/departments/" + departmentId, function (data) {
+    $.post(baseUrl + "/departments/" + departmentId, function (data) {
         let department = data;
 
         $("#editDepartmentID").val(department.id);
@@ -1082,170 +793,107 @@ $("#editDepartmentModal").on("show.bs.modal", function (e) {
         $("#editDepartmentLocation").val(department.locationID);
 
         let editDepartmentLocationSelect = $("#editDepartmentLocation");
-        editDepartmentLocationSelect.empty(); 
+        editDepartmentLocationSelect.empty();
         populateLocationsSelect(editDepartmentLocationSelect, department.locationID);
     });
 });
 
 // Edit department save
-$(document).ready(function () {
+$("#editDepartmentForm").on("submit", function (e) {
+    e.preventDefault();
 
-    $("#saveDepartmentBtn").click(function (e) {
-        e.preventDefault();
+    var departmentId = $("#editDepartmentID").val();
+    var departmentName = $("#editDepartmentName").val();
+    var locationID = $("#editDepartmentLocation").val();
 
-        clearValidationClasses();
-        
-        var departmentId = $("#editDepartmentID").val();
-        var departmentName = $("#editDepartmentName").val();
-        var locationID = $("#editDepartmentLocation").val();
+    // Create the JSON data to be sent in the PUT request
+    var jsonData = {
+        name: departmentName,
+        locationID: locationID
+    };
 
-        // Validation checks
-        var isValid = true;
+    // Send the PUT request
+    $.ajax({
+        url: baseUrl + "/departments/" + departmentId,
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(jsonData),
+        success: function (response) {
 
-        if (!isValidName(departmentName)) {
-            handleValidationError($("#editDepartmentName"), "Invalid character");
-            isValid = false;
+
+            $("#editDepartmentModal").modal("hide");
+
+            populateAndShowAlertModal("Department saved successfully.");
+
+            updateTable();
+        },
+        error: function (error) {
+
+            console.error("Error updating department data:", error);
         }
-
-        if (!isValid) {
-            return;
-        }
-
-        // Create the JSON data to be sent in the PUT request
-        var jsonData = {
-            name: departmentName,
-            locationID: locationID
-        };
-
-        // Send the PUT request
-        $.ajax({
-            url: baseUrl + "/departments/" + departmentId,
-            type: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify(jsonData),
-            success: function (response) {
-
-                console.log("Data updated successfully:", response);
-
-                $("#editDepartmentModal").modal("hide");
-
-                populateAndShowAlertModal("Department record saved successfully.");
-
-                updateTable();
-            },
-            error: function (error) {
-
-                console.error("Error updating department data:", error);
-            }
-        });
-
     });
+    clearFilters();
+
 });
 
-// Create department add
-$(document).ready(function () {
+// Add department
+$("#addDepartmentForm").on("submit", function (e) {
+    e.preventDefault();
 
-    $("#createDepartmentBtn").click(function (e) {
-        e.preventDefault();
+    var departmentName = $("#addDepartmentName").val();
+    var locationID = $("#addDepartmentLocation").val();
 
-        clearValidationClasses();
+    // Create the JSON data to be sent in the POST request
+    var jsonData = {
+        name: departmentName,
+        locationID: locationID
+    };
 
-        
-        var departmentName = $("#addDepartmentName").val();
-        var locationID = $("#addDepartmentLocation").val();
+    // Send the POST request
+    $.ajax({
+        url: baseUrl + "/departments",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(jsonData),
+        success: function (response) {
 
-        // Validation checks
-        var isValid = true;
+            console.log("Department data created successfully:", response);
 
-        if (!isValidName(departmentName)) {
-            handleValidationError($("#addDepartmentName"), "Invalid character");
-            isValid = false;
+            $("#addDepartmentModal").modal("hide");
+
+            populateAndShowAlertModal("Department created successfully.");
+
+            updateTable();
+        },
+        error: function (error) {
+
+            console.error("Error creating department data:", error);
         }
-
-        if (!isValidLocationID(parseInt(locationID))) {
-            handleValidationError($("#addDepartmentLocation"), "Invalid location");
-            isValid = false;
-        }
-
-        if (!isValid) {
-            return;
-        }
-
-        // Create the JSON data to be sent in the POST request
-        var jsonData = {
-            name: departmentName,
-            locationID: locationID
-        };
-
-        // Send the POST request
-        $.ajax({
-            url: baseUrl + "/departments",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(jsonData),
-            success: function (response) {
-
-                console.log("Department data created successfully:", response);
-
-                $("#addDepartmentModal").modal("hide");
-
-                populateAndShowAlertModal("Department record saved successfully.");
-
-                updateTable();
-            },
-            error: function (error) {
-
-                console.error("Error creating department data:", error);
-            }
-        });
-
     });
+    clearFilters();
 });
+
 
 // Delete department
 $(document).ready(function () {
-    var deleteDepartmentId; 
-    let deleteDepartmentName = "";
+    $(document).on("click", ".delete-department-btn", function () {
+        let deleteDepartmentId = $(this).data("department-id");
 
-    $("#deleteDepartmentModal").on("show.bs.modal", function (e) {
-        clearValidationClasses();
-        var button = $(e.relatedTarget);
-        deleteDepartmentId = button.data("department-id"); 
-
-        $.get(baseUrl + "/departments/" + deleteDepartmentId, function (data) {
-            var department = data; 
-            deleteDepartmentName = department.name;
-
-            $("#deleteDepartmentModalMessage").text("Are you sure you want to delete department " + department.name + "?");
-        });
-    });
-
-    // When the "Yes" button in the delete department modal is clicked
-    $("#confirmDeleteDepartmentBtn").click(function () {
-        // Send the DELETE request
         $.ajax({
             url: baseUrl + "/departments/" + deleteDepartmentId,
             type: "DELETE",
             success: function (response) {
-
-                console.log("Department deleted successfully:", deleteDepartmentName);
-
-                $("#deleteDepartmentModal").modal("hide");
-
-                populateAndShowAlertModal("Department deleted successfully.");
-
+                populateAndShowAlertModal("Department deleted successfully:");
                 updateTable();
             },
             error: function (error) {
-
                 console.error("Error deleting department:", error);
-
                 populateAndShowAlertModal(error.responseJSON.error, "error");
             }
         });
+
         clearFilters();
     });
-
 });
 
 // * Locations modal/tab
@@ -1253,12 +901,11 @@ $(document).ready(function () {
 // Edit location modal
 
 $("#editLocationModal").on("show.bs.modal", function (e) {
-    clearValidationClasses();
     const button = $(e.relatedTarget);
     let locationId = button.data("location-id");
 
-    $.get(baseUrl + "/locations/" + locationId, function (data) {
-        let location = data; 
+    $.post(baseUrl + "/locations/" + locationId, function (data) {
+        let location = data;
 
         $("#editLocationID").val(location.id);
         $("#editLocationName").val(location.name);
@@ -1266,161 +913,105 @@ $("#editLocationModal").on("show.bs.modal", function (e) {
 });
 
 // Edit location save
-$(document).ready(function () {
 
-    $("#saveLocationBtn").click(function (e) {
-        e.preventDefault();
 
-        clearValidationClasses();
+$("#editLocationForm").on("submit", function (e) {
+    e.preventDefault();
 
-        
-        var locationId = $("#editLocationID").val();
-        var locationName = $("#editLocationName").val();
+    var locationId = $("#editLocationID").val();
+    var locationName = $("#editLocationName").val();
 
-        // Validation checks
-        var isValid = true;
+    // Create the JSON data to be sent in the PUT request
+    var jsonData = {
+        name: locationName
+    };
 
-        if (!isValidName(locationName)) {
-            handleValidationError($("#editLocationName"), "Invalid character");
-            isValid = false;
+    // Send the PUT request
+    $.ajax({
+        url: baseUrl + "/locations/" + locationId,
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(jsonData),
+        success: function (response) {
+
+            $("#editLocationModal").modal("hide");
+
+            populateAndShowAlertModal("Location saved successfully.");
+
+            updateTable();
+        },
+        error: function (error) {
+
+            console.error("Error updating location data:", error);
         }
-
-        if (!isValid) {
-            return;
-        }
-
-        // Create the JSON data to be sent in the PUT request
-        var jsonData = {
-            name: locationName
-        };
-
-        // Send the PUT request
-        $.ajax({
-            url: baseUrl + "/locations/" + locationId,
-            type: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify(jsonData),
-            success: function (response) {
-
-                console.log("Location updated successfully:", response);
-
-                $("#editLocationModal").modal("hide");
-
-                populateAndShowAlertModal("Location record saved successfully.");
-                
-                updateTable();
-            },
-            error: function (error) {
-
-                console.error("Error updating location data:", error);
-            }
-        });
-
     });
+
+    clearFilters();
+
 });
 
 // Add location save
-$(document).ready(function () {
-    
-    $("#createLocationBtn").click(function (e) {
-        e.preventDefault();
-        
-        clearValidationClasses();
 
-        
-        var locationName = $("#addLocationName").val();
+$("#addLocationForm").on("submit", function (e) {
+    e.preventDefault();
 
-        // Validation checks
-        var isValid = true;
+    var locationName = $("#addLocationName").val();
 
-        if (!isValidName(locationName)) {
-            handleValidationError($("#addLocationName"), "Invalid character");
-            isValid = false;
+    // Create the JSON data to be sent in the POST request
+    var jsonData = {
+        name: locationName
+    };
+
+    // Send the POST request
+    $.ajax({
+        url: baseUrl + "/locations",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(jsonData),
+        success: function (response) {
+
+            $("#addLocationModal").modal("hide");
+
+            populateAndShowAlertModal("Location record saved successfully.");
+
+            updateTable();
+        },
+        error: function (error) {
+
+            console.error("Error creating location data:", error);
         }
-
-        if (!isValid) {
-            return;
-        }
-
-        // Create the JSON data to be sent in the POST request
-        var jsonData = {
-            name: locationName
-        };
-
-        // Send the POST request
-        $.ajax({
-            url: baseUrl + "/locations",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(jsonData),
-            success: function (response) {
-
-                console.log("Location data created successfully:", response);
-
-                $("#addLocationModal").modal("hide");
-
-                populateAndShowAlertModal("Location record saved successfully.");
-
-                updateTable();
-            },
-            error: function (error) {
-
-                console.error("Error creating location data:", error);
-            }
-        });
-
     });
+
+    clearFilters();
+
 });
 
 // Delete location
 $(document).ready(function () {
-    var deleteLocationId; 
-    let deleteLocationName = "";
+    $(document).on("click", ".delete-location-btn", function () {
+        let deleteLocationtId = $(this).data("location-id");
 
-    $("#deleteLocationModal").on("show.bs.modal", function (e) {
-        clearValidationClasses();
-        var button = $(e.relatedTarget);
-        deleteLocationId = parseInt(button.data("location-id")); 
-
-        $.get(baseUrl + "/locations/" + deleteLocationId, function (data) {
-            var location = data;
-            deleteLocationName = location.name;
-
-            $("#deleteLocationModalMessage").text("Are you sure you want to delete location " + location.name + "?");
-        });
-    });
-
-    $("#confirmDeleteLocationBtn").click(function () {
-        // Send the DELETE request
         $.ajax({
-            url: baseUrl + "/locations/" + deleteLocationId,
+            url: baseUrl + "/locations/" + deleteLocationtId,
             type: "DELETE",
             success: function (response) {
-
-                console.log("Location deleted successfully:", deleteLocationName);
-
-                $("#deleteLocationModal").modal("hide");
- 
-                populateAndShowAlertModal("Location deleted successfully.");
-                
+                populateAndShowAlertModal("Location deleted successfully:");
                 updateTable();
             },
             error: function (error) {
-
                 console.error("Error deleting location:", error);
-
                 populateAndShowAlertModal(error.responseJSON.error, "error");
             }
         });
+
         clearFilters();
     });
-
 });
 
 // * Filters and search
 
 $(document).ready(function () {
-    var timer; 
+    var timer;
 
     populateDepartmentsSelect($("#filterDepartment"));
     populateLocationsSelect($("#filterLocation"));
@@ -1497,9 +1088,43 @@ $(document).ready(function () {
     $(document).ready(function () {
         $("#filterLocationModal").on("keydown", function (event) {
             if (event.keyCode === 13) {
-                event.preventDefault(); 
+                event.preventDefault();
             }
         });
     });
-    
+
+});
+
+// Special characters and sql validation
+$(document).ready(function () {
+    // Array of field IDs to validate
+    var fieldIDs = [
+        "editPersonnelFirstName",
+        "editPersonnelLastName",
+        "editPersonnelJobTitle",
+        "addPersonnelFirstName",
+        "addPersonnelLastName",
+        "addPersonnelJobTitle",
+        "editDepartmentName",
+        "addDepartmentName",
+        "editLocationName",
+        "addLocationName"
+    ];
+
+    // Attach validation to each field
+    fieldIDs.forEach(function (fieldID) {
+        $("#" + fieldID).on("input", function () {
+            var specialCharacters = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|]/;
+            var sqlKeywords = /(SELECT|UPDATE|DELETE|INSERT|DROP|ALTER|TRUNCATE)/i;
+            var inputValue = $(this).val();
+
+            if (specialCharacters.test(inputValue) || sqlKeywords.test(inputValue)) {
+                $("#error-message").text("Input term are not allowed.");
+                $(this).get(0).setCustomValidity("Input term are not allowed.");
+            } else {
+                $("#error-message").text("");
+                $(this).get(0).setCustomValidity(""); // Clear custom error message
+            }
+        });
+    });
 });

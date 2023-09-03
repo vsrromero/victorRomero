@@ -15,21 +15,21 @@ $router = new Router();
 // Personnel routes
 $router->addRoute('GET', '/personnel', [PersonnelController::class, 'index']);
 $router->addRoute('POST', '/personnel', [PersonnelController::class, 'store']);
-$router->addRoute('POST', '/personnel/{id}', [PersonnelController::class, 'show']);
+$router->addRoute('GET', '/personnel/{id}', [PersonnelController::class, 'show']);
 $router->addRoute('PUT', '/personnel/{id}', [PersonnelController::class, 'update']);
 $router->addRoute('DELETE', '/personnel/{id}', [PersonnelController::class, 'destroy']);
 
 // Department routes
 $router->addRoute('GET', '/departments', [DepartmentController::class, 'index']);
 $router->addRoute('POST', '/departments', [DepartmentController::class, 'store']);
-$router->addRoute('POST', '/departments/{id}', [DepartmentController::class, 'show']);
+$router->addRoute('GET', '/departments/{id}', [DepartmentController::class, 'show']);
 $router->addRoute('PUT', '/departments/{id}', [DepartmentController::class, 'update']);
 $router->addRoute('DELETE', '/departments/{id}', [DepartmentController::class, 'destroy']);
 
 // Location routes
 $router->addRoute('GET', '/locations', [LocationController::class, 'index']);
 $router->addRoute('POST', '/locations', [LocationController::class, 'store']);
-$router->addRoute('POST', '/locations/{id}', [LocationController::class, 'show']);
+$router->addRoute('GET', '/locations/{id}', [LocationController::class, 'show']);
 $router->addRoute('PUT', '/locations/{id}', [LocationController::class, 'update']);
 $router->addRoute('DELETE', '/locations/{id}', [LocationController::class, 'destroy']);
 

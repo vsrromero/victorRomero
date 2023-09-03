@@ -231,144 +231,6 @@
             </div>
         </div>
 
-        <!-- Delete Personnel confirmation modal -->
-        <div
-            id="deletePersonnelModal"
-            class="modal fade"
-            tabindex="-1"
-            aria-labelledby="deletePersonnel"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteModalTitle">
-                            Delete Personnel
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <span class="fw-bold" id="deleteModalMessage"></span>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            No
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            id="confirmDeletePersonnelBtn"
-                        >
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Department confirmation modal -->
-        <div
-            id="deleteDepartmentModal"
-            class="modal fade"
-            tabindex="-1"
-            aria-labelledby="deleteDepartment"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteDepartmentModalTitle">
-                            Delete Department
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <span
-                            class="fw-bold"
-                            id="deleteDepartmentModalMessage"
-                        ></span>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            No
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            id="confirmDeleteDepartmentBtn"
-                        >
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Location confirmation modal -->
-        <div
-            id="deleteLocationModal"
-            class="modal fade"
-            tabindex="-1"
-            aria-labelledby="deleteLocation"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger text-white">
-                        <h5 class="modal-title" id="deleteLocationModalTitle">
-                            Delete Location
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <span
-                            class="fw-bold"
-                            id="deleteLocationModalMessage"
-                        ></span>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            No
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            id="confirmDeleteLocationBtn"
-                        >
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <section>
             <div class="appHeader">
                 <div class="row">
@@ -537,6 +399,7 @@
                                     type="text"
                                     class="form-control"
                                     id="editPersonnelFirstName"
+                                    maxlength="50"
                                     placeholder="First name"
                                     required
                                 />
@@ -550,6 +413,7 @@
                                     type="text"
                                     class="form-control"
                                     id="editPersonnelLastName"
+                                    maxlength="50"
                                     placeholder="Last name"
                                     required
                                 />
@@ -563,6 +427,8 @@
                                     type="text"
                                     class="form-control"
                                     id="editPersonnelJobTitle"
+                                    maxlength="50"
+                                    placeholder="Job title"
                                     required
                                 />
                                 <label for="editPersonnelJobTitle"
@@ -575,6 +441,7 @@
                                     type="email"
                                     class="form-control"
                                     id="editPersonnelEmailAddress"
+                                    maxlength="50"
                                     placeholder="Email address"
                                     required
                                 />
@@ -597,14 +464,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button
-                            id="saveBtn"
-                            type="submit"
-                            form="editPersonnelForm"
-                            class="myBtn btn btn-outline-primary btn-sm"
-                        >
-                            SAVE
-                        </button>
+                        <button type="submit" form="editPersonnelForm" class="btn btn-outline-primary btn-sm myBtn">SAVE</button>
                         <button
                             type="button"
                             class="myBtn btn btn-outline-primary btn-sm cancelBtn"
@@ -652,6 +512,7 @@
                                     type="text"
                                     class="form-control"
                                     id="addPersonnelFirstName"
+                                    maxlength="50"
                                     placeholder="First name"
                                     required
                                 />
@@ -665,6 +526,7 @@
                                     type="text"
                                     class="form-control"
                                     id="addPersonnelLastName"
+                                    maxlength="50"
                                     placeholder="Last name"
                                     required
                                 />
@@ -678,6 +540,7 @@
                                     type="text"
                                     class="form-control"
                                     id="addPersonnelJobTitle"
+                                    maxlength="50"
                                     placeholder="Job title"
                                     required
                                 />
@@ -691,6 +554,7 @@
                                     type="email"
                                     class="form-control"
                                     id="addPersonnelEmailAddress"
+                                    maxlength="50"
                                     placeholder="Email address"
                                     required
                                 />
@@ -771,6 +635,7 @@
                                     type="text"
                                     class="form-control"
                                     id="editDepartmentName"
+                                    maxlength="50"
                                     placeholder="Department name"
                                     required
                                 />
@@ -848,6 +713,7 @@
                                     type="text"
                                     class="form-control"
                                     id="addDepartmentName"
+                                    maxlength="50"
                                     placeholder="Department name"
                                     required
                                 />
@@ -895,6 +761,8 @@
             id="editLocationModal"
             class="modal fade"
             tabindex="-1"
+            data-bs-backdrop="false"
+            data-bs-keyboard="false"
             aria-labelledby="editLocation"
             aria-hidden="true"
         >
@@ -920,6 +788,7 @@
                                     type="text"
                                     class="form-control"
                                     id="editLocationName"
+                                    maxlength="50"
                                     placeholder="Location name"
                                     required
                                 />
@@ -984,6 +853,7 @@
                                     type="text"
                                     class="form-control"
                                     id="addLocationName"
+                                    maxlength="50"
                                     placeholder="Location name"
                                     required
                                 />
