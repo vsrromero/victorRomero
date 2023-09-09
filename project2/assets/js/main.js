@@ -1013,10 +1013,6 @@ $(document).ready(function () {
 $(document).ready(function () {
     var timer;
 
-    populateDepartmentsSelect($("#filterDepartment"));
-    populateLocationsSelect($("#filterLocation"));
-
-
     $("#filterBtn").click(function () {
         if ($("#personnelBtn").hasClass("active")) {
             openPersonnelFilterModal();
@@ -1026,7 +1022,6 @@ $(document).ready(function () {
             openLocationFilterModal();
         }
     });
-
 
     // on personnel modal
 
