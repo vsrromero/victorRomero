@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8" >
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Company Directory</title>
-        <link rel="stylesheet" href="./assets/styles/style.css" >
+        <link rel="stylesheet" href="./assets/styles/style.css" />
         <link
             rel="stylesheet"
             href="./node_modules/@fortawesome/fontawesome-free/css/all.css"
-        >
+        />
         <link
             rel="stylesheet"
             href="./node_modules/bootstrap/dist/css/bootstrap.css"
-        >
-        <link rel="shortcut icon" href="./assets/img/favicon.ico" >
+        />
+        <link rel="shortcut icon" href="./assets/img/favicon.ico" />
     </head>
     <body>
         <div class="loading-spinner">
@@ -21,44 +21,41 @@
         </div>
         <!-- Personnel Filter modal -->
         <div
-            class="modal fade"
             id="filterModal"
+            class="modal fade"
             tabindex="-1"
-
+            data-bs-backdrop="false"
+            data-bs-keyboard="false"
         >
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary bg-gradient text-white">
                         <h5 class="modal-title" id="filterModalLabel">
                             Filter Personnel
                         </h5>
                         <button
                             type="button"
-                            class="btn-close"
+                            class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-
                         ></button>
                     </div>
                     <div class="modal-body">
                         <form id="filterForm">
-                            <div class="mb-3">
-                                <label for="filterDepartment" class="form-label"
-                                    >Departament:</label
-                                >
+                            <div class="form-floating mb-3">
                                 <select
                                     class="form-select"
                                     id="filterDepartment"
                                 >
                                     <option value="">All</option>
                                 </select>
+                                <label for="filterDepartment">Department</label>
                             </div>
-                            <div class="mb-3">
-                                <label for="filterLocation" class="form-label"
-                                    >Location:</label
-                                >
+
+                            <div class="form-floating mb-3">
                                 <select class="form-select" id="filterLocation">
                                     <option value="">All</option>
                                 </select>
+                                <label for="filterLocation">Location</label>
                             </div>
                         </form>
                     </div>
@@ -66,17 +63,17 @@
                         <button
                             id="clearFiltersBtn"
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary btn-sm"
                         >
-                            Clear Filters
+                            CLEAR FILTERS
                         </button>
                         <button
                             id="closeFilterModalBtn"
                             type="button"
-                            class="btn btn-secondary"
+                            class="btn btn-outline-primary btn-sm myBtn"
                             data-bs-dismiss="modal"
                         >
-                            Close
+                            CLOSE
                         </button>
                     </div>
                 </div>
@@ -84,52 +81,42 @@
         </div>
 
         <!-- Department Filter Modal -->
-        <div
+        <div 
+            id="departmentFilterModal" 
             class="modal fade"
-            id="departmentFilterModal"
             tabindex="-1"
-
-        >
-            <div class="modal-dialog">
+            data-bs-backdrop="false"
+            data-bs-keyboard="false"
+            >
+            <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary bg-gradient text-white">
                         <h5 class="modal-title" id="departmentFilterModalLabel">
                             Department Filters
                         </h5>
                         <button
                             type="button"
-                            class="btn-close"
+                            class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-
                         ></button>
                     </div>
                     <div class="modal-body">
                         <form id="departmentFilterForm">
-                            <div class="mb-3">
-                                <label
-                                    for="departmentFilterDepartment"
-                                    class="form-label"
-                                    >Department:</label
-                                >
+                            <div class="form-floating mb-3">
                                 <select
                                     class="form-select"
                                     id="departmentFilterDepartment"
                                 >
                                     <option value="">All</option>
                                 </select>
+                                <label for="departmentFilterDepartment">Department</label>
                             </div>
-                            <div class="mb-3">
-                                <label
-                                    for="departmentFilterLocation"
-                                    class="form-label"
-                                    >Location:</label
-                                >
-                                <select
-                                    class="form-select"
-                                    id="departmentFilterLocation"
-                                >
+
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="departmentFilterLocation">
                                     <option value="">All</option>
                                 </select>
+                                <label for="departmentFilterLocation">Location</label>
                             </div>
                         </form>
                     </div>
@@ -137,17 +124,17 @@
                         <button
                             id="departmentClearFiltersBtn"
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary btn-sm"
                         >
-                            Clear Filters
+                            CLEAR FILTERS
                         </button>
                         <button
                             id="departmentCloseFilterModalBtn"
                             type="button"
-                            class="btn btn-secondary"
+                            class="btn btn-outline-primary btn-sm myBtn"
                             data-bs-dismiss="modal"
                         >
-                            Close
+                            CLOSE
                         </button>
                     </div>
                 </div>
@@ -155,12 +142,7 @@
         </div>
 
         <!-- Location Filter modal -->
-        <div
-            class="modal fade"
-            id="filterLocationModal"
-            tabindex="-1"
-
-        >
+        <div class="modal fade" id="filterLocationModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -171,7 +153,6 @@
                             type="button"
                             class="btn-close"
                             data-bs-dismiss="modal"
-
                         ></button>
                     </div>
                     <div class="modal-body">
@@ -186,7 +167,7 @@
                                     type="text"
                                     class="form-control"
                                     id="filterLocationKeyword"
-                                >
+                                />
                             </div>
                         </form>
                     </div>
@@ -212,12 +193,7 @@
         </div>
 
         <!-- Allert modal -->
-        <div
-            id="genericAlertModal"
-            class="modal fade"
-            tabindex="-1"
-
-        >
+        <div id="genericAlertModal" class="modal fade" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -235,15 +211,11 @@
                             id="searchInp"
                             class="form-control mb-3"
                             placeholder="search"
-                        >
+                        />
                     </div>
 
                     <div class="col-6 text-end me-2">
-                        <div
-                            class="btn-group"
-                            role="group"
-
-                        >
+                        <div class="btn-group" role="group">
                             <button
                                 id="refreshBtn"
                                 type="button"
@@ -307,7 +279,6 @@
                             data-bs-target="#locations-tab-pane"
                             type="button"
                             role="tab"
-
                         >
                             <i
                                 class="fa-solid fa-map-location-dot fa-lg fa-fw"
@@ -324,7 +295,6 @@
                     class="tab-pane show active"
                     id="personnel-tab-pane"
                     role="tabpanel"
-
                     tabindex="0"
                 ></div>
                 <!-- Departments table -->
@@ -332,7 +302,6 @@
                     class="tab-pane"
                     id="department-tab-pane"
                     role="tabpanel"
-
                     tabindex="0"
                 ></div>
                 <!-- Locations table -->
@@ -356,7 +325,6 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-
         >
             <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
             <!--   that the header and footer are always on display by making the body scroll -->
@@ -372,17 +340,16 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-
                         ></button>
                     </div>
 
                     <div class="modal-body">
                         <form id="editPersonnelForm">
-                            <input type="hidden" id="editPersonnelEmployeeID" >
+                            <input type="hidden" id="editPersonnelEmployeeID" />
                             <input
                                 type="hidden"
                                 id="editPersonnelDepartmentID"
-                            >
+                            />
                             <div class="form-floating mb-3">
                                 <input
                                     type="text"
@@ -391,7 +358,7 @@
                                     maxlength="50"
                                     placeholder="First name"
                                     required
-                                >
+                                />
                                 <label for="editPersonnelFirstName"
                                     >First name</label
                                 >
@@ -405,7 +372,7 @@
                                     maxlength="50"
                                     placeholder="Last name"
                                     required
-                                >
+                                />
                                 <label for="editPersonnelLastName"
                                     >Last name</label
                                 >
@@ -419,7 +386,7 @@
                                     maxlength="50"
                                     placeholder="Job title"
                                     required
-                                >
+                                />
                                 <label for="editPersonnelJobTitle"
                                     >Job Title</label
                                 >
@@ -433,7 +400,7 @@
                                     maxlength="50"
                                     placeholder="Email address"
                                     required
-                                >
+                                />
                                 <label for="editPersonnelEmailAddress"
                                     >Email Address</label
                                 >
@@ -452,7 +419,13 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" form="editPersonnelForm" class="btn btn-outline-primary btn-sm myBtn">SAVE</button>
+                        <button
+                            type="submit"
+                            form="editPersonnelForm"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                        >
+                            SAVE
+                        </button>
                         <button
                             type="button"
                             class="myBtn btn btn-outline-primary btn-sm cancelBtn"
@@ -472,7 +445,6 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-
         >
             <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
             <!--   that the header and footer are always on display by making the body scroll -->
@@ -488,7 +460,6 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-
                         ></button>
                     </div>
 
@@ -502,7 +473,7 @@
                                     maxlength="50"
                                     placeholder="First name"
                                     required
-                                >
+                                />
                                 <label for="addPersonnelFirstName"
                                     >First name</label
                                 >
@@ -516,7 +487,7 @@
                                     maxlength="50"
                                     placeholder="Last name"
                                     required
-                                >
+                                />
                                 <label for="addPersonnelLastName"
                                     >Last name</label
                                 >
@@ -530,7 +501,7 @@
                                     maxlength="50"
                                     placeholder="Job title"
                                     required
-                                >
+                                />
                                 <label for="addPersonnelJobTitle"
                                     >Job Title</label
                                 >
@@ -544,7 +515,7 @@
                                     maxlength="50"
                                     placeholder="Email address"
                                     required
-                                >
+                                />
                                 <label for="addPersonnelEmailAddress"
                                     >Email Address</label
                                 >
@@ -554,7 +525,7 @@
                                 <select
                                     class="form-select"
                                     id="addPersonnelDepartment"
-                                    >
+                                >
                                     <option value="">All</option>
                                 </select>
                                 <label for="addPersonnelDepartment"
@@ -592,7 +563,6 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-
         >
             <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
             <!--   that the header and footer are always on display by making the body scroll -->
@@ -608,13 +578,12 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-
                         ></button>
                     </div>
 
                     <div class="modal-body">
                         <form id="editDepartmentForm">
-                            <input type="hidden" id="editDepartmentID" >
+                            <input type="hidden" id="editDepartmentID" />
                             <div class="form-floating mb-3">
                                 <input
                                     type="text"
@@ -623,7 +592,7 @@
                                     maxlength="50"
                                     placeholder="Department name"
                                     required
-                                >
+                                />
                                 <label for="editDepartmentName"
                                     >Department name</label
                                 >
@@ -669,7 +638,6 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-
         >
             <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
             <!--   that the header and footer are always on display by making the body scroll -->
@@ -685,7 +653,6 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-
                         ></button>
                     </div>
 
@@ -699,7 +666,7 @@
                                     maxlength="50"
                                     placeholder="Department name"
                                     required
-                                >
+                                />
                                 <label for="addDepartmentName"
                                     >Department name</label
                                 >
@@ -745,7 +712,6 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-
         >
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content shadow">
@@ -757,13 +723,12 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-
                         ></button>
                     </div>
 
                     <div class="modal-body">
                         <form id="editLocationForm">
-                            <input type="hidden" id="editLocationID" >
+                            <input type="hidden" id="editLocationID" />
                             <div class="form-floating mb-3">
                                 <input
                                     type="text"
@@ -772,7 +737,7 @@
                                     maxlength="50"
                                     placeholder="Location name"
                                     required
-                                >
+                                />
                                 <label for="editLocationName"
                                     >Location name</label
                                 >
@@ -808,7 +773,6 @@
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-
         >
             <div
                 class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable"
@@ -822,7 +786,6 @@
                             type="button"
                             class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
-
                         ></button>
                     </div>
 
@@ -836,7 +799,7 @@
                                     maxlength="50"
                                     placeholder="Location name"
                                     required
-                                >
+                                />
                                 <label for="addLocationName"
                                     >Location name</label
                                 >
