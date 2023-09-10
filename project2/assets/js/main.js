@@ -7,11 +7,11 @@ const baseUrl = "http://localhost/api";
  *
  */
 function applyFilters() {
-    let locationKeyword = $("#filterLocationKeyword").val().toLowerCase();
     let departmentId = $("#filterDepartment option:selected").data("departmentid");
     let locationId = $("#filterLocation").val();
     let departmentFilterId = $("#departmentFilterDepartment option:selected").data("departmentid");
-    let locationFilterId = parseInt($("#departmentFilterLocation").val());
+    let locationFilterIdInDepartment = parseInt($("#departmentFilterLocation").val());
+    let locationFilterIdInLocation = parseInt($("#locationFilterLocation").val());
 
     // Loop through rows and apply filter for Personnel tab
     $("#personnel-tab-pane tbody tr").each(function () {
@@ -45,7 +45,7 @@ function applyFilters() {
             if (parseInt(departmentFilterId) && parseInt(departmentIdInRow) !== parseInt(departmentFilterId)) {
                 shouldShow = false;
             }
-            if (parseInt(locationFilterId) && parseInt(locationIdInRow) != parseInt(locationFilterId)) {
+            if (parseInt(locationFilterIdInDepartment) && parseInt(locationIdInRow) != parseInt(locationFilterIdInDepartment)) {
                 shouldShow = false;
             }
         }
@@ -53,21 +53,23 @@ function applyFilters() {
         row.toggle(shouldShow);
     });
 
+    // Loop through rows and apply filter for Locations tab
     $("#locations-tab-pane tbody tr").each(function () {
         var row = $(this);
-        var shouldShow = false;
+        var shouldShow = true;
 
-        row.find("td").each(function () {
-            var cellText = $(this).text().toLowerCase();
-            if (cellText.includes(locationKeyword)) {
-                shouldShow = true;
-                return false;
+        if ($("#locationsBtn").hasClass("active")) {
+            var locationIdInRow = row.find("td[data-tdlocationidinlocation]").data("tdlocationidinlocation");
+
+            if (parseInt(locationFilterIdInLocation) && parseInt(locationIdInRow) !== parseInt(locationFilterIdInLocation)) {
+                shouldShow = false;
             }
-        });
+        }
+
         row.toggle(shouldShow);
     });
 
-    var isAnyFilterApplied = departmentId || locationId || departmentFilterId || locationFilterId || locationKeyword;
+    var isAnyFilterApplied = departmentId || locationId || departmentFilterId || locationFilterIdInDepartment || locationFilterIdInLocation;
     var filterBtn = $("#filterBtn");
 
     if (isAnyFilterApplied) {
@@ -90,9 +92,8 @@ function clearFilters() {
     $("#filterLocation").val("");
     $("#departmentFilterDepartment").val("");
     $("#departmentFilterLocation").val("");
-    $("#filterLocationKeyword").val("");
     $("#searchInp").val("");
-    $("#filterLocationKeyword").val("");
+    $("#locationFilterLocation").val("");
     applyFilters();
 }
 
@@ -208,6 +209,7 @@ async function populateLocationsTable() {
 
 
             row.html(`
+                <td style="display: none;" data-tdlocationidinlocation="${location.id}"></td>
                 <td class="align-middle text-nowrap">${location.name}</td>
                 <td class="text-end text-nowrap">
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editLocationModal" data-location-id="${location.id}">
@@ -399,6 +401,7 @@ function openLocationFilterModal() {
      * Opens the location filter modal and displays it for filtering locations.
      * @function
      */
+    populateLocationsSelect($("#locationFilterLocation"));
     $("#filterLocationModal").modal("show");
 }
 
@@ -410,20 +413,17 @@ $("#searchInp").on("keyup", async function () {
     if (!searchTerm) {
         updateTable();
     } else {
-        // Verifique se algum filtro está ativo e limpe-os se necessário
-        if ($("#filterLocationKeyword").val() ||
+        if ($("#locationFilterLocation").val() ||
             $("#filterDepartment").val() ||
             $("#filterLocation").val() ||
             $("#departmentFilterDepartment").val() ||
             $("#departmentFilterLocation").val()) {
-            // Limpe os filtros aqui, por exemplo:
-            $("#filterLocationKeyword").val("");
+            $("#locationFilterLocation").val("");
             $("#filterDepartment").val("");
             $("#filterLocation").val("");
             $("#departmentFilterDepartment").val("");
             $("#departmentFilterLocation").val("");
 
-            // Também redefina a aparência do botão de filtro, se necessário
             $("#filterBtn").removeClass("btn-danger");
         }
     }
@@ -1068,9 +1068,8 @@ $(document).ready(function () {
 
     // on location modal
 
-    $("#filterLocationKeyword").on("input", function () {
-        clearTimeout(timer);
-        timer = setTimeout(applyFilters, 300);
+    $("#locationFilterLocation").change(function () {
+        applyFilters();
     });
 
     // on location modal
@@ -1078,6 +1077,8 @@ $(document).ready(function () {
     $("#clearLocationFiltersBtn").click(function () {
         clearFilters();
     });
+
+    
 
     // Disable enter key on #filterLocationFilterModal
     $(document).ready(function () {

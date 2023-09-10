@@ -142,32 +142,35 @@
         </div>
 
         <!-- Location Filter modal -->
-        <div class="modal fade" id="filterLocationModal" tabindex="-1">
-            <div class="modal-dialog">
+        <div 
+            id="filterLocationModal" 
+            class="modal fade" 
+            tabindex="-1"
+            data-bs-backdrop="false"
+            data-bs-keyboard="false"
+            >
+            <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary bg-gradient text-white">
                         <h5 class="modal-title" id="filterLocationModalLabel">
                             Filter Location
                         </h5>
                         <button
                             type="button"
-                            class="btn-close"
+                            class="btn-close btn-close-white"
                             data-bs-dismiss="modal"
                         ></button>
                     </div>
                     <div class="modal-body">
                         <form id="filterLocationForm">
-                            <div class="mb-3">
-                                <label
-                                    for="filterLocationKeyword"
-                                    class="form-label"
-                                    >Search Term:</label
+                            <div class="form-floating mb-3">
+                                <select
+                                    class="form-select"
+                                    id="locationFilterLocation"
                                 >
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    id="filterLocationKeyword"
-                                />
+                                    <option value="">All</option>
+                                </select>
+                                <label for="locationFilterLocation">Location</label>
                             </div>
                         </form>
                     </div>
@@ -175,17 +178,17 @@
                         <button
                             id="clearLocationFiltersBtn"
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary btn-sm"
                         >
-                            Clear Filters
+                            CLEAR FILTERS
                         </button>
                         <button
                             id="closeLocationFilterModalBtn"
                             type="button"
-                            class="btn btn-secondary"
+                            class="btn btn-outline-primary btn-sm myBtn"
                             data-bs-dismiss="modal"
                         >
-                            Close
+                            CLOSE
                         </button>
                     </div>
                 </div>
