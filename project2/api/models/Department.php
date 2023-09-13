@@ -2,6 +2,8 @@
 
 namespace api\models;
 
+use Exception;
+
 /**
  * Department model class.
  */
@@ -62,43 +64,28 @@ class Department extends Model
         return $result->fetch_assoc();
     }
 
-    public function delete(int $id): int 
+    public function checkDependencies(int $id): mixed
     {
-        // Verifique as dependências
-        $checkDependencies = "SELECT COUNT(*) as departmentCount
-        FROM personnel
-        WHERE departmentID = ?";
-        $statement = $this->db->getConnection()->prepare($checkDependencies);
-        $statement->bind_param('i', $id);
-        $statement->execute();
-
-        $result = $statement->get_result();
-        $row = $result->fetch_assoc();
-        $departmentCount = $row['departmentCount'];
-
-        if ($departmentCount < 1) {
-            $sql = "DELETE FROM {$this->table} WHERE id = ?";
+        $sql = 'SELECT COUNT(p.id) as personnelCount, d.name as departmentName
+        FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID)
+        WHERE d.id = ?';
+    
+        try {
             $statement = $this->db->getConnection()->prepare($sql);
             $statement->bind_param('i', $id);
+            $statement->execute();
     
-            if ($statement->execute()) {
-                // Check if any rows were affected (deleted)
-                if ($statement->affected_rows > 0) {
-                    $debug = ['msg' => 'Department model::delete() returning 1'];
-                    var_dump($debug);
-                    return 1; // Deleted
-                } else {
-                    $debug = ['msg' => 'Department model::delete() returning 0'];
-                    var_dump($debug);
-                    return 0; // Not found
-                }
+            $result = $statement->get_result();
+            $data = $result->fetch_assoc();
+            
+            if ($data['personnelCount'] != 0) {
+                return $data;
             } else {
-                $debug = ['msg' => 'Department model::delete() returning -1'];
-                var_dump($debug);
-                return -1; // Error
+                return null;
             }
-        } else {
-            return -2;
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+            return [];
         }
     }
 }

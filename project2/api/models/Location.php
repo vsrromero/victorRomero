@@ -28,43 +28,29 @@ class Location extends Model
         return $results;
     }
 
-    public function delete(int $id): int
+    public function checkDependencies(int $id): mixed
     {
-        // Verifique as dependências
-        $checkDependencies = "SELECT COUNT(*) as locationCount
-        FROM department
-        WHERE locationID = ?";
-        $statement = $this->db->getConnection()->prepare($checkDependencies);
-        $statement->bind_param('i', $id);
-        $statement->execute();
+        $sql = 'SELECT COUNT(d.id) as departmentCount, l.name as locationName
+        FROM department d LEFT JOIN location l ON (l.id = d.locationID)
+        WHERE l.id = ?';
 
-        $result = $statement->get_result();
-        $row = $result->fetch_assoc();
-        $locationCount = $row['locationCount'];
-
-        if ($locationCount < 1) {
-            $sql = "DELETE FROM location WHERE id = ?";
+        try {
             $statement = $this->db->getConnection()->prepare($sql);
             $statement->bind_param('i', $id);
+            $statement->execute();
 
-            if ($statement->execute()) {
-                // Check if any rows were affected (deleted)
-                if ($statement->affected_rows > 0) {
-                    $debug = ['msg' => 'Location model::delete() returning 1'];
-                    var_dump($debug);
-                    return 1; // Deleted
-                } else {
-                    $debug = ['msg' => 'Location model::delete() returning 0'];
-                    var_dump($debug);
-                    return 0; // Not found
-                }
+            $result = $statement->get_result();
+            $data = $result->fetch_assoc();
+
+            if ($data['departmentCount'] != 0) {
+                return $data;
             } else {
-                $debug = ['msg' => 'Location model::delete() returning -1'];
-                var_dump($debug);
-                return -1; // Error
+                return null;
             }
-        } else {
-            return -2;
+        } catch (\Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+            return null;
         }
+
     }
 }

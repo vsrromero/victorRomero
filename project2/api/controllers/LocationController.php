@@ -66,16 +66,35 @@ class LocationController extends Controller
     {
         try {
             $results = $this->model->getById($id);
+            $statusCode = http_response_code();
+            $statusName = HttpStatus::getStatusCodeName($statusCode);
+
+            $response = [
+                "status" => [
+                    "code" => $statusCode,
+                    "name" => $statusName,
+                    "description" => $statusCode === 200 ? "success" : "error",
+                    "returnedIn" => round(microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'], 2) * 1000 . " ms"
+                ],
+                "data" => [
+                    "location" => $results
+                ]
+            ];
 
             if ($results) {
-                http_response_code(200);
+                // Escape HTML characters - Cross-Site Scripting (XSS) prevention
+                foreach ($results as &$value) {
+                    $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+                }
+
                 header('Content-Type: application/json');
-                return $results;
+                return $response;
             } else {
                 http_response_code(404);
                 header('Content-Type: application/json');
-                return ['error' => 'Location not found'];
+                return ['error' => 'Location id ' . $id . ' not found'];
             }
+
         } catch (\Exception $e) {
             http_response_code(500);
             header('Content-Type: application/json');
@@ -178,24 +197,46 @@ class LocationController extends Controller
     public function destroy(int $id): array
     {
         try {
-            $response = $this->model->delete($id);
-            if ($response === 1) {
-                http_response_code(204);
-                header('Content-Type: application/json');
-                return ['success' => 'Location deleted successfully'];
-            } elseif ($response === 0) {
-                http_response_code(404);
-                header('Content-Type: application/json');
-                return ['error' => 'Location not found'];
-            } else {
+            $response = $this->model->checkDependencies($id);
+            if ($response) {
                 http_response_code(400);
                 header('Content-Type: application/json');
-                return ['error' => 'Cannot delete location with associated personnel'];
+                return ["error" => "Cannot delete location {$response['locationName']} with associated departments"];
+            } else {
+                $response = $this->model->delete($id);
+                if ($response === 1) {
+                    http_response_code(204);
+                    header('Content-Type: application/json');
+                    return ['success' => 'Location deleted successfully'];
+                } elseif ($response === 0) {
+                    http_response_code(404);
+                    header('Content-Type: application/json');
+                    return ['error' => 'Location not found'];
+                } else {
+                    http_response_code(500);
+                    header('Content-Type: application/json');
+                    return ['error' => 'Internal Server Error'];
+                }
             }
         } catch (\Exception $e) {
             http_response_code(500);
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
+        }
+    }
+
+    public function checkDependencies(int $id): array
+    {
+        $response = $this->model->checkDependencies($id);
+
+        if ($response) {
+            http_response_code(200);
+            header('Content-Type: application/json');
+            return ['hasDependencies' => true, 'data' => $response];
+        } else {
+            http_response_code(200);
+            header('Content-Type: application/json');
+            return ['hasDependencies' => false];
         }
     }
 }

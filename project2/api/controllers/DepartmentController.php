@@ -89,7 +89,7 @@ class DepartmentController extends Controller
                 }
 
                 header('Content-Type: application/json');
-                return $results;
+                return $response;
             } else {
                 http_response_code(404);
                 header('Content-Type: application/json');
@@ -199,24 +199,46 @@ class DepartmentController extends Controller
     public function destroy(int $id): array
     {
         try {
-            $response = $this->model->delete($id);
-            if ($response === 1) {
-                http_response_code(204);
-                header('Content-Type: application/json');
-                return ['success' => 'Department deleted successfully'];
-            } elseif ($response === 0) {
-                http_response_code(404);
-                header('Content-Type: application/json');
-                return ['error' => 'Department not found'];
-            } else {
+            $response = $this->model->checkDependencies($id);
+            if ($response) {
                 http_response_code(400);
                 header('Content-Type: application/json');
-                return ['error' => 'Cannot delete department with associated personnel'];
+                return ["error" => "Cannot delete department {$response['departmentName']} with associated personnel"];
+            } else {
+                $response = $this->model->delete($id);
+                if ($response === 1) {
+                    http_response_code(204);
+                    header('Content-Type: application/json');
+                    return ['success' => 'Department deleted successfully'];
+                } elseif ($response === 0) {
+                    http_response_code(404);
+                    header('Content-Type: application/json');
+                    return ['error' => 'Department not found'];
+                } else {
+                    http_response_code(500);
+                    header('Content-Type: application/json');
+                    return ['error' => 'Internal Server Error'];
+                }
             }
         } catch (\Exception $e) {
             http_response_code(500);
             header('Content-Type: application/json');
             return ['error' => 'Internal Server Error'];
+        }
+    }
+
+    public function checkDependencies(int $id): array
+    {
+        $response = $this->model->checkDependencies($id);
+
+        if ($response) {
+            http_response_code(200);
+            header('Content-Type: application/json');
+            return ['hasDependencies' => true, 'data' => $response];
+        } else {
+            http_response_code(200);
+            header('Content-Type: application/json');
+            return ['hasDependencies' => false];
         }
     }
 }
