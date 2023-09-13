@@ -758,17 +758,42 @@ $("#addPersonnelForm").on("submit", function (e) {
 // Delete personnel
 $(document).ready(function () {
     $(document).on("click", ".delete-personnel-btn", function () {
-        let deletePersonneltId = $(this).data("personnel-id");
+        let personnelId = $(this).data("personnel-id");
 
         $.ajax({
-            url: baseUrl + "/personnel/" + deletePersonneltId,
-            type: "DELETE",
-            success: function (response) {
-                populateAndShowAlertModal("Personnel deleted successfully:");
-                updateTable();
+            url: baseUrl + "/personnel/" + personnelId,
+            type: "POST",
+            success: function (personnel) {
+                const personnelName = personnel.data.personnel.lastName + ", " + personnel.data.personnel.firstName;
+
+                // Atualizar a mensagem no modal de confirmação
+                $("#deletePersonnelModalMessage").text("Are you sure you want to delete '" + personnelName + "'?");
+
+                // Exibir o modal de confirmação de exclusão
+                $("#deletePersonnelModal").modal("show");
+
+                // Definir o evento de clique no botão "Yes" no modal de confirmação
+                $("#confirmDeletePersonnelBtn").off("click").on("click", function () {
+                    // Fechar o modal de confirmação de exclusão
+                    $("#deletePersonnelModal").modal("hide");
+
+                    // Excluir a localização
+                    $.ajax({
+                        url: baseUrl + "/personnel/" + personnelId,
+                        type: "DELETE",
+                        success: function (response) {
+                            populateAndShowAlertModal(`Personnel ${personnelName} deleted successfully`);
+                            updateTable();
+                        },
+                        error: function (error) {
+                            populateAndShowAlertModal(error.responseJSON.error, "error");
+                        }
+                    });
+
+                    clearFilters();
+                });
             },
             error: function (error) {
-                //console.error("Error deleting personnel:", error);
                 populateAndShowAlertModal(error.responseJSON.error, "error");
             }
         });
@@ -785,8 +810,8 @@ $("#editDepartmentModal").on("show.bs.modal", function (e) {
     const button = $(e.relatedTarget);
     let departmentId = button.data("department-id");
 
-    $.post(baseUrl + "/departments/" + departmentId, function (data) {
-        let department = data;
+    $.post(baseUrl + "/departments/" + departmentId, function (response) {
+        let department = response.data.department;
 
         $("#editDepartmentID").val(department.id);
         $("#editDepartmentName").val(department.name);
@@ -879,22 +904,70 @@ $(document).ready(function () {
     $(document).on("click", ".delete-department-btn", function () {
         let deleteDepartmentId = $(this).data("department-id");
 
+        // Verificar dependências antes de mostrar o modal de confirmação
         $.ajax({
-            url: baseUrl + "/departments/" + deleteDepartmentId,
-            type: "DELETE",
+            url: baseUrl + "/departments/check-dependencies/" + deleteDepartmentId,
+            type: "POST",
             success: function (response) {
-                populateAndShowAlertModal("Department deleted successfully:");
-                updateTable();
+                console.log("Response:", response);
+                if (response.hasDependencies) {
+                    // Exibir modal de erro diretamente
+                    populateAndShowAlertModal(`Cannot delete the department ${response.data.departmentName}, it has a personnel associated`, "error");
+                } else {
+                    // Exibir o modal de confirmação
+                    showDeleteConfirmationModal(deleteDepartmentId);
+                }
             },
             error: function (error) {
-                //console.error("Error deleting department:", error);
+                console.error("Error checking dependencies:", error);
                 populateAndShowAlertModal(error.responseJSON.error, "error");
             }
         });
-
-        clearFilters();
     });
+
+    // Função para exibir o modal de confirmação de exclusão
+    function showDeleteConfirmationModal(departmentId) {
+        // Fazer uma solicitação AJAX para obter o nome do departamento
+        $.ajax({
+            url: baseUrl + "/departments/" + departmentId,
+            type: "POST",
+            success: function (response) {
+                const departmentName = response.data.department.name;
+
+                // Atualizar a mensagem no modal de confirmação
+                $("#deleteDepartmentModalMessage").text("Are you sure you want to delete the department '" + departmentName + "'?");
+
+                // Exibir o modal de confirmação de exclusão
+                $("#deleteDepartmentModal").modal("show");
+
+                // Definir o evento de clique no botão "Yes" no modal de confirmação
+                $("#confirmDeleteDepartmentBtn").off("click").on("click", function () {
+                    // Fechar o modal de confirmação de exclusão
+                    $("#deleteDepartmentModal").modal("hide");
+
+                    // Excluir o departamento
+                    $.ajax({
+                        url: baseUrl + "/departments/" + departmentId,
+                        type: "DELETE",
+                        success: function (response) {
+                            populateAndShowAlertModal(`Department ${departmentName} deleted successfully`);
+                            updateTable();
+                        },
+                        error: function (error) {
+                            populateAndShowAlertModal(error.responseJSON.error, "error");
+                        }
+                    });
+
+                    clearFilters();
+                });
+            },
+            error: function (error) {
+                populateAndShowAlertModal(error.responseJSON.error, "error");
+            }
+        });
+    }
 });
+
 
 // * Locations modal/tab
 
@@ -904,8 +977,8 @@ $("#editLocationModal").on("show.bs.modal", function (e) {
     const button = $(e.relatedTarget);
     let locationId = button.data("location-id");
 
-    $.post(baseUrl + "/locations/" + locationId, function (data) {
-        let location = data;
+    $.post(baseUrl + "/locations/" + locationId, function (result) {
+        let location = result.data.location;
 
         $("#editLocationID").val(location.id);
         $("#editLocationName").val(location.name);
@@ -987,25 +1060,73 @@ $("#addLocationForm").on("submit", function (e) {
 });
 
 // Delete location
+
 $(document).ready(function () {
     $(document).on("click", ".delete-location-btn", function () {
-        let deleteLocationtId = $(this).data("location-id");
+        let deleteLocationId = $(this).data("location-id");
 
+        // Verificar dependências antes de mostrar o modal de confirmação
         $.ajax({
-            url: baseUrl + "/locations/" + deleteLocationtId,
-            type: "DELETE",
+            url: baseUrl + "/locations/check-dependencies/" + deleteLocationId,
+            type: "POST",
             success: function (response) {
-                populateAndShowAlertModal("Location deleted successfully:");
-                updateTable();
+                console.log("Response:", response);
+                if (response.hasDependencies) {
+                    // Exibir modal de erro diretamente
+                    populateAndShowAlertModal(`Cannot delete the location ${response.data.locationName}, it has a department associated`, "error");
+                } else {
+                    // Exibir o modal de confirmação
+                    showDeleteConfirmationModal(deleteLocationId);
+                }
             },
             error: function (error) {
-                //console.error("Error deleting location:", error);
+                console.error("Error checking dependencies:", error);
                 populateAndShowAlertModal(error.responseJSON.error, "error");
             }
         });
-
-        clearFilters();
     });
+
+    // Função para exibir o modal de confirmação de exclusão
+    function showDeleteConfirmationModal(locationId) {
+        // Fazer uma solicitação AJAX para obter o nome do departamento
+        $.ajax({
+            url: baseUrl + "/locations/" + locationId,
+            type: "POST",
+            success: function (response) {
+                const locationName = response.data.location.name;
+
+                // Atualizar a mensagem no modal de confirmação
+                $("#deleteLocationModalMessage").text("Are you sure you want to delete the location '" + locationName + "'?");
+
+                // Exibir o modal de confirmação de exclusão
+                $("#deleteLocationModal").modal("show");
+
+                // Definir o evento de clique no botão "Yes" no modal de confirmação
+                $("#confirmDeleteLocationBtn").off("click").on("click", function () {
+                    // Fechar o modal de confirmação de exclusão
+                    $("#deleteLocationModal").modal("hide");
+
+                    // Excluir a localização
+                    $.ajax({
+                        url: baseUrl + "/locations/" + locationId,
+                        type: "DELETE",
+                        success: function (response) {
+                            populateAndShowAlertModal(`Location ${locationName} deleted successfully`);
+                            updateTable();
+                        },
+                        error: function (error) {
+                            populateAndShowAlertModal(error.responseJSON.error, "error");
+                        }
+                    });
+
+                    clearFilters();
+                });
+            },
+            error: function (error) {
+                populateAndShowAlertModal(error.responseJSON.error, "error");
+            }
+        });
+    }
 });
 
 // * Filters and search
@@ -1078,7 +1199,7 @@ $(document).ready(function () {
         clearFilters();
     });
 
-    
+
 
     // Disable enter key on #filterLocationFilterModal
     $(document).ready(function () {

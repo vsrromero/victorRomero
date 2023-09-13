@@ -25,6 +25,7 @@ $router->addRoute('POST', '/departments', [DepartmentController::class, 'store']
 $router->addRoute('POST', '/departments/{id}', [DepartmentController::class, 'show']);
 $router->addRoute('PUT', '/departments/{id}', [DepartmentController::class, 'update']);
 $router->addRoute('DELETE', '/departments/{id}', [DepartmentController::class, 'destroy']);
+$router->addRoute('POST', '/departments/check-dependencies/{id}', [DepartmentController::class, 'checkDependencies']);
 
 // Location routes
 $router->addRoute('GET', '/locations', [LocationController::class, 'index']);
@@ -32,6 +33,7 @@ $router->addRoute('POST', '/locations', [LocationController::class, 'store']);
 $router->addRoute('POST', '/locations/{id}', [LocationController::class, 'show']);
 $router->addRoute('PUT', '/locations/{id}', [LocationController::class, 'update']);
 $router->addRoute('DELETE', '/locations/{id}', [LocationController::class, 'destroy']);
+$router->addRoute('POST', '/locations/check-dependencies/{id}', [LocationController::class, 'checkDependencies']);
 
 // Search route
 $router->addRoute('GET', '/search-personnel', [SearchPersonnelController::class, 'searchPersonnel']);

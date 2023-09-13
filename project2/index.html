@@ -19,6 +19,148 @@
         <div class="loading-spinner">
             <div class="spinner"></div>
         </div>
+
+        <!-- Delete Department confirmation modal -->
+        <div
+            id="deleteDepartmentModal"
+            class="modal fade"
+            tabindex="-1"
+            data-bs-backdrop="false"
+            data-bs-keyboard="false"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="deleteDepartmentModalTitle">
+                            Delete Department
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <span
+                            class="fw-bold"
+                            id="deleteDepartmentModalMessage"
+                        ></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                            id="confirmDeleteDepartmentBtn"
+                        >
+                            YES
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                            data-bs-dismiss="modal"
+                        >
+                            NO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Location confirmation modal -->
+        <div
+            id="deleteLocationModal"
+            class="modal fade"
+            tabindex="-1"
+            data-bs-backdrop="false"
+            data-bs-keyboard="false"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="deleteLocationModalTitle">
+                            Delete Location
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <span
+                            class="fw-bold"
+                            id="deleteLocationModalMessage"
+                        ></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                            id="confirmDeleteLocationBtn"
+                        >
+                            YES
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                            data-bs-dismiss="modal"
+                        >
+                            NO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Personnel confirmation modal -->
+        <div
+            id="deletePersonnelModal"
+            class="modal fade"
+            tabindex="-1"
+            data-bs-backdrop="false"
+            data-bs-keyboard="false"
+        >
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="deletePersonnelModalTitle">
+                            Delete Personnel
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <span
+                            class="fw-bold"
+                            id="deletePersonnelModalMessage"
+                        ></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                            id="confirmDeletePersonnelBtn"
+                        >
+                            YES
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm myBtn"
+                            data-bs-dismiss="modal"
+                        >
+                            NO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Personnel Filter modal -->
         <div
             id="filterModal"
@@ -81,13 +223,13 @@
         </div>
 
         <!-- Department Filter Modal -->
-        <div 
-            id="departmentFilterModal" 
+        <div
+            id="departmentFilterModal"
             class="modal fade"
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-            >
+        >
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-primary bg-gradient text-white">
@@ -109,14 +251,21 @@
                                 >
                                     <option value="">All</option>
                                 </select>
-                                <label for="departmentFilterDepartment">Department</label>
+                                <label for="departmentFilterDepartment"
+                                    >Department</label
+                                >
                             </div>
 
                             <div class="form-floating mb-3">
-                                <select class="form-select" id="departmentFilterLocation">
+                                <select
+                                    class="form-select"
+                                    id="departmentFilterLocation"
+                                >
                                     <option value="">All</option>
                                 </select>
-                                <label for="departmentFilterLocation">Location</label>
+                                <label for="departmentFilterLocation"
+                                    >Location</label
+                                >
                             </div>
                         </form>
                     </div>
@@ -142,13 +291,13 @@
         </div>
 
         <!-- Location Filter modal -->
-        <div 
-            id="filterLocationModal" 
-            class="modal fade" 
+        <div
+            id="filterLocationModal"
+            class="modal fade"
             tabindex="-1"
             data-bs-backdrop="false"
             data-bs-keyboard="false"
-            >
+        >
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-primary bg-gradient text-white">
@@ -170,7 +319,9 @@
                                 >
                                     <option value="">All</option>
                                 </select>
-                                <label for="locationFilterLocation">Location</label>
+                                <label for="locationFilterLocation"
+                                    >Location</label
+                                >
                             </div>
                         </form>
                     </div>

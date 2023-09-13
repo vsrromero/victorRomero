@@ -169,4 +169,9 @@ abstract class Model
         }
     }
 
+    public function checkDependencies(int $id): mixed
+    {
+        return 0;
+    }
+
 }
