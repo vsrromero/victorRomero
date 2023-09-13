@@ -70,8 +70,7 @@ class PersonnelController extends Controller
             $dataArray = json_decode($jsonData, true);
     
             if ($dataArray) {
-                // Verificar se os campos não contêm caracteres especiais indesejados
-                // e palavras-chave SQL
+
                 if (
                     isset($dataArray['firstName']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\-ç\s\',\']+$/u', $dataArray['firstName']) && strlen($dataArray['firstName']) <= 50 &&
                     isset($dataArray['lastName']) && preg_match('/^[a-zA-ZÀ-ÿ0-9\-ç\s\',\']+$/u', $dataArray['lastName']) && strlen($dataArray['lastName']) <= 50 &&

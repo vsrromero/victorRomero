@@ -176,7 +176,7 @@ function refreshPersonnelTable() {
  * Refreshes the departments table by populating it with updated data.
  */
 function refreshDepartmentsTable() {
-    populateDeparmentsTable();
+    populateDepartmentsTable();
 }
 
 /**
@@ -239,7 +239,7 @@ async function populateLocationsTable() {
 /**
  * Populate the locations table with data retrieved from the server.
  */
-async function populateDeparmentsTable() {
+async function populateDepartmentsTable() {
     $(".loading-spinner").show();
     try {
         let response = await fetch(`${baseUrl}/departments`);
@@ -495,7 +495,7 @@ $("#refreshBtn").click(function () {
         if ($("#departmentsBtn").hasClass("active")) {
 
             clearFilters();
-            populateDeparmentsTable();
+            populateDepartmentsTable();
 
         } else {
 
@@ -540,7 +540,7 @@ $(document).ready(function () {
 
     // department-tab-pane
     const departmentsTable = $("#department-tab-pane");
-    populateDeparmentsTable();
+    populateDepartmentsTable();
 
     // locations-tab-pane
     const locationsTable = $("#locations-tab-pane");
@@ -766,18 +766,13 @@ $(document).ready(function () {
             success: function (personnel) {
                 const personnelName = personnel.data.personnel.lastName + ", " + personnel.data.personnel.firstName;
 
-                // Atualizar a mensagem no modal de confirmação
                 $("#deletePersonnelModalMessage").text("Are you sure you want to delete '" + personnelName + "'?");
 
-                // Exibir o modal de confirmação de exclusão
                 $("#deletePersonnelModal").modal("show");
 
-                // Definir o evento de clique no botão "Yes" no modal de confirmação
                 $("#confirmDeletePersonnelBtn").off("click").on("click", function () {
-                    // Fechar o modal de confirmação de exclusão
                     $("#deletePersonnelModal").modal("hide");
 
-                    // Excluir a localização
                     $.ajax({
                         url: baseUrl + "/personnel/" + personnelId,
                         type: "DELETE",
@@ -904,17 +899,13 @@ $(document).ready(function () {
     $(document).on("click", ".delete-department-btn", function () {
         let deleteDepartmentId = $(this).data("department-id");
 
-        // Verificar dependências antes de mostrar o modal de confirmação
         $.ajax({
             url: baseUrl + "/departments/check-dependencies/" + deleteDepartmentId,
             type: "POST",
             success: function (response) {
-                console.log("Response:", response);
                 if (response.hasDependencies) {
-                    // Exibir modal de erro diretamente
                     populateAndShowAlertModal(`Cannot delete the department ${response.data.departmentName}, it has a personnel associated`, "error");
                 } else {
-                    // Exibir o modal de confirmação
                     showDeleteConfirmationModal(deleteDepartmentId);
                 }
             },
@@ -925,27 +916,20 @@ $(document).ready(function () {
         });
     });
 
-    // Função para exibir o modal de confirmação de exclusão
     function showDeleteConfirmationModal(departmentId) {
-        // Fazer uma solicitação AJAX para obter o nome do departamento
         $.ajax({
             url: baseUrl + "/departments/" + departmentId,
             type: "POST",
             success: function (response) {
                 const departmentName = response.data.department.name;
 
-                // Atualizar a mensagem no modal de confirmação
                 $("#deleteDepartmentModalMessage").text("Are you sure you want to delete the department '" + departmentName + "'?");
 
-                // Exibir o modal de confirmação de exclusão
                 $("#deleteDepartmentModal").modal("show");
 
-                // Definir o evento de clique no botão "Yes" no modal de confirmação
                 $("#confirmDeleteDepartmentBtn").off("click").on("click", function () {
-                    // Fechar o modal de confirmação de exclusão
                     $("#deleteDepartmentModal").modal("hide");
 
-                    // Excluir o departamento
                     $.ajax({
                         url: baseUrl + "/departments/" + departmentId,
                         type: "DELETE",
@@ -1065,17 +1049,13 @@ $(document).ready(function () {
     $(document).on("click", ".delete-location-btn", function () {
         let deleteLocationId = $(this).data("location-id");
 
-        // Verificar dependências antes de mostrar o modal de confirmação
         $.ajax({
             url: baseUrl + "/locations/check-dependencies/" + deleteLocationId,
             type: "POST",
             success: function (response) {
-                console.log("Response:", response);
                 if (response.hasDependencies) {
-                    // Exibir modal de erro diretamente
                     populateAndShowAlertModal(`Cannot delete the location ${response.data.locationName}, it has a department associated`, "error");
                 } else {
-                    // Exibir o modal de confirmação
                     showDeleteConfirmationModal(deleteLocationId);
                 }
             },
@@ -1086,27 +1066,19 @@ $(document).ready(function () {
         });
     });
 
-    // Função para exibir o modal de confirmação de exclusão
     function showDeleteConfirmationModal(locationId) {
-        // Fazer uma solicitação AJAX para obter o nome do departamento
         $.ajax({
             url: baseUrl + "/locations/" + locationId,
             type: "POST",
             success: function (response) {
                 const locationName = response.data.location.name;
 
-                // Atualizar a mensagem no modal de confirmação
                 $("#deleteLocationModalMessage").text("Are you sure you want to delete the location '" + locationName + "'?");
 
-                // Exibir o modal de confirmação de exclusão
                 $("#deleteLocationModal").modal("show");
 
-                // Definir o evento de clique no botão "Yes" no modal de confirmação
                 $("#confirmDeleteLocationBtn").off("click").on("click", function () {
-                    // Fechar o modal de confirmação de exclusão
                     $("#deleteLocationModal").modal("hide");
-
-                    // Excluir a localização
                     $.ajax({
                         url: baseUrl + "/locations/" + locationId,
                         type: "DELETE",
